@@ -192,35 +192,37 @@ public class FileUtil {
     }
 
     public static void copyDirectoryWithExclusions(File source, File copyInto, List<String> exclusions) throws IOException {
+        if (!source.exists()) {
+            return;
+        }
+
         if (!source.isDirectory()) {
-            File parentFile = copyInto.getParentFile();
-            if (parentFile == null || parentFile.exists() || parentFile.mkdirs()) {
-                FileInputStream fileInputStream = new FileInputStream(source);
-                FileOutputStream fileOutputStream = new FileOutputStream(copyInto);
-                byte[] bArr = new byte[2048];
-                while (true) {
-                    int read = fileInputStream.read(bArr);
-                    if (read <= 0) {
-                        fileInputStream.close();
-                        fileOutputStream.close();
-                        return;
-                    }
-                    fileOutputStream.write(bArr, 0, read);
-                }
-            } else {
-                throw new IOException("Cannot create dir " + parentFile.getAbsolutePath());
-            }
-        } else if (copyInto.exists() || copyInto.mkdirs()) {
-            String[] list = source.list();
-            if (list != null) {
-                for (String s : list) {
-                    if (!exclusions.contains(s)) { // Check if the file/directory is not in the exclusion list
-                        copyDirectoryWithExclusions(new File(source, s), new File(copyInto, s), exclusions);
+
+            if (!exclusions.contains(source.getName())) {
+                try (FileInputStream fileInputStream = new FileInputStream(source)) {
+                    FileOutputStream fileOutputStream = new FileOutputStream(copyInto);
+                    byte[] bArr = new byte[2048];
+                    int bytesRead;
+                    while ((bytesRead = fileInputStream.read(bArr)) != -1) {
+                        fileOutputStream.write(bArr, 0, read);
                     }
                 }
             }
         } else {
-            throw new IOException("Cannot create dir " + copyInto.getAbsolutePath());
+            if (!exclusions.contains(source.getName())) {
+                if (!copyInto.exists() && !copyInto.mkdirs()) {
+                    throw new IOException("Cannot creat dir " + copyInto.getAbsolutePath());
+                }
+
+                String[] list = source.list();
+                if (list != null) {
+                    for (String s : list) {
+                        File srcFile = new File(source, s);
+                        File destFile = new File(copyInto, s);
+                        copyDirectoryWithExclusions(srcFile, destFile, exclusions);
+                    }
+                }
+            }
         }
     }
 
