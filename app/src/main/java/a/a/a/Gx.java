@@ -66,6 +66,12 @@ public class Gx {
                 classInfos = "Var.Map";
                 break;
 
+            case "int":
+            case "Integer":
+            case "Color":
+                classInfos = "Var.int.Integer.Color";
+                break;
+
             case "ListInt":
                 classInfos = "List.ListInt";
                 break;
@@ -412,6 +418,8 @@ public class Gx {
             default:
                 classInfos = ComponentsHandler.c(a);
         }
+
+        classInfos = "Object." + classInfos;
 
         b = classInfos.split("\\.");
     }
