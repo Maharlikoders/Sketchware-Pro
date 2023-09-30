@@ -448,7 +448,7 @@ public class ComponentsHandler {
             }
         }
 
-        return "Component";
+        return name;
     }
 
     /**
