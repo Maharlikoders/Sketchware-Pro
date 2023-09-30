@@ -41,6 +41,13 @@ public class ProjectSettings {
     public static final String SETTING_APPLICATION_CLASS = "app_class";
 
     /**
+     * Setting for the final app's {@link Util} class
+     *
+     * @see Util
+     */
+    public static final String SETTING_UTIL_CLASS = "util_class";
+
+    /**
      * Setting for the final app's {@code targetSdkVersion}
      *
      * @see ApplicationInfo#targetSdkVersion
