@@ -47,6 +47,8 @@ public class wq {
     public static final String y = "sketchware" + File.separator + "localization";
     public static final String z = "sketchware" + File.separator + "localization" + File.separator + "strings.xml";
 
+    public static final String SKETCH_GITHUB_SRC = ".sketchware" + File.separator + "github";
+
     public static final String EXTRA_SYSTEM_DATA = ".sketchware" + File.separator + "data" + File.separator + "system";
     public static final String CUSTOM_COMPONENT_FILE = EXTRA_SYSTEM_DATA + File.separator + "component.json";
     public static final String EXTRA_DATA_EXPORT = EXTRA_SYSTEM_DATA + File.separator + "export";
@@ -262,6 +264,10 @@ public class wq {
 
     public static String getExtraDataExport() {
         return getAbsolutePathOf(EXTRA_DATA_EXPORT);
+    }
+
+    public static String getGitHubSrc(String sc_id) {
+        return getAbsolutePathOf(SKETCH_GITHUB_SRC + File.separator + sc_id);
     }
 
     public static String y() {
