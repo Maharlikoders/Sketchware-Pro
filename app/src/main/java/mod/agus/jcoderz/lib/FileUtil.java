@@ -204,7 +204,7 @@ public class FileUtil {
                     byte[] bArr = new byte[2048];
                     int bytesRead;
                     while ((bytesRead = fileInputStream.read(bArr)) != -1) {
-                        fileOutputStream.write(bArr, 0, read);
+                        fileOutputStream.write(bArr, 0, bytesRead);
                     }
                 }
             }
