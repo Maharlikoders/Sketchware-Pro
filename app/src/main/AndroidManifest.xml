@@ -239,6 +239,16 @@
             android:name="mod.agus.jcoderz.editor.manage.resource.ManageResourceActivity"
             android:configChanges="orientation|screenSize" />
         <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.github.ManageGitHubActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.github.ManageGitHubChangesActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.github.SetupGitHubActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
             android:name="mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity"
             android:configChanges="orientation|screenSize" />
         <activity

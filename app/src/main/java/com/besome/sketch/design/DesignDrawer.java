@@ -113,9 +113,12 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         menusLayout.addView(addDrawerItem(17, false,
                 R.drawable.connected_96, R.string.design_drawer_menu_proguard, R.string.design_drawer_menu_proguard_subtitle));
         /* Add StringFog Manager */
-        /* INCLUDES SECTION SEPARATOR */
-        menusLayout.addView(addDrawerItem(18, true,
+        menusLayout.addView(addDrawerItem(18, false,
                 R.drawable.color_lock_96, R.string.design_drawer_menu_stringfog, R.string.design_drawer_menu_stringfog_subtitle));
+        /* Add GitHub Manager */
+        /* INCLUDES SECTION SEPARATOR */
+        menusLayout.addView(addDrawerItem(24, true,
+                R.drawable.github, R.string.design_drawer_menu_title_github, R.string.design_drawer_menu_description_github));
         /* Add Source Code Viewer */
         menusLayout.addView(addDrawerItem(16, false,
                 R.drawable.code_icon, R.string.design_drawer_menu_title_source_code, R.string.design_drawer_menu_description_source_code));
@@ -207,6 +210,9 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                         return;
                     case 23:
                         designActivity.toXmlManager();
+                        break;
+                    case 24:
+                        designActivity.toGitHubManager();
                         break;
                     case 2:
                     default:

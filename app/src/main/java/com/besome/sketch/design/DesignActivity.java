@@ -91,7 +91,10 @@ import mod.SketchwareUtil;
 import mod.agus.jcoderz.editor.manage.permission.ManagePermissionActivity;
 import mod.agus.jcoderz.editor.manage.resource.ManageResourceActivity;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.GitHubBean;
+import mod.elfilibustero.sketch.editor.manage.github.ManageGitHubActivity;
 import mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity;
+import mod.elfilibustero.sketch.lib.utils.GitHubUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
 import mod.hey.studios.activity.managers.java.ManageJavaActivity;
 import mod.hey.studios.activity.managers.nativelib.ManageNativelibsActivity;
@@ -795,6 +798,13 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
+     * Opens {@link ManageGitHubActivity}.
+     */
+    void toGitHubManager() {
+        launchActivity(ManageGitHubActivity.class, null);
+    }
+
+    /**
      * Opens {@link ManageXmlActivity}.
      */
     void toXmlManager() {
@@ -1264,6 +1274,11 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             var sc_id = activity.sc_id;
             activity.saveVersionCodeInformationToProject();
             activity.h();
+            GitHubUtil gitUtil = new GitHubUtil(activity.sc_id);
+            GitHubBean bean = gitUtil.getBean();
+            if (!bean.username.isEmpty() && !bean.token.isEmpty()) {
+                gitUtil.generate();
+            }
             jC.d(sc_id).f();
             jC.d(sc_id).g();
             jC.d(sc_id).e();
