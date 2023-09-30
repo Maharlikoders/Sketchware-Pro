@@ -2906,7 +2906,7 @@ public class Lx {
     /**
      * @return Content of a <code>SketchwareUtil.java</code> file, with indentation
      */
-    public static String i(String packageName) {
+    public static String i(String packageName, String className) {
         return "package " + packageName + ";\r\n" +
                 "import android.app.*;\r\n" +
                 "import android.content.*;\r\n" +
@@ -2920,7 +2920,7 @@ public class Lx {
                 "import java.io.*;\r\n" +
                 "import java.util.*;\n" +
                 "\r\n" +
-                "public class SketchwareUtil {\r\n" +
+                "public class "+ className +" {\r\n" +
                 "\r\n" +
                 "    public static int TOP = 1;\r\n" +
                 "    public static int CENTER = 2;\r\n" +
