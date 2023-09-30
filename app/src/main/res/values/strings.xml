@@ -1183,6 +1183,7 @@ ex)\"*/*\", \"image/*\", \"audio/*\", \"text/*\""</string>
     <string name="design_drawer_menu_bottom_title">Global</string>
     <string name="design_drawer_menu_description_collection">My saved collections</string>
     <string name="design_drawer_menu_description_font">Import different fonts</string>
+    <string name="design_drawer_menu_description_github">GitHub settings</string>
     <string name="design_drawer_menu_description_image">Import photos and icons</string>
     <string name="design_drawer_menu_description_library">Component settings</string>
     <string name="design_drawer_menu_description_sound">Import music and sound efects</string>
@@ -1193,6 +1194,7 @@ ex)\"*/*\", \"image/*\", \"audio/*\", \"text/*\""</string>
     <string name="design_drawer_menu_title">Configuration</string>
     <string name="design_drawer_menu_title_collection">Collection</string>
     <string name="design_drawer_menu_title_font">Font</string>
+    <string name="design_drawer_menu_title_github">GitHub</string>
     <string name="design_drawer_menu_title_image">Image</string>
     <string name="design_drawer_menu_title_library">Library</string>
     <string name="design_drawer_menu_title_sound">Sound</string>
@@ -1200,6 +1202,11 @@ ex)\"*/*\", \"image/*\", \"audio/*\", \"text/*\""</string>
     <string name="design_drawer_menu_title_theme">Theme</string>
     <string name="design_drawer_menu_title_view">View</string>
     <string name="design_drawer_menu_title_xml">XML</string>
+    <string name="design_github_button_goto_setting">Open GitHub Setting</string>
+    <string name="design_github_setting_step1_desc">Enter your username and token</string>
+    <string name="design_github_setting_step1_title">Setup Credentials</string>
+    <string name="design_github_setting_step2_desc">Please review the information below. If they are all correct, click on \"Save\".</string>
+    <string name="design_github_setting_step2_title">Review Information</string>
     <string name="design_file_selector_title_java">Available Java Files</string>
     <string name="design_library_admob_button_goto_console">Open AdMob Console</string>
     <string name="design_library_admob_button_goto_setting">Open AdMob Setting</string>
