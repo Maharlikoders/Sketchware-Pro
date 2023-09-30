@@ -327,32 +327,34 @@ public class GitHubUtil {
     private void buildProjectResources() {
         File resourcePath = new File(FileUtil.getExternalStorageDir(), wq.l);
         String srcResDir = getGitHubProject("src/resources");
-        if (!FileUtil.isDirectory(srcResDir)) {
-            return;
-        }
-        try {
-            for (String subFolder : PROJECT_RESOURCES_FOLDER) {
-                File resSubFolder = new File(resourcePath, subFolder + File.separator + sc_id);
-                String resSubFolderDir = resSubFolder.getAbsolutePath(); 
-                FileUtil.makeDir(resSubFolderDir);
-                FileUtil.copyDirectory(new File(srcResDir, subFolder), new File(resSubFolderDir));
+        if (FileUtil.isDirectory(srcResDir)) {
+            try {
+                for (String subFolder : PROJECT_RESOURCES_FOLDER) {
+                    String resFolder = srcResDir + File.separator + subFolder;
+                    if (FileUtil.isDirectory(resFolder)) {
+                        File resSubFolderPath = new File(resourcePath, subFolder + File.separator + sc_id);
+                        String resSubFolder = resSubFolderPath.getAbsolutePath(); 
+                        FileUtil.makeDir(resSubFolderDir);
+                        FileUtil.copyDirectory(new File(resFolder), new File(resSubFolder));
+                    }
+                }
+            } catch (Exception ignored) {
             }
-        } catch (Exception ignored) {
         }
     }
 
     private void buildLocalLibrary() {
         File localLibraryDest = new File(getGitHubProject("libs"));
 
-        if (localLibraryDest.exists()) {
-            File[] local_libs_content = localLibraryDest.listFiles();
-            if (local_libs_content != null) {
-                for (File local_lib : local_libs_content) {
-                    File local_lib_real_path = new File(FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs", local_lib.getName());
-                    if (!local_lib_real_path.exists()) {
-                        local_lib_real_path.mkdirs();
+        if (localLibraryDest.exists() && localLibraryDest.isDirectory()) {
+            File[] localLibsContent = localLibraryDest.listFiles();
+            if (localLibsContent != null) {
+                for (File localLib : localLibsContent) {
+                    File localLibRealPath = new File(FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs", localLib.getName());
+                    if (!localLibRealPath.exists()) {
+                        localLibRealPath.mkdirs();
                         try {
-                            FileUtil.copyDirectory(local_lib, local_lib_real_path);
+                            FileUtil.copyDirectory(localLib, localLibRealPath);
                         } catch (Exception ignored) {
                         }
                     }
