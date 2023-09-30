@@ -333,9 +333,9 @@ public class GitHubUtil {
         try {
             for (String subFolder : PROJECT_RESOURCES_FOLDER) {
                 File resSubFolder = new File(resourcePath, subFolder);
-                String resSubFolderDir = resSubFolder.getAbsolutePath(); 
+                String resSubFolderDir = resSubFolder.getAbsolutePath() + File.separator + sc_id; 
                 FileUtil.makeDir(resSubFolderDir);
-                FileUtil.copyDirectory(new File(srcResDir, subFolder), new File(resSubFolder, sc_id));
+                FileUtil.copyDirectory(new File(srcResDir, subFolder), new File(resSubFolderDir));
             }
         } catch (Exception ignored) {
         }
