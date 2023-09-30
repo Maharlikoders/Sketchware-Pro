@@ -41,12 +41,11 @@ import a.a.a.yB;
 import mod.hey.studios.project.ProjectSettingsDialog;
 import mod.hey.studios.project.backup.BackupRestoreManager;
 
-public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.ProjectViewHolder> {
     private final ProjectsFragment projectsFragment;
     private final Activity activity;
     private List<HashMap<String, Object>> shownProjects = new ArrayList<>();
     private List<HashMap<String, Object>> allProjects;
-    private int shownSpecialActions = 1;
 
     public ProjectsAdapter(ProjectsFragment projectsFragment, List<HashMap<String, Object>> allProjects) {
         this.projectsFragment = projectsFragment;
@@ -58,23 +57,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         allProjects = projects;
     }
 
-    private void maybeAdjustSpecialActions() {
-        if (shownProjects.size() == 0) {
-            if (allProjects.size() > 0) {
-                if (shownSpecialActions == 2) {
-                    shownSpecialActions = 1;
-                    notifyItemRemoved(0);
-                }
-            } else {
-                if (shownSpecialActions == 1) {
-                    notifyItemChanged(0);
-                    notifyItemInserted(1);
-                    shownSpecialActions = 2;
-                }
-            }
-        }
-    }
-
     public void filterData(String query) {
         List<HashMap<String, Object>> newProjects;
         if (query.isEmpty()) {
@@ -83,11 +65,9 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 int projectCount;
                 if ((projectCount = allProjects.size()) > 0) {
                     shownProjects = allProjects;
-                    notifyItemChanged(0);
-                    notifyItemRangeInserted(1, projectCount);
+                    notifyItemRangeInserted(0, projectCount);
                 }
             }
-            maybeAdjustSpecialActions();
             newProjects = allProjects;
         } else {
             newProjects = allProjects.stream()
@@ -95,10 +75,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .collect(Collectors.toList());
         }
 
-        // remove them so DiffUtil isn't confused
-        if (shownSpecialActions > 0) {
-            notifyItemRangeRemoved(0, shownSpecialActions);
-        }
         var result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
             @Override
             public int getOldListSize() {
@@ -139,28 +115,11 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }, true /* sort behavior can be changed */);
         shownProjects = newProjects;
         result.dispatchUpdatesTo(this);
-        // add them again after DiffUtil's done
-        if (shownSpecialActions > 0) {
-            notifyItemRangeInserted(0, shownSpecialActions);
-        }
-
-        // hide Restore Projects when searching
-        if (query.isEmpty()) {
-            if (shownSpecialActions == 0) {
-                shownSpecialActions = 1;
-                notifyItemInserted(0);
-            }
-        } else {
-            if (shownSpecialActions > 0) {
-                shownSpecialActions = 0;
-                notifyItemRemoved(0);
-            }
-        }
     }
 
     @Override
     public int getItemCount() {
-        return shownSpecialActions + shownProjects.size();
+        return shownProjects.size();
     }
 
     private boolean matchesQuery(HashMap<String, Object> projectMap, String searchQuery) {
@@ -180,9 +139,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int truePosition) {
-        if (viewHolder instanceof ProjectViewHolder holder) {
-            int position = truePosition - shownSpecialActions;
+    public void onBindViewHolder(@NonNull ProjectViewHolder holder, int position) {
             HashMap<String, Object> projectMap = shownProjects.get(position);
             holder.setProject(projectMap);
             String scId = yB.c(projectMap, "sc_id");
@@ -281,28 +238,16 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 mB.a(v);
                 toProjectSettingOrRequestPermission(projectMap, position);
             });
-        } else if (viewHolder instanceof SpecialActionViewHolder holder) {
-            boolean isNewProjectView = allProjects.isEmpty() && truePosition == 0;
-            holder.setIsNewProjectAction(isNewProjectView);
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position - shownSpecialActions < 0 ? 1 : 0;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ProjectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         var inflater = LayoutInflater.from(parent.getContext());
-        if (viewType == 1) {
-            return new SpecialActionViewHolder(inflater.inflate(R.layout.myprojects_item_special, parent, false));
-        }
         return new ProjectViewHolder(inflater.inflate(R.layout.myprojects_item, parent, false));
     }
 
-    private static class ProjectViewHolder extends CollapsibleViewHolder {
+    public static class ProjectViewHolder extends CollapsibleViewHolder {
         public final TextView tvPublished;
         public final ImageView expand;
         public final MyProjectButtonLayout projectButtonLayout;
@@ -371,41 +316,11 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private class SpecialActionViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView icon;
-        public final TextView title;
-
-        private boolean isNewProjectAction = true;
-
-        public SpecialActionViewHolder(@NonNull View itemView) {
-            super(itemView);
-            icon = itemView.findViewById(R.id.iv_create_new);
-            title = itemView.findViewById(R.id.tv_create_new);
-            itemView.findViewById(R.id.project_one).setOnClickListener(v -> {
-                if (isNewProjectAction()) {
-                    projectsFragment.toProjectSettingsActivity();
-                } else {
-                    projectsFragment.restoreProject();
-                }
-            });
-        }
-
-        public void setIsNewProjectAction(boolean b) {
-            isNewProjectAction = b;
-            icon.setImageResource(isNewProjectAction ? R.drawable.plus_96 : R.drawable.data_backup_96);
-            title.setText(activity.getString(isNewProjectAction ? R.string.myprojects_list_menu_title_create_a_new_project : R.string.myprojects_list_menu_title_restore_projects));
-        }
-
-        public boolean isNewProjectAction() {
-            return isNewProjectAction;
-        }
-    }
-
     private void deleteProject(int truePosition) {
         final ZA c = new ZA(activity); //Now loading
         c.show();
 
-        var sc_id = yB.c(shownProjects.get(truePosition - shownSpecialActions), "sc_id");
+        var sc_id = yB.c(shownProjects.get(truePosition), "sc_id");
         new Thread(() -> {
             lC.a(activity, sc_id);
             activity.runOnUiThread(() -> {
@@ -414,8 +329,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 shownProjects.removeIf(remover);
                 allProjects.removeIf(remover);
                 notifyItemRemoved(truePosition);
-
-                maybeAdjustSpecialActions();
             });
         }).start();
     }
