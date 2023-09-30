@@ -334,7 +334,7 @@ public class GitHubUtil {
                     if (FileUtil.isDirectory(resFolder)) {
                         File resSubFolderPath = new File(resourcePath, subFolder + File.separator + sc_id);
                         String resSubFolder = resSubFolderPath.getAbsolutePath(); 
-                        FileUtil.makeDir(resSubFolderDir);
+                        FileUtil.makeDir(resSubFolder);
                         FileUtil.copyDirectory(new File(resFolder), new File(resSubFolder));
                     }
                 }
