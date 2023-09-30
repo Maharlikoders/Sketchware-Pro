@@ -570,6 +570,11 @@ public class Jx {
             code = code.replaceAll("getFragmentManager", "getSupportFragmentManager");
         }
 
+        String customUtilClassName = settings.getValue(ProjectSettings.SETTING_UTIL_CLASS, "SketchwareUtil");
+        boolean notUsingCustomUtilClass = customUtilClassName.equals("SketchwareUtil");
+        if (!notUsingCustomUtilClass) {
+            code = code.replaceAll("SketchwareUtil", customUtilClassName);
+        }
         return CommandBlock.CB(Lx.j(code, false));
     }
 
