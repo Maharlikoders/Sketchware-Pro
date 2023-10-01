@@ -450,7 +450,9 @@ public class GitHubUtil {
 
         try {
             Set<String> exclusions = new HashSet<>();
-            exclusions.addAll(Arrays.asList(PROJECT_DATA_FILE));
+            for (String exclusion : PROJECT_RESOURCES_FOLDER) {
+                exclusions.add(exclusion);
+            }
             NewFileUtil.copyFiles(data, getGitHubProject("src/data"), exclusions);
             String files = data + File.separator + "files";
             String injections = data + File.separator + "injection";
