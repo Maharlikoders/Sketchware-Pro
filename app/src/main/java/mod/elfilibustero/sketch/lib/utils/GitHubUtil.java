@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jgit.api.CreateBranchCommand;
@@ -318,7 +320,7 @@ public class GitHubUtil {
             if (!FileUtil.isDirectory(srcDataDir)) {
                 return;
             }
-            FileUtil.copyDirectoryWithExclusions(new File(getGitHubProject("src/data")), new File(data), PROJECT_DATA_FILE);
+            NewFileUtil.copyDir(srcDataDir, data);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -447,7 +449,13 @@ public class GitHubUtil {
         writeFile(getView(data), getView(getGitHubProject("src")));
 
         try {
-            FileUtil.copyDirectoryWithExclusions(new File(data), new File(getGitHubProject("src/data")), PROJECT_DATA_FILE);
+            Set<String> exclusions = new HashSet<>();
+            exclusions.addAll(Arrays.asList(PROJECT_DATA_FILE));
+            NewFileUtil.copyFiles(data, getGitHubProject("src/data"), exclusions);
+            String files = data + File.separator + "files";
+            String injections = data + File.separator + "injection";
+            NewFileUtil.copyDir(files, getGitHubProject("src/data/files"));
+            NewFileUtil.copyDir(injections, getGitHubProject("src/data/injection"));
         } catch (Exception ignored) {
         }
     }
