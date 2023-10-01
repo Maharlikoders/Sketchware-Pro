@@ -191,41 +191,6 @@ public class FileUtil {
         }
     }
 
-    public static void copyDirectoryWithExclusions(File source, File copyInto, List<String> exclusions) throws IOException {
-        if (!source.exists()) {
-            return;
-        }
-
-        if (!source.isDirectory()) {
-
-            if (!exclusions.contains(source.getName())) {
-                try (FileInputStream fileInputStream = new FileInputStream(source)) {
-                    FileOutputStream fileOutputStream = new FileOutputStream(copyInto);
-                    byte[] bArr = new byte[2048];
-                    int bytesRead;
-                    while ((bytesRead = fileInputStream.read(bArr)) != -1) {
-                        fileOutputStream.write(bArr, 0, bytesRead);
-                    }
-                }
-            }
-        } else {
-            if (!exclusions.contains(source.getName())) {
-                if (!copyInto.exists() && !copyInto.mkdirs()) {
-                    throw new IOException("Cannot creat dir " + copyInto.getAbsolutePath());
-                }
-
-                String[] list = source.list();
-                if (list != null) {
-                    for (String s : list) {
-                        File srcFile = new File(source, s);
-                        File destFile = new File(copyInto, s);
-                        copyDirectoryWithExclusions(srcFile, destFile, exclusions);
-                    }
-                }
-            }
-        }
-    }
-
     public static void extractFileFromZip(InputStream inputStream, File file) throws IOException {
         try (OutputStream outputStream = new FileOutputStream(file)) {
             byte[] bArr = new byte[1024];
