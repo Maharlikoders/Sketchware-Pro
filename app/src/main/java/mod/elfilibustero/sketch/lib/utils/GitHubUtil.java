@@ -364,9 +364,7 @@ public class GitHubUtil {
                         File resSubFolderPath = new File(resourcePath, subFolder + File.separator + sc_id);
                         String resSubFolder = resSubFolderPath.getAbsolutePath();
                         FileUtil.makeDir(resSubFolder);
-                        long resFolderSize = NewFileUtil.getFolderSize(resFolder);
-                        long resSubFolderSize = NewFileUtil.getFolderSize(resSubFolder);
-                        if (resFolderSize != resSubFolderSize) {
+                        if (isFileSizeChanged(resFolder, resSubFolder)) {
                             FileUtil.copyDirectory(new File(resFolder), new File(resSubFolder));
                         }
                     }
@@ -382,27 +380,21 @@ public class GitHubUtil {
 
         if (localLibraryDest.exists() && localLibraryDest.isDirectory()) {
             File[] localLibsContent = localLibraryDest.listFiles();
+            try {
             if (localLibsContent != null) {
                 for (File localLib : localLibsContent) {
-                    File localLibRealPath = new File(FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs", localLib.getName());
-
-                    long localLibSize = NewFileUtil.getFolderSize(localLib.getAbsolutePath());
-                    long localLibRealSize = NewFileUtil.getFolderSize(localLibRealPath.getAbsolutePath());
-                    if (!localLibRealPath.exists()) {
-                        localLibRealPath.mkdirs();
-                        try {
-                            FileUtil.copyDirectory(localLib, localLibRealPath);
-                        } catch (Exception ignored) {
-                            ignored.printStackTrace();
-                        }
-                    } else if (localLibSize != localLibRealSize) {
-                        try {
-                            FileUtil.copyDirectory(localLib, localLibRealPath);
-                        } catch (Exception ignored) {
-                            ignored.printStackTrace();
-                        }
+                    File localLibReal = new File(FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs", localLib.getName());
+                    String localLibRealPath = localLibReal.getAbsolutePath();
+                    FileUtil.makeDir(localLibRealPath);
+                    if (!localLibReal.exists()) {
+                        FileUtil.copyDirectory(localLib, localLibReal);
+                    } else if (isFileSizeChanged(localLib.getAbsolutePath(), localLibRealPath)) {
+                        FileUtil.copyDirectory(localLib, localLibReal);
                     }
                 }
+            }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -663,7 +655,7 @@ public class GitHubUtil {
         return path + File.separator + "view";
     }
 
-    private boolean isFileSizeChanged(String source, String destination) {
+    private boolean isFileSizeChanged(String source, String destination) throws IOException {
         long sourceSize = NewFileUtil.getFolderSize(source);
         long destSize = NewFileUtil.getFolderSize(destination);
         return sourceSize != destSize;
