@@ -37,8 +37,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import a.a.a.aB;
@@ -58,7 +57,6 @@ import mod.hey.studios.project.backup.BackupRestoreManager;
 import mod.hey.studios.util.Helper;
 
 public class ProjectsFragment extends DA {
-    private Executor executor = Executors.newSingleThreadExecutor();
 
     private SwipeRefreshLayout swipeRefresh;
     private SearchView projectsSearchView;
@@ -133,7 +131,7 @@ public class ProjectsFragment extends DA {
         projectsAdapter = new ProjectsAdapter(this, new ArrayList<>(projectsList));
         myProjects.setAdapter(projectsAdapter);
         
-        executor.execute(() -> refreshProjectsList());
+        refreshProjectsList();
 
         view.findViewById(R.id.bottom_sheet_content_holder).setOnClickListener(v -> {
             if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
@@ -214,8 +212,10 @@ public class ProjectsFragment extends DA {
                         final String errorMessage;
                         try {
                             requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Generating project sources, please wait"));
-                            gitUtil.build();
-                            requireActivity().startActivity(intent);
+                            CompletableFuture<Void> build = gitUtil.build();
+                            build.thenRun(() -> requireActivity().startActivity(intent));
+                            build.join();
+                            
                             return;
                         } catch (FileNotFoundException e) {
                             errorMessage = e.getMessage();
@@ -379,32 +379,28 @@ public class ProjectsFragment extends DA {
     }
 
     private void showGitCloneDialog() {
-        Executor executor = Executors.newFixedThreadPool(4);
-        Handler handler = new Handler(Looper.getMainLooper());
-        
         try {
             Clone clone = new Clone(requireActivity(), lC.b());
             clone.execute((boolean success, String sc_id, GitHubBean bean) -> {
                 if (success) {
                     GitHubUtil gitUtil = new GitHubUtil(sc_id);
                     gitUtil.setBean(bean);
-                    executor.execute(() -> {
-                        final String errorMessage;
-                        try {
-                            requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Generating project sources, please wait"));
-                            gitUtil.build();
-                            handler.post(() -> {
-                                refreshProjectsList();
-                                toDesignActivity(sc_id);
-                            });
-                            return;
-                        } catch (FileNotFoundException e) {
-                            errorMessage = e.getMessage();
-                        } catch (Exception e) {
-                            errorMessage = e.getMessage();
-                        }
-                        requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + errorMessage));
-                    });
+                    final String errorMessage;
+                    try {
+                        requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Generating project sources, please wait"));
+                        CompletableFuture<Void> build = gitUtil.build();
+                        build.thenRun(() -> {
+                            refreshProjectsList();
+                            toDesignActivity(sc_id);
+                        });
+                        build.join();
+                        return;
+                    } catch (FileNotFoundException e) {
+                        errorMessage = e.getMessage();
+                    } catch (Exception e) {
+                        errorMessage = e.getMessage();
+                    }
+                    requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + errorMessage));
                 }
             });
         } catch (Exception e) {

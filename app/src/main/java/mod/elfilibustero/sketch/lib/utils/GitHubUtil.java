@@ -19,6 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.jgit.api.CreateBranchCommand;
@@ -61,6 +64,7 @@ import mod.elfilibustero.sketch.beans.GitCommitBean;
 import mod.elfilibustero.sketch.beans.GitHubBean;
 import mod.elfilibustero.sketch.beans.ProjectBean;
 import mod.elfilibustero.sketch.beans.TempProjectBean;
+import mod.elfilibustero.sketch.lib.viewmodel.GitHubViewModel;
 import mod.hey.studios.editor.manage.block.ExtraBlockInfo;
 import mod.hey.studios.editor.manage.block.v2.BlockLoader;
 import mod.hey.studios.project.custom_blocks.CustomBlocksManager;
@@ -98,21 +102,29 @@ public class GitHubUtil {
         FileUtil.writeFile(path, new Gson().toJson(bean != null ? bean : new GitHubBean()));
     }
 
-    public void build() throws IOException, Exception {
+    public CompletableFuture<Void> build() throws IOException, Exception {
+        Executor executor = Executors.newFixedThreadPool(3);
         try (Repository repository = Git.open(new File(getGitHubSrc())).getRepository()) {
-            //if (!isFileExists(repository, "project.json")) {
-            //    throw new FileNotFoundException("Project file not found");
-            //}
-
-            buildProjectFile();
-
-            buildDataFile(repository);
-
-            buildProjectResources();
-
-            buildLocalLibrary();
-
-            buildCustomBlock(repository);
+            return CompletableFuture.supplyAsync(() -> {
+                buildProjectFile();
+                return null;
+            }, executor)
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                buildDataFile(repository);
+                return null;
+            }, executor)
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                buildProjectResources();
+                return null;
+            }, executor)
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                buildLocalLibrary();
+                return null;
+            }, executor)
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                buildCustomBlock();
+                return null;
+            }, executor));
         }
     }
 
@@ -388,24 +400,24 @@ public class GitHubUtil {
 
     public void generate() {
         try (Repository repository = openRepository()) {
+            //Project File (.sketchware/mysc/list/sc_id/project)
+            generateProjectFile();
 
+            //Project Data (.sketchware/data/sc_id/project)
+            generateProjectData();
+
+            //Project Resources
+            generateProjectResources();
+
+            //Local Library
+            generateLocalLibrary();
+
+            //Custom Block
+            generateCustomBlock();
         } catch (Exception e) {
-            SketchwareUtil.toast(e.getMessage());
+            SketchwareUtil.toastError(e.getMessage());
         }
-        //Project File (.sketchware/mysc/list/sc_id/project)
-        generateProjectFile();
-
-        //Project Data (.sketchware/data/sc_id/project)
-        generateProjectData();
-
-        //Project Resources
-        generateProjectResources();
-
-        //Local Library
-        generateLocalLibrary();
-
-        //Custom Block
-        generateCustomBlock();
+        
     }
 
     private void writeFile(String from, String to) {

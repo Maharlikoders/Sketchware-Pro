@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,8 +12,7 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
 
 import a.a.a.aB;
 import a.a.a.wq;
@@ -209,32 +206,29 @@ public class SetupGitHubActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void showGitClone(GitHubBean bean) {
-        Executor executor = Executors.newFixedThreadPool(4);
-        Handler handler = new Handler(Looper.getMainLooper());
-        
         try {
             Clone clone = new Clone(this, sc_id);
             clone.execute(bean, (boolean success, String _sc_id, GitHubBean _bean) -> {
                 if (success) {
-                    executor.execute(() -> {
-                        final String errorMessage;
-                        try {
-                            runOnUiThread(() -> SketchwareUtil.toast("Generating project sources, please wait"));
-                            new GitHubUtil(sc_id).build();
-                            handler.post(() -> {
-                                goBackToManageGitHub();
-                            });
-                            return;
-                        } catch (FileNotFoundException e) {
-                            errorMessage = e.getMessage();
-                        } catch (Exception e) {
-                            errorMessage = e.getMessage();
-                        }
-                        runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + errorMessage));
-                    });
+                    final String errorMessage;
+                    try {
+                        runOnUiThread(() -> SketchwareUtil.toast("Generating project sources, please wait"));
+                        CompletableFuture<Void> build = new GitHubUtil(sc_id).build();
+                        build.thenRun(() -> {
+                            goBackToManageGitHub();
+                        });
+                        build.join();
+                        return;
+                    } catch (FileNotFoundException e) {
+                        errorMessage = e.getMessage();
+                    } catch (Exception e) {
+                        errorMessage = e.getMessage();
+                    }
+                    runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + errorMessage));
                 }
             });
         } catch (Exception e) {
+            goBackToManageGitHub();
             SketchwareUtil.toastError("Cloning failed: " + e.getMessage());
         }
     }
