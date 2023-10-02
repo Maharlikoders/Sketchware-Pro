@@ -92,7 +92,7 @@ public class PullRemoteUpdates {
                 }
                 if (hasUpdates) {
                 	PullCommand pull = git.pull();
-                	pull.setRemote(bean.repoUrl);
+                	pull.setRemote("origin");
                 	pull.setRemoteBranchName(bean.branch);
                 	pull.setProgressMonitor(monitor);
                 	pull.setCredentialsProvider(credentials);
@@ -112,7 +112,7 @@ public class PullRemoteUpdates {
                 return;
             } catch (JGitInternalException | GitAPIException | IOException e) {
                 ThreadUtils.runOnUiThread(() -> {
-                    SketchwareUtil.toastError("Fetch failed " + e.getMessage());
+                    SketchwareUtil.toastError("Fetch failed: " + e.getMessage());
                     dialog.dismiss();
                 });
                 success.onSuccess(false);
