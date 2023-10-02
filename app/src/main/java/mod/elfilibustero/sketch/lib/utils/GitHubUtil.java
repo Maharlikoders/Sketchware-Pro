@@ -365,7 +365,7 @@ public class GitHubUtil {
                     }
                 }
             } catch (Exception ignored) {
-                e.printStackTrace();
+                ignored.printStackTrace();
             }
         }
     }
@@ -383,7 +383,7 @@ public class GitHubUtil {
                         try {
                             FileUtil.copyDirectory(localLib, localLibRealPath);
                         } catch (Exception ignored) {
-                            e.printStackTrace();
+                            ignored.printStackTrace();
                         }
                     }
                 }
