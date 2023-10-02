@@ -109,15 +109,15 @@ public class GitHubUtil {
                 try {
                     buildProjectFile();
                 } catch (Exception e) {
-                    throw new Exception(e.toString());
+                    e.printStackTrace();
                 }
                 return null;
             }, executor)
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
                     buildDataFile(repository);
-                } catch (IOException e) {
-                    throw new IOException(e.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 return null;
             }, executor))
@@ -132,8 +132,8 @@ public class GitHubUtil {
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
                     buildCustomBlock(repository);
-                } catch (IOException e) {
-                    throw new IOException(e.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 return null;
             }, executor));
@@ -365,6 +365,7 @@ public class GitHubUtil {
                     }
                 }
             } catch (Exception ignored) {
+                e.printStackTrace();
             }
         }
     }
@@ -382,6 +383,7 @@ public class GitHubUtil {
                         try {
                             FileUtil.copyDirectory(localLib, localLibRealPath);
                         } catch (Exception ignored) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -389,7 +391,7 @@ public class GitHubUtil {
         }
     }
 
-    private void buildCustomBlock(Repository repository) throws IOException {
+    private void buildCustomBlock(Repository repository) {
         String srcBlockInfo = getGitHubProject("src/block/custom_blocks");
         if (isFileExists(repository, "src/block/custom_blocks")) {
             FileUtil.copyFile(srcBlockInfo, wq.b(sc_id));
@@ -406,6 +408,7 @@ public class GitHubUtil {
                 custom_blocks.addAll(blocks);
                 FileUtil.writeFile(customBlockTempPath, new Gson().toJson(custom_blocks));
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
