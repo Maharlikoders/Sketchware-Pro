@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import a.a.a.bB;
 import a.a.a.gB;
 
-import com.sketchware.remod.databinding.ManageGithubSetCredentialBinding;
+import com.sketchware.pro.databinding.ManageGithubSetCredentialBinding;
 
 import mod.elfilibustero.sketch.beans.GitHubBean;
 

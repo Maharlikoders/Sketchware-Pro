@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.cardview.widget.CardView;
 
-import com.sketchware.remod.databinding.ManageXmlBaseItemBinding;
+import com.sketchware.pro.databinding.ManageXmlBaseItemBinding;
 import com.sketchware.pro.R;
 
 import mod.elfilibustero.sketch.constants.XmlResourceConstant;

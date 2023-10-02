@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import a.a.a.bB;
 import a.a.a.gB;
 
-import com.sketchware.remod.databinding.ManageGithubPreviewBinding;
+import com.sketchware.pro.databinding.ManageGithubPreviewBinding;
 
 import mod.elfilibustero.sketch.beans.GitHubBean;
 

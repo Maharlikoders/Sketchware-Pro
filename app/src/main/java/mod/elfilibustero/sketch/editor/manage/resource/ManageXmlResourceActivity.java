@@ -25,10 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.besome.sketch.lib.base.CollapsibleViewHolder;
 import com.besome.sketch.lib.ui.CollapsibleButton;
 import com.google.gson.Gson;
-import com.sketchware.remod.databinding.ColorPickerBinding;
-import com.sketchware.remod.databinding.ManageXmlResourceBinding;
-import com.sketchware.remod.databinding.ManageXmlResourceAddBinding;
-import com.sketchware.remod.databinding.ManageXmlResourceListItemBinding;
+import com.sketchware.pro.databinding.ColorPickerBinding;
+import com.sketchware.pro.databinding.ManageXmlResourceBinding;
+import com.sketchware.pro.databinding.ManageXmlResourceAddBinding;
+import com.sketchware.pro.databinding.ManageXmlResourceListItemBinding;
 import com.sketchware.pro.R;
 
 import io.github.rosemoe.sora.widget.CodeEditor;

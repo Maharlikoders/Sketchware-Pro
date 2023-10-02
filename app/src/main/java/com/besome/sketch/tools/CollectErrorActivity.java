@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.sketchware.remod.BuildConfig;
+import com.sketchware.pro.BuildConfig;
 import com.sketchware.pro.R;
 
 import java.io.File;

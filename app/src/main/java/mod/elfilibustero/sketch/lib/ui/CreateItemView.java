@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.cardview.widget.CardView;
 
-import com.sketchware.remod.databinding.CreateItemViewBinding;
+import com.sketchware.pro.databinding.CreateItemViewBinding;
 import com.sketchware.pro.R;
 
 public class CreateItemView extends CardView {

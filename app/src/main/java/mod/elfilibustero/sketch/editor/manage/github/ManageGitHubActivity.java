@@ -33,8 +33,8 @@ import a.a.a.lC;
 import a.a.a.wB;
 
 import com.sketchware.pro.R;
-import com.sketchware.remod.databinding.ManageGithubBinding;
-import com.sketchware.remod.databinding.PropertyPopupSelectorSingleBinding;
+import com.sketchware.pro.databinding.ManageGithubBinding;
+import com.sketchware.pro.databinding.PropertyPopupSelectorSingleBinding;
 
 import mod.SketchwareUtil;
 import mod.elfilibustero.sketch.beans.GitHubBean;

@@ -20,7 +20,7 @@ import org.eclipse.jgit.lib.Repository;
 import a.a.a.aB;
 
 import com.sketchware.pro.R;
-import com.sketchware.remod.databinding.PropertyPopupInputTextBinding;
+import com.sketchware.pro.databinding.PropertyPopupInputTextBinding;
 
 import mod.SketchwareUtil;
 import mod.elfilibustero.sketch.beans.GitCommitBean;

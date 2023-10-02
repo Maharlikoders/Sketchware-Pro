@@ -19,7 +19,7 @@ import a.a.a.wq;
 import a.a.a.xB;
 
 import com.sketchware.pro.R;
-import com.sketchware.remod.databinding.ManageGithubSetupBinding;
+import com.sketchware.pro.databinding.ManageGithubSetupBinding;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;

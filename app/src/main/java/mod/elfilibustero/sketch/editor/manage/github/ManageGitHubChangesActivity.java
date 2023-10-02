@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.sketchware.pro.R;
-import com.sketchware.remod.databinding.ManageGithubChangesBinding;
+import com.sketchware.pro.databinding.ManageGithubChangesBinding;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;

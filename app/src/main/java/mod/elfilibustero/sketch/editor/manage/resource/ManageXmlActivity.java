@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sketchware.remod.databinding.ManageXmlBinding;
+import com.sketchware.pro.databinding.ManageXmlBinding;
 import com.sketchware.pro.R;
 
 import mod.elfilibustero.sketch.constants.XmlResourceConstant;

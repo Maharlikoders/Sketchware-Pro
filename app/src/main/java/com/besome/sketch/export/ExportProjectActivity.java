@@ -32,7 +32,7 @@ import androidx.core.content.FileProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
-import com.sketchware.remod.BuildConfig;
+import com.sketchware.pro.BuildConfig;
 import com.sketchware.pro.R;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
