@@ -545,7 +545,7 @@ public class GitHubUtil {
     }
 
     private void generateLocalLibrary() {
-        File localLibrary new File(wq.b(sc_id), "local_library");
+        File localLibrary = new File(wq.b(sc_id), "local_library");
 
         if (localLibrary.exists()) {
             try {
