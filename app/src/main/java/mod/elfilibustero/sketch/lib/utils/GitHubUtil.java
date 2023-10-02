@@ -429,7 +429,7 @@ public class GitHubUtil {
         }
     }
 
-    public CompletableFuture<Void> generate() throws Exception {
+    public CompletableFuture<Void> generate() {
         Executor executor = Executors.newFixedThreadPool(3);
         try (Repository repository = openRepository()) {
             return CompletableFuture.supplyAsync(() -> {
@@ -462,8 +462,10 @@ public class GitHubUtil {
                 generateCustomBlock();
                 return null;
             }, executor));
+        } catch (Exception e) {
+            SketchwareUtil.toastError("Updating repository failed: " + e.getMessage());
+            return null;
         }
-        
     }
 
     private void writeFile(String from, String to) {
@@ -520,7 +522,7 @@ public class GitHubUtil {
                     NewFileUtil.copyDir(files, toFiles);
                 }
             } else {
-                FileUtil.delete(toFiles);
+                FileUtil.deleteFile(toFiles);
             }
 
             String injections = data + File.separator + "injection";
@@ -530,7 +532,7 @@ public class GitHubUtil {
                     NewFileUtil.copyDir(injections, toInjections);
                 }
             } else {
-                FileUtil.delete(toInjections);
+                FileUtil.deleteFile(toInjections);
             }
             
         } catch (Exception ignored) {
@@ -546,11 +548,11 @@ public class GitHubUtil {
                 if (resFolder.exists()) {
                     FileUtil.makeDir(resSubFolder.getAbsolutePath());
                     if (isFileSizeChanged(resFolder.getAbsolutePath(), resSubFolder.getAbsolutePath())) {
-                        FileUtil.delete(resSubFolder.getAbsolutePath());
+                        FileUtil.deleteFile(resSubFolder.getAbsolutePath());
                         FileUtil.copyDirectory(resFolder, resSubFolder);
                     }
                 } else if (resSubFolder.exists()) {
-                    FileUtil.delete(resSubFolder.getAbsolutePath());
+                    FileUtil.deleteFile(resSubFolder.getAbsolutePath());
                 }
             }
         } catch (Exception ignored) {
@@ -574,7 +576,7 @@ public class GitHubUtil {
                             String libPath = jarFile.getAbsolutePath();
                             String gitPath = gitJarFile.getAbsolutePath();
                             if (gitJarFile.exists() && isFileSizeChanged(libPath, gitPath)) {
-                                FileUtil.delete(gitPath);
+                                FileUtil.deleteFile(gitPath);
                             }
 
                             if (!isFileSizeChanged(libPath, gitPath)) {
@@ -586,7 +588,7 @@ public class GitHubUtil {
                         }
                     }
                     if (gitJarFile.exists()) {
-                        FileUtil.delete(gitJarFile.getAbsolutePath());
+                        FileUtil.deleteFile(gitJarFile.getAbsolutePath());
                     }
                 }
             } catch (Exception ignored) {

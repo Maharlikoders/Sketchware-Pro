@@ -33,8 +33,7 @@ public class NewFileUtil {
 		long size = 0;
 
 		if (Files.isDirectory(folder)) {
-			EnumSet<FileVisitOption> options = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
-			try (Stream<Path> pathStream = Files.walk(folder, options)) {
+			try (Stream<Path> pathStream = Files.walk(folder)) {
 				size = pathStream
 					.filter(Files::isRegularFile)
 					.mapToLong(file -> {
@@ -42,7 +41,7 @@ public class NewFileUtil {
 							return Files.size(file);
 						} catch (IOException e) {
 							e.printStackTrace();
-							return 0;
+							return 0L;
 						}
 					})
 					.sum();

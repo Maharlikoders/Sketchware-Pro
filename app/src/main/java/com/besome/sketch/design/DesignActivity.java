@@ -1278,7 +1278,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             GitHubUtil gitUtil = new GitHubUtil(sc_id);
             if (!gitUtil.getBean().repoUrl.isEmpty()) {
                 CompletableFuture<Void> build = gitUtil.generate();
-                build.join();
+                if (build != null) build.join();
             }
             jC.d(sc_id).f();
             jC.d(sc_id).g();
