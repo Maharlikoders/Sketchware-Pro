@@ -391,7 +391,7 @@ public class GitHubUtil {
         }
     }
 
-    private void buildCustomBlock(Repository repository) {
+    private void buildCustomBlock(Repository repository) throws IOException {
         String srcBlockInfo = getGitHubProject("src/block/custom_blocks");
         if (isFileExists(repository, "src/block/custom_blocks")) {
             FileUtil.copyFile(srcBlockInfo, wq.b(sc_id));
