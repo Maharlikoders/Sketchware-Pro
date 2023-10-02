@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import a.a.a.Hx;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 
 public class ComponentExtraCode {
 
@@ -44,7 +45,7 @@ public class ComponentExtraCode {
         }
 
         // Hilal's components
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/data/system/listeners.json");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/listeners.json");
         try {
             if (FileUtil.isExistFile(path) && !FileUtil.readFile(path).equals("") && !FileUtil.readFile(path).equals("[]")) {
                 JSONArray arr = new JSONArray(FileUtil.readFile(path));

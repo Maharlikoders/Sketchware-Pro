@@ -16,6 +16,7 @@ import java.util.Objects;
 import com.sketchware.remod.xml.XmlBuilder;
 import a.a.a.jq;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 
 public class AppCompatInjection {
@@ -60,7 +61,7 @@ public class AppCompatInjection {
         String toParse;
 
         File injectionFile = new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/data/" + sc_id + "/injection/appcompat/" + activityFilename);
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/injection/appcompat/" + activityFilename);
         String fileContent;
         if (injectionFile.exists() && (fileContent = FileUtil.readFile(injectionFile.getAbsolutePath())).length() != 0) {
             toParse = fileContent;

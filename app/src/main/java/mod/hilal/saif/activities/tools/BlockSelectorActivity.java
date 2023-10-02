@@ -41,11 +41,12 @@ import java.util.HashMap;
 import dev.aldi.sayuti.block.ExtraBlockClassInfo;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 
 public class BlockSelectorActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final File BLOCK_SELECTOR_MENUS_FILE = new File(Environment.getExternalStorageDirectory(), ".sketchware/resources/block/My Block/menu.json");
+    private static final File BLOCK_SELECTOR_MENUS_FILE = new File(Environment.getExternalStorageDirectory(), SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/My Block/menu.json");
 
     private final ArrayList<String> display = new ArrayList<>();
     private LinearLayout add;
@@ -193,8 +194,8 @@ public class BlockSelectorActivity extends AppCompatActivity implements View.OnC
                 case "Export current block selector menu":
                     ArrayList<HashMap<String, Object>> arrayList = new ArrayList<>();
                     arrayList.add(data.get(current_item));
-                    FileUtil.writeFile(FileUtil.getExternalStorageDir().concat("/.sketchware/resources/block/export/menu/") + data.get(current_item).get("name") + ".json", new Gson().toJson(arrayList));
-                    SketchwareUtil.toast("Successfully exported block menu to:\n/Internal storage/.sketchware/resources/block/export", Toast.LENGTH_LONG);
+                    FileUtil.writeFile(FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/export/menu/") + data.get(current_item).get("name") + ".json", new Gson().toJson(arrayList));
+                    SketchwareUtil.toast("Successfully exported block menu to:\n/Internal storage/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/export", Toast.LENGTH_LONG);
                     break;
 
                 case "Import block selector menus":
@@ -202,8 +203,8 @@ public class BlockSelectorActivity extends AppCompatActivity implements View.OnC
                     break;
 
                 case "Export all block selector menus":
-                    FileUtil.writeFile(FileUtil.getExternalStorageDir().concat("/.sketchware/resources/block/export/menu/") + "All_Menus.json", new Gson().toJson(data));
-                    SketchwareUtil.toast("Successfully exported block menus to:\n/Internal storage/.sketchware/resources/block/export", Toast.LENGTH_LONG);
+                    FileUtil.writeFile(FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/export/menu/") + "All_Menus.json", new Gson().toJson(data));
+                    SketchwareUtil.toast("Successfully exported block menus to:\n/Internal storage/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/export", Toast.LENGTH_LONG);
                     break;
 
                 default:

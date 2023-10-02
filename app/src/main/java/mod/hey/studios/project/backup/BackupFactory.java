@@ -37,9 +37,11 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import a.a.a.lC;
+import a.a.a.wq;
 import a.a.a.yB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.editor.manage.block.ExtraBlockInfo;
 import mod.hey.studios.editor.manage.block.v2.BlockLoader;
 import mod.hey.studios.project.custom_blocks.CustomBlocksManager;
@@ -48,7 +50,7 @@ import mod.hilal.saif.activities.tools.ConfigActivity;
 
 public class BackupFactory {
     public static final String EXTENSION = "swb";
-    public static final String DEF_PATH = ".sketchware/backups/";
+    public static final String DEF_PATH = SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "backups/";
 
     private static final String[] resSubfolders = {
             "fonts", "icons", "images", "sounds"
@@ -76,7 +78,7 @@ public class BackupFactory {
 
     private static File getAllLocalLibsDir() {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/libs/local_libs");
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "libs/local_libs");
     }
 
     private static HashMap<String, Object> getProject(File file) {
@@ -118,8 +120,7 @@ public class BackupFactory {
     }
 
     public static String getNewScId() {
-        File myscList = new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/mysc/list/");
+        File myscList = new File(wq.c() + "/");
 
         ArrayList<String> list = new ArrayList<>();
         FileUtil.listDir(myscList.getAbsolutePath(), list);
@@ -551,21 +552,21 @@ public class BackupFactory {
 
     private File getDataDir() {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/data/" + sc_id);
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id);
     }
 
     private File getResDir(String subfolder) {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/resources/" + subfolder + "/" + sc_id);
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/" + subfolder + "/" + sc_id);
     }
 
     private File getProjectPath() {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/mysc/list/" + sc_id + "/project");
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/mysc/list/" + sc_id + "/project");
     }
 
     private File getLocalLibsPath() {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/data/" + sc_id + "/local_library");
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/local_library");
     }
 }

@@ -47,6 +47,7 @@ import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.constants.XmlResourceConstant;
 import mod.elfilibustero.sketch.editor.xml.CollapsibleXmlLayout;
 import mod.elfilibustero.sketch.lib.handler.XmlResourceHandler;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.elfilibustero.sketch.lib.utils.StringEscapeUtil;
 import mod.elfilibustero.sketch.lib.valid.ResNameValidator;
 import mod.hey.studios.util.Helper;
@@ -89,7 +90,7 @@ public class ManageXmlResourceActivity extends AppCompatActivity {
         resType = getIntent().getIntExtra("type", 0);
         fileName = XmlResourceConstant.getFileName(resType);
         resName = Helper.getResString(XmlResourceConstant.getName(resType));
-        resourcePath = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/injection/resource/" + fileName;
+        resourcePath = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/injection/resource/" + fileName;
         resourceHandler = new XmlResourceHandler(this, sc_id);
         switch (resType) {
             case XmlResourceConstant.TYPE_STRING -> {

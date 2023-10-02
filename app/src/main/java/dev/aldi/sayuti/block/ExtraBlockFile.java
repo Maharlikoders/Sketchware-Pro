@@ -9,19 +9,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.blocks.BlocksHandler;
 
 public class ExtraBlockFile {
 
     public static final File EXTRA_BLOCKS_DATA_FILE = new File(Environment.getExternalStorageDirectory(),
-            ".sketchware/resources/block/My Block/block.json");
+            SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/My Block/block.json");
     public static final File EXTRA_BLOCKS_PALETTE_FILE = new File(Environment.getExternalStorageDirectory(),
-            ".sketchware/resources/block/My Block/palette.json");
+            SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/My Block/palette.json");
     public static final File EXTRA_MENU_DATA_FILE = new File(Environment.getExternalStorageDirectory(),
-            ".sketchware/resources/block/Menu Block/data.json");
+            SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/Menu Block/data.json");
     public static final File EXTRA_MENU_BLOCK_FILE = new File(Environment.getExternalStorageDirectory(),
-            ".sketchware/resources/block/Menu Block/block.json");
+            SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/Menu Block/block.json");
 
     public static ArrayList<HashMap<String, Object>> getExtraBlockData() {
         ArrayList<HashMap<String, Object>> extraBlocks = new Gson().fromJson(getExtraBlockFile(), Helper.TYPE_MAP_LIST);

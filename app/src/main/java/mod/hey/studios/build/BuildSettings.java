@@ -1,6 +1,8 @@
 package mod.hey.studios.build;
 
+import java.io.File;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.project.ProjectSettings;
 
 public class BuildSettings extends ProjectSettings {
@@ -27,6 +29,6 @@ public class BuildSettings extends ProjectSettings {
 
     @Override
     public String getPath() {
-        return FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/build_config";
+        return FileUtil.getExternalStorageDir() + File.separator + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator +"data/" + sc_id + "/build_config";
     }
 }

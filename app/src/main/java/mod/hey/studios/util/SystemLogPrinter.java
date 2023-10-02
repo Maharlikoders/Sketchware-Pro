@@ -8,11 +8,12 @@ import java.io.PrintStream;
 import kellinwood.logging.LogManager;
 import kellinwood.logging.Logger;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.jbk.util.LogUtil;
 
 public class SystemLogPrinter {
 
-    private static final String PATH = FileUtil.getExternalStorageDir().concat("/.sketchware/debug.txt");
+    private static final String PATH = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/debug.txt";
 
     public static void start() {
         start(PATH);

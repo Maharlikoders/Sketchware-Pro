@@ -377,7 +377,7 @@ public class GitHubUtil {
             try {
             if (localLibsContent != null) {
                 for (File localLib : localLibsContent) {
-                    File localLibReal = new File(FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs", localLib.getName());
+                    File localLibReal = new File(FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs", localLib.getName());
                     String localLibRealPath = localLibReal.getAbsolutePath();
                     FileUtil.makeDir(localLibRealPath);
                     if (!localLibReal.exists()) {

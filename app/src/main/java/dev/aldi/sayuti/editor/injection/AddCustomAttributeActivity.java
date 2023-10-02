@@ -32,6 +32,7 @@ import java.util.HashMap;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 
 public class AddCustomAttributeActivity extends AppCompatActivity {
@@ -62,7 +63,7 @@ public class AddCustomAttributeActivity extends AppCompatActivity {
 
             title.setText(widgetType);
 
-            activityInjectionsFilePath = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/injection/appcompat/" + activityFilename;
+            activityInjectionsFilePath = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/injection/appcompat/" + activityFilename;
             if (!FileUtil.isExistFile(activityInjectionsFilePath) || FileUtil.readFile(activityInjectionsFilePath).equals("")) {
                 activityInjections = new Gson().fromJson(AppCompatInjection.getDefaultActivityInjections(), Helper.TYPE_MAP_LIST);
             } else {

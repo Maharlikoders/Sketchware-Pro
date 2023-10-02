@@ -47,7 +47,7 @@ public class GetKeyStoreCredentialsDialog {
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.b(Helper.getResString(R.string.common_word_next), next -> {
             if (mode == SigningMode.OWN_KEY_STORE) {
-                // La/a/a/wq;->j()Ljava/lang/String; returns /Internal storage/sketchware/keystore/release_key.jks
+                // La/a/a/wq;->j()Ljava/lang/String; returns /Internal storage/<?sketchware workspace?>/keystore/release_key.jks
                 if (new File(wq.j()).exists()) {
                     boolean aliasEmpty = TextUtils.isEmpty(alias.getText().toString());
                     boolean passwordEmpty = TextUtils.isEmpty(password.getText().toString());

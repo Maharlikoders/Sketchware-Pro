@@ -41,17 +41,18 @@ import java.util.HashMap;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.events.EventsHandler;
 
 public class EventsMaker extends Activity {
 
     public static final File EVENT_EXPORT_LOCATION = new File(Environment.getExternalStorageDirectory(),
-            ".sketchware/data/system/export/events/");
+            SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/export/events/");
     public static final File EVENTS_FILE = new File(Environment.getExternalStorageDirectory(),
-            ".sketchware/data/system/events.json");
+            SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/events.json");
     public static final File LISTENERS_FILE = new File(Environment.getExternalStorageDirectory(),
-            ".sketchware/data/system/listeners.json");
+            SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/listeners.json");
     private ArrayList<HashMap<String, Object>> listMap = new ArrayList<>();
     private ListView listView;
 
@@ -326,11 +327,11 @@ public class EventsMaker extends Activity {
         FileUtil.writeFile(new File(EVENT_EXPORT_LOCATION, "All_Events.txt").getAbsolutePath(),
                 new Gson().toJson(listMap) + "\n" + new Gson().toJson(events));
         SketchwareUtil.toast("Successfully exported events to:\n" +
-                "/Internal storage/.sketchware/data/system/export/events", Toast.LENGTH_LONG);
+                "/Internal storage/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/export/events", Toast.LENGTH_LONG);
     }
 
     private void export(int p) {
-        String concat = FileUtil.getExternalStorageDir().concat("/.sketchware/data/system/export/events/");
+        String concat = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/export/events/");
         ArrayList<HashMap<String, Object>> ex = new ArrayList<>();
         ex.add(listMap.get(p));
         ArrayList<HashMap<String, Object>> ex2 = new ArrayList<>();
@@ -345,7 +346,7 @@ public class EventsMaker extends Activity {
         }
         FileUtil.writeFile(concat + ex.get(0).get("name").toString() + ".txt", new Gson().toJson(ex) + "\n" + new Gson().toJson(ex2));
         SketchwareUtil.toast("Successfully exported event to:\n" +
-                "/Internal storage/.sketchware/data/system/export/events", Toast.LENGTH_LONG);
+                "/Internal storage/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/export/events", Toast.LENGTH_LONG);
     }
 
     private String getNumOfEvents(String str) {
@@ -454,7 +455,7 @@ public class EventsMaker extends Activity {
                     case "Export events":
                         exportAll();
                         SketchwareUtil.toast("Successfully exported events to:\n" +
-                                "/Internal storage/.sketchware/data/system/export/events", Toast.LENGTH_LONG);
+                                "/Internal storage/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/export/events", Toast.LENGTH_LONG);
                         break;
 
                     default:

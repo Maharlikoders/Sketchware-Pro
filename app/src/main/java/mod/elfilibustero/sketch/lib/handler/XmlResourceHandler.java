@@ -18,6 +18,7 @@ import com.besome.sketch.beans.ProjectLibraryBean;
 
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.constants.XmlResourceConstant;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
 import mod.hey.studios.util.Helper;
@@ -31,7 +32,7 @@ public class XmlResourceHandler {
     public XmlResourceHandler(Context context, String sc_id) {
         this.sc_id = sc_id;
         sourceCodeMaker = new yq(context, sc_id);
-        injectResourceDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/injection/resource/";
+        injectResourceDir = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/injection/resource/";
     }
 
     public List<Map<String, Object>> parseResourceFile(String file) {

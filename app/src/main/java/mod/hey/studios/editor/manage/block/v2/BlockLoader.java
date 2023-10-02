@@ -14,6 +14,7 @@ import dev.aldi.sayuti.block.ExtraBlockFile;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.editor.manage.block.palette.PaletteSelector;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.editor.manage.block.ExtraBlockInfo;
 import mod.jbk.util.LogUtil;
 
@@ -49,7 +50,7 @@ public class BlockLoader {
 
     public static ExtraBlockInfo getBlockFromProject(String sc_id, String block_name) {
         File customBlocksConfig = new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/data/" + sc_id + "/custom_blocks");
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator +"data/" + sc_id + "/custom_blocks");
         if (customBlocksConfig.exists()) {
             try {
                 ArrayList<ExtraBlockInfo> extraBlocks = new Gson().fromJson(

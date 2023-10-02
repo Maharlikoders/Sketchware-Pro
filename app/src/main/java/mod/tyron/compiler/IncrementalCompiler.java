@@ -17,6 +17,7 @@ import java.util.List;
 import a.a.a.yq;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 
 public class IncrementalCompiler {
 
@@ -111,7 +112,7 @@ public class IncrementalCompiler {
             }
         }
         File file = new File(Environment.getExternalStorageDirectory(),
-                ".sketchware/data/".concat(projectConfig.sc_id.concat("/files/native_libs")));
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/".concat(projectConfig.sc_id.concat("/files/native_libs")));
         if (FileUtil.isExistFile(file.getAbsolutePath())) {
             builder.addNativeLibraries(file);
         }

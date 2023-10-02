@@ -39,6 +39,7 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.code.SrcCodeEditor;
 import mod.hey.studios.code.SrcCodeEditorLegacy;
 import mod.hey.studios.util.Helper;
@@ -83,7 +84,7 @@ public class AndroidManifestInjection extends Activity {
     }
 
     private void checkAttrs() {
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id).concat("/Injection/androidmanifest/attributes.json");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(sc_id).concat("/Injection/androidmanifest/attributes.json");
         if (FileUtil.isExistFile(path)) {
             ArrayList<HashMap<String, Object>> data = new Gson().fromJson(FileUtil.readFile(path),
                     Helper.TYPE_MAP_LIST);
@@ -237,7 +238,7 @@ public class AndroidManifestInjection extends Activity {
             intent.setClass(getApplicationContext(), SrcCodeEditor.class);
         }
 
-        String APP_COMPONENTS_PATH = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id).concat("/Injection/androidmanifest/app_components.txt");
+        String APP_COMPONENTS_PATH = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(sc_id).concat("/Injection/androidmanifest/app_components.txt");
         if (!FileUtil.isExistFile(APP_COMPONENTS_PATH)) FileUtil.writeFile(APP_COMPONENTS_PATH, "");
         intent.putExtra("content", APP_COMPONENTS_PATH);
         intent.putExtra("xml", "");
@@ -306,7 +307,7 @@ public class AndroidManifestInjection extends Activity {
     }
 
     private void addNewActivity(String componentName) {
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id).concat("/Injection/androidmanifest/attributes.json");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(sc_id).concat("/Injection/androidmanifest/attributes.json");
         ArrayList<HashMap<String, Object>> data = new ArrayList<>();
         if (FileUtil.isExistFile(path)) {
             data = new Gson().fromJson(FileUtil.readFile(path), Helper.TYPE_MAP_LIST);
@@ -376,7 +377,7 @@ public class AndroidManifestInjection extends Activity {
 
     private void refreshList() {
         list_map.clear();
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id).concat("/Injection/androidmanifest/attributes.json");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(sc_id).concat("/Injection/androidmanifest/attributes.json");
         ArrayList<String> temp = new ArrayList<>();
         ArrayList<HashMap<String, Object>> data;
         if (FileUtil.isExistFile(path)) {
@@ -401,7 +402,7 @@ public class AndroidManifestInjection extends Activity {
     private void deleteActivity(int pos) {
 
         String activity_name = (String) list_map.get(pos).get("act_name");
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id).concat("/Injection/androidmanifest/attributes.json");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(sc_id).concat("/Injection/androidmanifest/attributes.json");
         ArrayList<HashMap<String, Object>> data;
         data = new Gson().fromJson(FileUtil.readFile(path), Helper.TYPE_MAP_LIST);
         for (int i = data.size() - 1; i > -1; i--) {
@@ -417,7 +418,7 @@ public class AndroidManifestInjection extends Activity {
     }
 
     private void removeComponents(String str) {
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id).concat("/Injection/androidmanifest/activities_components.json");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(sc_id).concat("/Injection/androidmanifest/activities_components.json");
         ArrayList<HashMap<String, Object>> data;
         if (FileUtil.isExistFile(path)) {
             data = new Gson().fromJson(FileUtil.readFile(path), Helper.TYPE_MAP_LIST);

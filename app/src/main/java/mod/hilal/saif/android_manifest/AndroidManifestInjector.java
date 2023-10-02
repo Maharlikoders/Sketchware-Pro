@@ -13,31 +13,32 @@ import java.util.HashMap;
 import com.sketchware.remod.xml.XmlBuilder;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 
 public class AndroidManifestInjector {
 
     public static File getPathAndroidManifestAttributeInjection(String sc_id) {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware" + File.separator + "data" + File.separator + sc_id + File.separator +
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data" + File.separator + sc_id + File.separator +
                         "Injection" + File.separator + "androidmanifest" + File.separator + "attributes.json");
     }
 
     public static File getPathAndroidManifestLauncherActivity(String sc_id) {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware" + File.separator + "data" + File.separator + sc_id + File.separator +
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data" + File.separator + sc_id + File.separator +
                         "Injection" + File.separator + "androidmanifest" + File.separator + "activity_launcher.txt");
     }
 
     public static File getPathAndroidManifestActivitiesComponents(String sc_id) {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware" + File.separator + "data" + File.separator + sc_id + File.separator +
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data" + File.separator + sc_id + File.separator +
                         "Injection" + File.separator + "androidmanifest" + File.separator + "activities_components.json");
     }
 
     public static File getPathAndroidManifestAppComponents(String sc_id) {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware" + File.separator + "data" + File.separator + sc_id + File.separator +
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data" + File.separator + sc_id + File.separator +
                         "Injection" + File.separator + "androidmanifest" + File.separator + "app_components.txt");
     }
 

@@ -10,6 +10,7 @@ import com.android.tools.r8.OutputMode
 import com.google.gson.Gson
 import mod.agus.jcoderz.dx.command.dexer.Main
 import mod.agus.jcoderz.lib.FileUtil
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil
 import mod.hey.studios.util.Helper
 import mod.jbk.build.BuiltInLibraries
 import org.cosmic.ide.dependency.resolver.api.Artifact
@@ -70,11 +71,11 @@ class DependencyResolver(
     }
 
     private val downloadPath: String =
-        FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs"
+        FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs"
 
     private val repositoriesJson = Paths.get(
         Environment.getExternalStorageDirectory().absolutePath,
-        ".sketchware", "libs", "repositories.json"
+        SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY, "libs", "repositories.json"
     )
 
     init {

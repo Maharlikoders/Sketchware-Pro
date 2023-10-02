@@ -13,6 +13,7 @@ import java.util.HashMap;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.util.LogUtil;
 
@@ -114,7 +115,7 @@ public class ManageLocalLibrary {
         for (String packageName : getPackageNames()) {
             if (!packageName.isEmpty()) {
                 File projectGenFolder = new File(Environment.getExternalStorageDirectory(),
-                        ".sketchware/mysc/".concat(projectId).concat("/gen"));
+                        SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/mysc/".concat(projectId).concat("/gen"));
                 String rJavaPath = packageName.replace(".", File.separator)
                         .concat(File.separator).concat("R.java");
                 genPaths.add(new File(projectGenFolder, rJavaPath).getAbsolutePath());

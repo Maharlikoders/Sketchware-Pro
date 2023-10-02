@@ -20,6 +20,7 @@ import a.a.a.yq;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.jbk.build.BuiltInLibraries;
 import mod.jbk.util.LogUtil;
@@ -45,7 +46,7 @@ public class IncrementalJavaCompiler extends Compiler {
     private Compiler.Result onResultListener;
 
     public IncrementalJavaCompiler(yq projectConfig) {
-        SAVE_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/mysc/" + projectConfig.sc_id + "/incremental";
+        SAVE_PATH = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/mysc/" + projectConfig.sc_id + "/incremental";
 
         this.projectConfig = projectConfig;
         buildSettings = new BuildSettings(projectConfig.sc_id);

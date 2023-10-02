@@ -51,6 +51,8 @@ import mod.hilal.saif.asd.AsdDialog;
 import mod.hilal.saif.asd.asdforall.AsdAllEditor;
 import mod.hilal.saif.asd.old.AsdOldDialog;
 
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
+
 public class ExtraMenuBean {
 
     public static final int VARIABLE_TYPE_BOOLEAN = 0;
@@ -76,8 +78,8 @@ public class ExtraMenuBean {
         permission = permissions.toArray(new String[0]);
     }
 
-    private final String ASSETS_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/data/%s/files/assets/";
-    private final String NATIVE_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/data/%s/files/native_libs/";
+    private final String ASSETS_PATH = FileUtil.getExternalStorageDir() + File.separator + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data/%s/files/assets/";
+    private final String NATIVE_PATH = FileUtil.getExternalStorageDir() + File.separator + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data/%s/files/native_libs/";
     private final ExtraMenuBlock extraMenuBlock;
     private final FilePathUtil fpu;
     private final FilePickerDialog fpd;

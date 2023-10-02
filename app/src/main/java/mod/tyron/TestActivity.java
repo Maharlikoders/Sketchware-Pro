@@ -17,6 +17,7 @@ import java.util.List;
 
 import a.a.a.yq;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.tyron.compiler.Compiler;
 import mod.tyron.compiler.IncrementalD8Compiler;
 import mod.tyron.compiler.IncrementalJavaCompiler;
@@ -48,7 +49,7 @@ public class TestActivity extends Activity {
         testProject.put("my_app_name", "Sketchub");
         testProject.put("sc_ver_code", "1.0");
         testProject.put("sc_ver_name", "1.0");
-        String path = FileUtil.getExternalStorageDir() + "/.sketchware/mysc/748/";
+        String path = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/mysc/748/";
 
         yq projectConfig = new yq(this, path, testProject);
 
