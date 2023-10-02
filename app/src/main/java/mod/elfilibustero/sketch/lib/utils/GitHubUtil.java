@@ -112,19 +112,19 @@ public class GitHubUtil {
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 buildDataFile(repository);
                 return null;
-            }, executor)
+            }, executor))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 buildProjectResources();
                 return null;
-            }, executor)
+            }, executor))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 buildLocalLibrary();
                 return null;
-            }, executor)
+            }, executor))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 buildCustomBlock();
                 return null;
-            }, executor)));
+            }, executor));
         }
     }
 
