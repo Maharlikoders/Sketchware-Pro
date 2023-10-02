@@ -343,11 +343,7 @@ public class GitHubUtil {
             if (!FileUtil.isDirectory(srcDataDir)) {
                 return;
             }
-            long srcDataSize = NewFileUtil.getFolderSize(srcDataDir);
-            long dataSize = NewFileUtil.getFolderSize(data);
-            if (srcDataSize != dataSize) {
-                NewFileUtil.copyDir(srcDataDir, data);
-            }
+            NewFileUtil.copyDir(srcDataDir, data);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -364,9 +360,7 @@ public class GitHubUtil {
                         File resSubFolderPath = new File(resourcePath, subFolder + File.separator + sc_id);
                         String resSubFolder = resSubFolderPath.getAbsolutePath();
                         FileUtil.makeDir(resSubFolder);
-                        if (isFileSizeChanged(resFolder, resSubFolder)) {
-                            FileUtil.copyDirectory(new File(resFolder), new File(resSubFolder));
-                        }
+                        FileUtil.copyDirectory(new File(resFolder), new File(resSubFolder));
                     }
                 }
             } catch (Exception ignored) {
@@ -511,6 +505,7 @@ public class GitHubUtil {
             String toFiles = getGitHubProject("src/data/files");
             if (new File(files).exists()) {
                 if (isFileSizeChanged(files, toFiles)) {
+                    FileUtil.deleteFile(toFiles);
                     NewFileUtil.copyDir(files, toFiles);
                 }
             } else {
@@ -521,6 +516,7 @@ public class GitHubUtil {
             String toInjections = getGitHubProject("src/data/injection");
             if (new File(injections).exists()) {
                 if (isFileSizeChanged(injections, toInjections)) {
+                    FileUtil.deleteFile(toInjections);
                     NewFileUtil.copyDir(injections, toInjections);
                 }
             } else {
@@ -538,13 +534,10 @@ public class GitHubUtil {
                 File resFolder = new File(getResources(subFolder));
                 File resSubFolder = new File(gitResourcePath, subFolder);
                 if (resFolder.exists()) {
-                    FileUtil.makeDir(resSubFolder.getAbsolutePath());
                     if (isFileSizeChanged(resFolder.getAbsolutePath(), resSubFolder.getAbsolutePath())) {
                         FileUtil.deleteFile(resSubFolder.getAbsolutePath());
                         FileUtil.copyDirectory(resFolder, resSubFolder);
                     }
-                } else if (resSubFolder.exists()) {
-                    FileUtil.deleteFile(resSubFolder.getAbsolutePath());
                 }
             }
         } catch (Exception ignored) {
@@ -552,8 +545,7 @@ public class GitHubUtil {
     }
 
     private void generateLocalLibrary() {
-        String data = wq.b(sc_id);
-        File localLibrary = new File(data, "local_library");
+        File localLibrary new File(wq.b(sc_id), "local_library");
 
         if (localLibrary.exists()) {
             try {
@@ -579,10 +571,6 @@ public class GitHubUtil {
                             return;
                         }
                     }
-                    if (gitJarFile.exists()) {
-                        FileUtil.deleteFile(gitJarFile.getAbsolutePath());
-                    }
-                }
             } catch (Exception ignored) {
             }
         }
