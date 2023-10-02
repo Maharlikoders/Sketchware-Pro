@@ -430,6 +430,7 @@ public class GitHubUtil {
     }
 
     public CompletableFuture<Void> generate() throws Exception {
+        Executor executor = Executors.newFixedThreadPool(3);
         try (Repository repository = openRepository()) {
             return CompletableFuture.supplyAsync(() -> {
                 //Project File (.sketchware/mysc/list/sc_id/project)
@@ -511,10 +512,27 @@ public class GitHubUtil {
                 exclusions.add(exclusion);
             }
             NewFileUtil.copyFiles(data, getGitHubProject("src/data"), exclusions);
+
             String files = data + File.separator + "files";
+            String toFiles = getGitHubProject("src/data/files");
+            if (new File(files).exists()) {
+                if (isFileSizeChanged(files, toFiles)) {
+                    NewFileUtil.copyDir(files, toFiles);
+                }
+            } else {
+                FileUtil.delete(toFiles);
+            }
+
             String injections = data + File.separator + "injection";
-            NewFileUtil.copyDir(files, getGitHubProject("src/data/files"));
-            NewFileUtil.copyDir(injections, getGitHubProject("src/data/injection"));
+            String toInjections = getGitHubProject("src/data/injection");
+            if (new File(injections).exists()) {
+                if (isFileSizeChanged(injections, toInjections)) {
+                    NewFileUtil.copyDir(injections, toInjections);
+                }
+            } else {
+                FileUtil.delete(toInjections);
+            }
+            
         } catch (Exception ignored) {
         }
     }
@@ -524,14 +542,15 @@ public class GitHubUtil {
         try {
             for (String subFolder : PROJECT_RESOURCES_FOLDER) {
                 File resFolder = new File(getResources(subFolder));
+                File resSubFolder = new File(gitResourcePath, subFolder);
                 if (resFolder.exists()) {
-                    File resSubFolder = new File(gitResourcePath, subFolder);
-                    FileUtil.makeDir(resSubFolderPath);
-                    long resSize = NewFileUtil.getFolderSize(resFolder.getAbsolutePath());
-                    long resSubSize = NewFileUtil.getFolderSize(resSubFolder.getAbsolutePath());
-                    if (resSize != resSubSize) {
+                    FileUtil.makeDir(resSubFolder.getAbsolutePath());
+                    if (isFileSizeChanged(resFolder.getAbsolutePath(), resSubFolder.getAbsolutePath())) {
+                        FileUtil.delete(resSubFolder.getAbsolutePath());
                         FileUtil.copyDirectory(resFolder, resSubFolder);
                     }
+                } else if (resSubFolder.exists()) {
+                    FileUtil.delete(resSubFolder.getAbsolutePath());
                 }
             }
         } catch (Exception ignored) {
@@ -546,23 +565,28 @@ public class GitHubUtil {
             try {
                 JSONArray array = new JSONArray(FileUtil.readFile(localLibrary.getAbsolutePath()));
                 File localLibraryDest = new File(getGitHubProject("libs"));
-                localLibraryDest.mkdirs();
-
                 for (int i = 0; i < array.length(); i++) {
                     String jarPath = array.getJSONObject(i).optString("jarPath");
+                    File jarFile = new File(jarPath).getParentFile();
+                    File gitJarFile = new File(localLibraryDest, jarFile.getName());
                     if (jarPath != null && !jarPath.isEmpty()) {
-                        File jarFile = new File(jarPath).getParentFile();
                         if (jarFile != null) {
-                            File gitJarFile = new File(localLibraryDest, jarFile.getName());
-
-                            long jarSize = NewFileUtil.getFolderSize(jarFile.getAbsolutePath());
-                            long gitSize = NewFileUtil.getFolderSize(gitJarFile.getAbsolutePath());
-                            if (!gitJarFile.exists()) {
-                                FileUtil.copyDirectory(jarFile, new File(gitJarFile.getAbsolutePath()));
-                            } else if (jarSize != gitJarSize) {
-                                FileUtil.copyDirectory(jarFile, new File(gitJarFile.getAbsolutePath()));
+                            String libPath = jarFile.getAbsolutePath();
+                            String gitPath = gitJarFile.getAbsolutePath();
+                            if (gitJarFile.exists() && isFileSizeChanged(libPath, gitPath)) {
+                                FileUtil.delete(gitPath);
                             }
+
+                            if (!isFileSizeChanged(libPath, gitPath)) {
+                                return;
+                            }
+                            FileUtil.makeDir(gitPath);
+                            FileUtil.copyDirectory(jarFile, gitJarFile);
+                            return;
                         }
+                    }
+                    if (gitJarFile.exists()) {
+                        FileUtil.delete(gitJarFile.getAbsolutePath());
                     }
                 }
             } catch (Exception ignored) {
@@ -635,6 +659,12 @@ public class GitHubUtil {
 
     private String getView(String path) {
         return path + File.separator + "view";
+    }
+
+    private boolean isFileSizeChanged(String source, String destination) {
+        long sourceSize = NewFileUtil.getFolderSize(source);
+        long destSize = NewFileUtil.getFolderSize(destination);
+        return sourceSize != destSize;
     }
 
     public List<String> getAllBranches() {

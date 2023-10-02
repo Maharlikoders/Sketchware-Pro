@@ -12,6 +12,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class NewFileUtil {
 
@@ -33,15 +34,19 @@ public class NewFileUtil {
 
 		if (Files.isDirectory(folder)) {
 			EnumSet<FileVisitOption> options = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
-			Files.walk(folder, options, Integer.MAX_VALUE)
-				.filter(Files::isRegularFile)
-				.forEach(file -> {
-					try {
-						size += Files.size(file);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				});
+			try (Stream<Path> pathStream = Files.walk(folder, options)) {
+				size = pathStream
+					.filter(Files::isRegularFile)
+					.mapToLong(file -> {
+						try {
+							return Files.size(file);
+						} catch (IOException e) {
+							e.printStackTrace();
+							return 0;
+						}
+					})
+					.sum();
+			}
 		}
 
 		return size;
