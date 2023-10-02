@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

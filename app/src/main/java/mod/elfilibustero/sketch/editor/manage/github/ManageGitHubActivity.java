@@ -32,7 +32,7 @@ import a.a.a.aB;
 import a.a.a.lC;
 import a.a.a.wB;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 import com.sketchware.remod.databinding.ManageGithubBinding;
 import com.sketchware.remod.databinding.PropertyPopupSelectorSingleBinding;
 

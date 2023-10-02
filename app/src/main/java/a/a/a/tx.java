@@ -21,7 +21,7 @@ import androidx.core.content.FileProvider;
 import com.besome.sketch.beans.ProjectResourceBean;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Key;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.util.ArrayList;

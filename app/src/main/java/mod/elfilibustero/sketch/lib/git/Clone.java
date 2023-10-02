@@ -24,7 +24,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import a.a.a.aB;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 import com.sketchware.remod.databinding.ManageGithubPopupPushBinding;
 import com.sketchware.remod.databinding.PropertyPopupInputTextBinding;
 import com.sketchware.remod.databinding.PropertyPopupCheckboxBinding;

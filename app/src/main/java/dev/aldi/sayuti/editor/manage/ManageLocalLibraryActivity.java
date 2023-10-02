@@ -24,7 +24,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

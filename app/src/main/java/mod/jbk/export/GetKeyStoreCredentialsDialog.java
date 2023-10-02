@@ -16,7 +16,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.util.LinkedList;

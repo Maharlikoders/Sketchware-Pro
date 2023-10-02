@@ -25,7 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.besome.sketch.lib.base.BasePermissionAppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.io.IOException;
@@ -232,7 +232,7 @@ public class MainActivity extends BasePermissionAppCompatActivity {
             dialog.b("New changes in v6.4.0");
             dialog.a("Just as a reminder; There have been many changes since v6.3.0 fix1, " +
                     "and it's important to know them all if you want your projects to still work.\n" +
-                    "You can view all changes whenever you want at the updated About Sketchware Pro screen.");
+                    "You can view all changes whenever you want at the updated About SketchwareX Pro screen.");
 
             dialog.b("View", v -> {
                 dialog.dismiss();
@@ -297,7 +297,7 @@ public class MainActivity extends BasePermissionAppCompatActivity {
                 aB dialog = new aB(this);
                 dialog.a(R.drawable.ic_expire_48dp);
                 dialog.b("Android 11 storage access");
-                dialog.a("Starting with Android 11, Sketchware Pro needs a new permission to avoid " +
+                dialog.a("Starting with Android 11, SketchwareX Pro needs a new permission to avoid " +
                         "taking ages to build projects. Don't worry, we can't do more to storage than " +
                         "with current granted permissions.");
                 dialog.b(Helper.getResString(R.string.common_word_settings), v -> {

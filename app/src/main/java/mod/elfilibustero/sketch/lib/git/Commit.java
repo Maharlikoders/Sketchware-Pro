@@ -19,7 +19,7 @@ import org.eclipse.jgit.lib.Repository;
 
 import a.a.a.aB;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 import com.sketchware.remod.databinding.PropertyPopupInputTextBinding;
 
 import mod.SketchwareUtil;

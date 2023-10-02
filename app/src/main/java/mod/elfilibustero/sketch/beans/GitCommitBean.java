@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 public class GitCommitBean implements Parcelable {
     public static final Parcelable.Creator<GitCommitBean> CREATOR = new Parcelable.Creator<>() {

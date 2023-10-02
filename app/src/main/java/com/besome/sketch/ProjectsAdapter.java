@@ -22,7 +22,7 @@ import com.besome.sketch.lib.ui.CircleImageView;
 import com.besome.sketch.projects.MyProjectButton;
 import com.besome.sketch.projects.MyProjectButtonLayout;
 import com.besome.sketch.projects.MyProjectSettingActivity;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.util.ArrayList;

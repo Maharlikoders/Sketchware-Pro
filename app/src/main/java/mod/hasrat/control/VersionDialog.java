@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import com.besome.sketch.projects.MyProjectSettingActivity;
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.mB;
 import mod.hasrat.dialog.SketchDialog;

@@ -12,7 +12,7 @@ import android.widget.MultiAutoCompleteTextView;
 import com.besome.sketch.beans.ProjectResourceBean;
 import com.besome.sketch.beans.ViewBean;
 import com.besome.sketch.editor.view.ViewPane;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.kC;
 import dev.aldi.sayuti.editor.view.item.ItemCircleImageView;

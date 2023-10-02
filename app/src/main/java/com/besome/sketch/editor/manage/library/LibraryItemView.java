@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import com.besome.sketch.beans.ProjectLibraryBean;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.wB;
 import a.a.a.xB;

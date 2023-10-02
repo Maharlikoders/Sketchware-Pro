@@ -14,7 +14,7 @@ import androidx.cardview.widget.CardView;
 
 import com.besome.sketch.beans.ProjectLibraryBean;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.Comparator;
 import java.util.HashMap;

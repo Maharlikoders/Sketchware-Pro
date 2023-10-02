@@ -164,7 +164,7 @@ public class IncrementalJavaCompiler extends Compiler {
     }
 
     /**
-     * Gets all Java source code files, that Sketchware Pro has generated.
+     * Gets all Java source code files, that SketchwareX Pro has generated.
      */
     private ArrayList<JavaFile> getSketchwareFiles() {
         ArrayList<JavaFile> arrayList = new ArrayList<>();

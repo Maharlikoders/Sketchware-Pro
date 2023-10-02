@@ -17,7 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import mod.SketchwareUtil;
 import mod.hey.studios.util.Helper;

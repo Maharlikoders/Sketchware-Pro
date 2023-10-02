@@ -32,7 +32,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.android.flexbox.FlexboxLayoutManager.LayoutParams;
 import com.google.android.flexbox.JustifyContent;
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

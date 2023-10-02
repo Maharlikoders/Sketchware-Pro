@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.besome.sketch.beans.ProjectResourceBean;
 import com.besome.sketch.lib.base.BaseDialogActivity;
 import com.besome.sketch.lib.ui.EasyDeleteEditText;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 

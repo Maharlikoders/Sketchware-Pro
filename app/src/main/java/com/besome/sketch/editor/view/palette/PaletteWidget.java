@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.besome.sketch.lib.ui.CustomScrollView;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.wB;
 import dev.aldi.sayuti.editor.view.palette.IconBadgeView;

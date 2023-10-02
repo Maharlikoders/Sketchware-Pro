@@ -41,7 +41,7 @@ import com.besome.sketch.editor.event.CollapsibleEventLayout;
 import com.besome.sketch.lib.base.CollapsibleViewHolder;
 import com.besome.sketch.lib.ui.CollapsibleButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

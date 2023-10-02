@@ -18,7 +18,7 @@ import a.a.a.aB;
 import a.a.a.wq;
 import a.a.a.xB;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 import com.sketchware.remod.databinding.ManageGithubSetupBinding;
 
 import mod.SketchwareUtil;

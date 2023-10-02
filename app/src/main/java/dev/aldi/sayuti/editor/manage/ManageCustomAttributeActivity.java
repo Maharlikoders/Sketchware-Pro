@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.LinkedList;
 import java.util.List;

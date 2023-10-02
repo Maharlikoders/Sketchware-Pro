@@ -1,6 +1,6 @@
 package mod.elfilibustero.sketch.constants;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 public class XmlResourceConstant {
     public static final int TYPE_STRING = 0;

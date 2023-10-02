@@ -22,7 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

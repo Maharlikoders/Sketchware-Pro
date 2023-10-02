@@ -5,7 +5,7 @@ import a.a.a.MB;
 import android.content.Context;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.List;
 import java.util.regex.Pattern;

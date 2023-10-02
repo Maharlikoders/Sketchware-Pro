@@ -31,7 +31,7 @@ import com.besome.sketch.design.DesignActivity;
 import com.besome.sketch.editor.manage.library.ProjectComparator;
 import com.besome.sketch.projects.MyProjectSettingActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

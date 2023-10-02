@@ -30,7 +30,7 @@ with a free Sketchware Account"</string>
     <string name="account_settings_actionbar_title">Account Settings</string>
     <string name="account_settings_button_logout">Log Out</string>
     <string name="account_settings_description_no_nickname">No nickname created</string>
-    <string name="app_name">Sketchware Pro</string>
+    <string name="app_name">SketchwareX Pro</string>
     <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
     <string name="besome_blog_url">http://medium.com/sketchware</string>
     <string name="block_add_list_int_body_1">to</string>
@@ -2643,7 +2643,7 @@ Please check the URL again."</string>
     <string name="local_library_manager_skip_downloading_dependencies">Skip downloading sub-dependencies</string>
 
     <!--  about the team screen  -->
-    <string name="about_title">About Sketchware Pro</string>
+    <string name="about_title">About SketchwareX Pro</string>
     <string name="about_team_title">The team</string>
     <string name="about_specialthanks_title">Special Thanks</string>
     <string name="about_changelog_title">Changelog</string>

@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.Kw;
 import a.a.a.mB;

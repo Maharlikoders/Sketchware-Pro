@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

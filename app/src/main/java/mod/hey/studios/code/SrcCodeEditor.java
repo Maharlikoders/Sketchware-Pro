@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

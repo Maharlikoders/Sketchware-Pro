@@ -25,7 +25,7 @@ import org.eclipse.jgit.lib.Repository;
 
 import a.a.a.aB;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import mod.elfilibustero.sketch.beans.GitHubBean;
 import mod.elfilibustero.sketch.lib.utils.GitHubUtil;

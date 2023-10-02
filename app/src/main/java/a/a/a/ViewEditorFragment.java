@@ -23,7 +23,7 @@ import com.besome.sketch.editor.PropertyActivity;
 import com.besome.sketch.editor.view.ViewEditor;
 import com.besome.sketch.editor.view.ViewProperty;
 import com.besome.sketch.editor.view.palette.PaletteWidget;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 

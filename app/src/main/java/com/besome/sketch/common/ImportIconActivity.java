@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.io.IOException;

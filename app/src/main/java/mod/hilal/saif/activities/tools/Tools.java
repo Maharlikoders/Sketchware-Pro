@@ -28,7 +28,7 @@ import com.besome.sketch.lib.ui.EasyDeleteEditText;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 
@@ -243,7 +243,7 @@ public class Tools extends Activity {
         CardView openWorkingDirectory = newCard(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.0f);
         LinearLayout openWorkingDirectoryLayout = newLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.0f);
         openWorkingDirectory.addView(openWorkingDirectoryLayout);
-        makeup(openWorkingDirectoryLayout, R.mipmap.ic_type_folder, "Open working directory", "Open Sketchware Pro's directory and edit files in it");
+        makeup(openWorkingDirectoryLayout, R.mipmap.ic_type_folder, "Open working directory", "Open SketchwareX Pro's directory and edit files in it");
         base.addView(openWorkingDirectory);
         openWorkingDirectoryLayout.setOnClickListener(v -> openWorkingDirectory());
 

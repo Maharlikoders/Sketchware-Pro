@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.aB;
 import mod.hey.studios.util.Helper;

@@ -29,7 +29,7 @@ import com.sketchware.remod.databinding.ColorPickerBinding;
 import com.sketchware.remod.databinding.ManageXmlResourceBinding;
 import com.sketchware.remod.databinding.ManageXmlResourceAddBinding;
 import com.sketchware.remod.databinding.ManageXmlResourceListItemBinding;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;

@@ -13,7 +13,7 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.beans.ProjectLibraryBean;
 import com.besome.sketch.beans.SrcCodeBean;
 import com.besome.sketch.beans.ViewBean;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 import com.sketchware.remod.xml.XmlBuilder;
 
 import java.io.File;

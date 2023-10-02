@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 import com.sketchware.remod.databinding.ManageGithubChangesBinding;
 
 import mod.SketchwareUtil;

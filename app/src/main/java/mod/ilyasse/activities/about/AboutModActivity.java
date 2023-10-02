@@ -38,7 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.LongSerializationPolicy;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -317,7 +317,7 @@ public class AboutModActivity extends AppCompatActivity {
                     majorChanges.setTextSize(14);
                 }
 
-                majorChanges.setText("Major changes to Sketchware Pro will appear here.");
+                majorChanges.setText("Major changes to SketchwareX Pro will appear here.");
                 viewContainer.addView(majorChanges);
             }
             container.addView(v, 0);
