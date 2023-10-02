@@ -106,11 +106,19 @@ public class GitHubUtil {
         Executor executor = Executors.newFixedThreadPool(3);
         try (Repository repository = Git.open(new File(getGitHubSrc())).getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
-                buildProjectFile();
+                try {
+                    buildProjectFile();
+                } catch (Exception e) {
+                    throw new Exception(e.toString());
+                }
                 return null;
             }, executor)
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
-                buildDataFile(repository);
+                try {
+                    buildDataFile(repository);
+                } catch (IOException e) {
+                    throw new IOException(e.toString());
+                }
                 return null;
             }, executor))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
@@ -122,7 +130,11 @@ public class GitHubUtil {
                 return null;
             }, executor))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
-                buildCustomBlock(repository);
+                try {
+                    buildCustomBlock(repository);
+                } catch (IOException e) {
+                    throw new IOException(e.toString());
+                }
                 return null;
             }, executor));
         }
