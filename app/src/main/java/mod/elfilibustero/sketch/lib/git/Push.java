@@ -65,6 +65,7 @@ public class Push {
         }
 
         var dialog = new aB((Activity) context);
+        dialog.b("Pushing...");
         dialog.a(R.drawable.ic_repo_push_16);
         var binding = ManageGithubPopupPushBinding.inflate(LayoutInflater.from(context), null, false);
         dialog.a(binding.getRoot());
