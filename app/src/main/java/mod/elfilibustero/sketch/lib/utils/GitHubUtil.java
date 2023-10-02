@@ -124,7 +124,7 @@ public class GitHubUtil {
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 buildCustomBlock();
                 return null;
-            }, executor));
+            }, executor)));
         }
     }
 
