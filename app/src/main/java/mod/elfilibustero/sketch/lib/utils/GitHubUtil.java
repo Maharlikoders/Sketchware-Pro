@@ -571,6 +571,7 @@ public class GitHubUtil {
                             return;
                         }
                     }
+                }
             } catch (Exception ignored) {
             }
         }
