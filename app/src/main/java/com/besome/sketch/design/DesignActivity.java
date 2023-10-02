@@ -1274,10 +1274,10 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             var sc_id = activity.sc_id;
             activity.saveVersionCodeInformationToProject();
             activity.h();
-            GitHubUtil gitUtil = new GitHubUtil(activity.sc_id);
-            GitHubBean bean = gitUtil.getBean();
-            if (!bean.username.isEmpty() && !bean.token.isEmpty()) {
-                gitUtil.generate();
+            GitHubUtil gitUtil = new GitHubUtil(sc_id);
+            if (!gitUtil.getBean().repoUrl.isEmpty()) {
+                CompletableFuture<Void> build = gitUtil.generate();
+                build.join();
             }
             jC.d(sc_id).f();
             jC.d(sc_id).g();

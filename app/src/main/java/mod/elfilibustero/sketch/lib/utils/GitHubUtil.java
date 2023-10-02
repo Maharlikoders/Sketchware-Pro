@@ -64,7 +64,6 @@ import mod.elfilibustero.sketch.beans.GitCommitBean;
 import mod.elfilibustero.sketch.beans.GitHubBean;
 import mod.elfilibustero.sketch.beans.ProjectBean;
 import mod.elfilibustero.sketch.beans.TempProjectBean;
-import mod.elfilibustero.sketch.lib.viewmodel.GitHubViewModel;
 import mod.hey.studios.editor.manage.block.ExtraBlockInfo;
 import mod.hey.studios.editor.manage.block.v2.BlockLoader;
 import mod.hey.studios.project.custom_blocks.CustomBlocksManager;
@@ -344,7 +343,11 @@ public class GitHubUtil {
             if (!FileUtil.isDirectory(srcDataDir)) {
                 return;
             }
-            NewFileUtil.copyDir(srcDataDir, data);
+            long srcDataSize = NewFileUtil.getFolderSize(srcDataDir);
+            long dataSize = NewFileUtil.getFolderSize(data);
+            if (srcDataSize != dataSize) {
+                NewFileUtil.copyDir(srcDataDir, data);
+            }
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -359,9 +362,13 @@ public class GitHubUtil {
                     String resFolder = srcResDir + File.separator + subFolder;
                     if (FileUtil.isDirectory(resFolder)) {
                         File resSubFolderPath = new File(resourcePath, subFolder + File.separator + sc_id);
-                        String resSubFolder = resSubFolderPath.getAbsolutePath(); 
+                        String resSubFolder = resSubFolderPath.getAbsolutePath();
                         FileUtil.makeDir(resSubFolder);
-                        FileUtil.copyDirectory(new File(resFolder), new File(resSubFolder));
+                        long resFolderSize = NewFileUtil.getFolderSize(resFolder);
+                        long resSubFolderSize = NewFileUtil.getFolderSize(resSubFolder);
+                        if (resFolderSize != resSubFolderSize) {
+                            FileUtil.copyDirectory(new File(resFolder), new File(resSubFolder));
+                        }
                     }
                 }
             } catch (Exception ignored) {
@@ -378,8 +385,17 @@ public class GitHubUtil {
             if (localLibsContent != null) {
                 for (File localLib : localLibsContent) {
                     File localLibRealPath = new File(FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs", localLib.getName());
+
+                    long localLibSize = NewFileUtil.getFolderSize(localLib.getAbsolutePath());
+                    long localLibRealSize = NewFileUtil.getFolderSize(localLibRealPath.getAbsolutePath());
                     if (!localLibRealPath.exists()) {
                         localLibRealPath.mkdirs();
+                        try {
+                            FileUtil.copyDirectory(localLib, localLibRealPath);
+                        } catch (Exception ignored) {
+                            ignored.printStackTrace();
+                        }
+                    } else if (localLibSize != localLibRealSize) {
                         try {
                             FileUtil.copyDirectory(localLib, localLibRealPath);
                         } catch (Exception ignored) {
@@ -413,24 +429,38 @@ public class GitHubUtil {
         }
     }
 
-    public void generate() {
+    public CompletableFuture<Void> generate() throws Exception {
         try (Repository repository = openRepository()) {
-            //Project File (.sketchware/mysc/list/sc_id/project)
-            generateProjectFile();
-
-            //Project Data (.sketchware/data/sc_id/project)
-            generateProjectData();
-
-            //Project Resources
-            generateProjectResources();
-
-            //Local Library
-            generateLocalLibrary();
-
-            //Custom Block
-            generateCustomBlock();
-        } catch (Exception e) {
-            SketchwareUtil.toastError(e.getMessage());
+            return CompletableFuture.supplyAsync(() -> {
+                //Project File (.sketchware/mysc/list/sc_id/project)
+                generateProjectFile();
+                return null;
+            }, executor)
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                //Project File (.sketchware/mysc/list/sc_id/project)
+                generateProjectFile();
+                return null;
+            }, executor))
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                //Project Data (.sketchware/data/sc_id/)
+                generateProjectData();
+                return null;
+            }, executor))
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                //Project Resources
+                generateProjectResources();
+                return null;
+            }, executor))
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                //Local Library
+                generateLocalLibrary();
+                return null;
+            }, executor))
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                //Custom Block
+                generateCustomBlock();
+                return null;
+            }, executor));
         }
         
     }
@@ -491,13 +521,18 @@ public class GitHubUtil {
 
     private void generateProjectResources() {
         File gitResourcePath = new File(getGitHubProject("src/resources"));
-        FileUtil.makeDir(gitResourcePath.getAbsolutePath());
-
         try {
             for (String subFolder : PROJECT_RESOURCES_FOLDER) {
-                File resSubFolder = new File(gitResourcePath, subFolder);
-                FileUtil.makeDir(resSubFolder.getAbsolutePath());
-                FileUtil.copyDirectory(new File(getResources(subFolder)), resSubFolder);
+                File resFolder = new File(getResources(subFolder));
+                if (resFolder.exists()) {
+                    File resSubFolder = new File(gitResourcePath, subFolder);
+                    FileUtil.makeDir(resSubFolderPath);
+                    long resSize = NewFileUtil.getFolderSize(resFolder.getAbsolutePath());
+                    long resSubSize = NewFileUtil.getFolderSize(resSubFolder.getAbsolutePath());
+                    if (resSize != resSubSize) {
+                        FileUtil.copyDirectory(resFolder, resSubFolder);
+                    }
+                }
             }
         } catch (Exception ignored) {
         }
@@ -518,7 +553,15 @@ public class GitHubUtil {
                     if (jarPath != null && !jarPath.isEmpty()) {
                         File jarFile = new File(jarPath).getParentFile();
                         if (jarFile != null) {
-                            FileUtil.copyDirectory(jarFile, new File(localLibraryDest, jarFile.getName()));
+                            File gitJarFile = new File(localLibraryDest, jarFile.getName());
+
+                            long jarSize = NewFileUtil.getFolderSize(jarFile.getAbsolutePath());
+                            long gitSize = NewFileUtil.getFolderSize(gitJarFile.getAbsolutePath());
+                            if (!gitJarFile.exists()) {
+                                FileUtil.copyDirectory(jarFile, new File(gitJarFile.getAbsolutePath()));
+                            } else if (jarSize != gitJarSize) {
+                                FileUtil.copyDirectory(jarFile, new File(gitJarFile.getAbsolutePath()));
+                            }
                         }
                     }
                 }
