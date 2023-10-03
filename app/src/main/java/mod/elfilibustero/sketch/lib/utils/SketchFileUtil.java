@@ -3,6 +3,7 @@ package mod.elfilibustero.sketch.lib.utils;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,8 +14,8 @@ import mod.hey.studios.util.Helper;
 public class SketchFileUtil {
 
     public static final String SKETCHWARE_SECURE = "sketchwaresecure";
-    public static final String SKETCHWARE_WORKSPACE_DIRECTORY = ".sketchware-pro";
-    public static final String SKETCHWARE_DIRECTORY = "sketchwarepro";
+    public static final String SKETCHWARE_DIRECTORY = "Sketchware Pro";
+    public static final String SKETCHWARE_WORKSPACE_DIRECTORY = SKETCHWARE_DIRECTORY + File.separator + "workspace";
 
     public static String decrypt(String path) {
         try {
