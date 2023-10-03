@@ -14,7 +14,7 @@ public class SketchFileUtil {
 
     public static final String SKETCHWARE_SECURE = "sketchwaresecure";
     public static final String SKETCHWARE_WORKSPACE_DIRECTORY = ".sketchware-pro";
-    public static final String SKETCHWARE_DIRECTORY = Helper.getResString(R.string.app_name);
+    public static final String SKETCHWARE_DIRECTORY = "sketchwarepro";
 
     public static String decrypt(String path) {
         try {
