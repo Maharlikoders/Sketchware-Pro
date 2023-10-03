@@ -2,7 +2,7 @@ package com.besome.sketch.editor.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.graphics.ColorStateList;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
