@@ -13,7 +13,7 @@ import mod.hey.studios.util.Helper;
 public class SketchFileUtil {
 
     public static final String SKETCHWARE_SECURE = "sketchwaresecure";
-    public static final String SKETCHWARE_WORKSPACE_DIRECTORY = ".sketchware";
+    public static final String SKETCHWARE_WORKSPACE_DIRECTORY = ".sketchware-pro";
     public static final String SKETCHWARE_DIRECTORY = Helper.getResString(R.string.app_name);
 
     public static String decrypt(String path) {
