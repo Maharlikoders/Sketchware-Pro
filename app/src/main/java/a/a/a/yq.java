@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import mod.agus.jcoderz.lib.FileUtil;
-
 import mod.elfilibustero.sketch.lib.handler.BuiltInUtilClassHandler;
 import mod.elfilibustero.sketch.lib.handler.XmlResourceHandler;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
 import mod.hilal.saif.blocks.CommandBlock;
@@ -341,7 +341,7 @@ public class yq {
         boolean logcatEnabled = N.isDebugBuild && new BuildSettings(sc_id).getValue(
                 BuildSettings.SETTING_ENABLE_LOGCAT, BuildSettings.SETTING_GENERIC_VALUE_TRUE).equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE);
 
-        String javaDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/java/";
+        String javaDir = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/java/";
         if (!new File(javaDir, "DebugActivity.java").exists()) {
             fileUtil.b(javaFilesPath + File.separator
                             + packageNameAsFolders + File.separator
@@ -689,8 +689,8 @@ public class yq {
         a(SketchApplication.getContext());
         CommandBlock.x();
 
-        final String javaDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/java/";
-        final String layoutDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/resource/layout/";
+        final String javaDir = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/java/";
+        final String layoutDir = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/resource/layout/";
         List<File> javaFiles;
         {
             File[] files = new File(javaDir).listFiles();
