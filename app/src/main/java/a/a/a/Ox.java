@@ -154,7 +154,7 @@ public class Ox {
             if (backgroundColor != 0xffffff) {
                 if (backgroundColor != 0) {
                     int color = backgroundColor & 0xffffff;
-                    if (nx.c().equals("BottomAppBar") || nx.c().equals("Button") || nx.c().equals("MaterialButton")) {
+                    if (nx.c().equals("BottomAppBar") || nx.c().equals("MaterialButton")) {
                         if (!toNotAdd.contains("app:backgroundTint")) {
                             nx.addAttribute("app", "backgroundTint", String.format("#%06X", color));
                         }
