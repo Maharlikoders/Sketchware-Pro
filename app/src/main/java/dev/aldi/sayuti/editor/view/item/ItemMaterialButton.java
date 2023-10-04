@@ -1,7 +1,6 @@
 package dev.aldi.sayuti.editor.view.item;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -79,7 +78,7 @@ public class ItemMaterialButton extends AppCompatButton implements sy {
         if (color == 0xffffff) {
             setBackground(background);
         } else {
-            setBackgroundTintList(ColorStateList.valueOf(color));
+            super.setBackgroundColor(color);
         }
     }
 
