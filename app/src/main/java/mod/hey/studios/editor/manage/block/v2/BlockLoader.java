@@ -10,12 +10,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import a.a.a.wq;
+
 import dev.aldi.sayuti.block.ExtraBlockFile;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.editor.manage.block.palette.PaletteSelector;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.editor.manage.block.ExtraBlockInfo;
+import mod.hey.studios.project.ProjectTracker;
+import mod.hey.studios.util.Helper;
 import mod.jbk.util.LogUtil;
 
 /**
@@ -81,6 +85,17 @@ public class BlockLoader {
         blocks = new ArrayList<>();
 
         ArrayList<HashMap<String, Object>> arrList = ExtraBlockFile.getExtraBlockData();
+
+        String tempBlocks = FileUtil.getExternalStorageDir() + File.separator + wq.l + File.separator + "block" + File.separator + ProjectTracker.SC_ID + File.separator + "data.json";
+        ArrayList<HashMap<String, Object>> tempList = new ArrayList<>();
+        if (FileUtil.isExistFile(tempBlocks)) {
+            try {
+                tempList = new Gson().fromJson(FileUtil.readFile(tempBlocks), Helper.TYPE_MAP_LIST);
+                arrList.addAll(tempList);
+            } catch (Exception e) {
+            }
+        }
+        
 
         for (int i = 0; i < arrList.size(); i++) {
             HashMap<String, Object> map = arrList.get(i);
