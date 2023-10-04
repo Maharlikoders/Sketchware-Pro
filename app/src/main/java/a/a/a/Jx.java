@@ -264,7 +264,7 @@ public class Jx {
         for (String classToImplement : implementsList) {
             if (firstImplement) {
                 firstImplement = false;
-                sb.append( "implements ")
+                sb.append(" implements ");
             } else {
                 sb.append(", ");
             }
