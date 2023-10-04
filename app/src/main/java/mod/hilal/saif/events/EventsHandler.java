@@ -488,7 +488,7 @@ public class EventsHandler {
                 return "create new import";
 
             case "onClick":
-                return "when " + name + " clicked"; 
+                return "when " + name + " clicked %m.view.view"; 
 
             case "onActivityResult":
                 return "OnActivityResult %d.requestCode %d.resultCode %m.intent.data";
