@@ -77,7 +77,7 @@ public class Jx {
     private final ArrayList<String> filePickerRequestCodes = new ArrayList<>();
     private Hx eventManager;
     private ArrayList<String> imports = new ArrayList<>();
-    private ArrayList<String> interfaces = new ArrayList<>();
+    private ArrayList<String> implements = new ArrayList<>();
     private String onCreateEventCode = "";
 
     public Jx(jq jqVar, ProjectFileBean projectFileBean, eC eCVar) {
@@ -131,6 +131,16 @@ public class Jx {
         imports = newImports;
     }
 
+    private void removeExtraImplements() {
+        ArrayList<String> newImplements = new ArrayList<>();
+        for (String value : implements) {
+            if (!newImplements.contains(value) && !value.trim().isEmpty()) {
+                newImplements.add(value);
+            }
+        }
+        implements = newImplements;
+    }
+
     /**
      * @return Import to be added to the currently generating class
      * (includes import of default launcher activity)
@@ -175,6 +185,7 @@ public class Jx {
         addRequestCodeConstants();
         addImportsForBlocks();
         addLocalLibraryImports();
+        addImplements();
 
         StringBuilder sb = new StringBuilder(8192);
         sb.append("package ").append(packageName).append(";").append(EOL)
@@ -248,15 +259,16 @@ public class Jx {
             }
         }
 
-        addInterfaces();
-        boolean firstInterface = true;
-        for (String classToInterface : interfaces) {
-            if (firstInterface) {
-                firstInterface = false;
+        removeExtraImplements();
+        boolean firstImplement = true;
+        for (String classToImplement : implements) {
+            if (firstImplement) {
+                firstImplement = false;
+                sb.append( "implements ")
             } else {
                 sb.append(", ");
             }
-            sb.append(classToInterface);
+            sb.append(classToImplement);
         }
         sb.append(" {").append(EOL);
 
@@ -701,9 +713,9 @@ public class Jx {
         }
     }
 
-    private void addInterface(String classToInterface) {
-        if (!interfaces.contains(classToInterface)) {
-            interfaces.add(classToInterface);
+    private void addImplement(String classToImplement) {
+        if (!implements.contains(classToImplement)) {
+            implements.add(classToImplement);
         }
     }
 
@@ -1051,12 +1063,12 @@ public class Jx {
         }
     }
 
-    private void addInterfaces() {
+    private void addImplements() {
         ArrayList<EventBean> events = projectDataManager.g(projectFileBean.getJavaName());
         for (EventBean bean : events) {
             switch (bean.eventName) {
                 case "onClick":
-                    addInterface("View.OnClickListener");
+                    addImplement("View.OnClickListener");
                     break;
             }
         }
