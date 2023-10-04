@@ -2,7 +2,6 @@ package com.besome.sketch.editor.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -451,11 +450,7 @@ public class ViewPane extends RelativeLayout {
             ((ItemAdView) view).setAdSize(viewBean.adSize);
         }
         if (classInfo.b("CardView")) {
-            ((ItemCardView) view).setContentPadding(
-                    viewBean.layout.paddingLeft,
-                    viewBean.layout.paddingTop,
-                    viewBean.layout.paddingRight,
-                    viewBean.layout.paddingBottom);
+            updateCardView((ItemCardView) view, viewBean);
         }
         if (classInfo.b("SignInButton")) {
             ItemSignInButton button = (ItemSignInButton) view;
@@ -843,8 +838,70 @@ public class ViewPane extends RelativeLayout {
         editText.setHintTextColor(viewBean.text.hintColor);
     }
 
-    private String extractAttrValue(String line, String attrbute) {
-        Matcher matcher = Pattern.compile("=\"([^\"]*)\"").matcher(line);
-        return matcher.find() ? matcher.group(1) : "";
+    private void updateCardView(ItemCardView cardView, ViewBean viewBean) {
+        cardView.setContentPadding(
+            viewBean.layout.paddingLeft,
+            viewBean.layout.paddingTop,
+            viewBean.layout.paddingRight,
+            viewBean.layout.paddingBottom);
+        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+        String cardElevation = handler.getAttributeValueOf("cardElevation");
+        String cardCornerRadius = handler.getAttributeValueOf("cardCornerRadius");
+        String compatPadding = handler.getAttributeValueOf("cardUseCompatPadding");
+        String strokeColor = handler.getAttributeValueOf("strokeColor");
+        String strokeWidth = handler.getAttributeValueOf("strokeWidth");
+
+        int elevation = 4;
+        if (!cardElevation.isEmpty()) {
+                try {
+                elevation = Integer.parseInt(cardElevation.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+        cardView.setCardElevation(elevation);
+
+        int radius = 8;
+        if (!cardCornerRadius.isEmpty()) {
+            try {
+                radius = Integer.parseInt(cardCornerRadius.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+        cardView.setRadius((float) radius);
+
+        boolean useCompatPadding = false;
+        if (!compatPadding.isEmpty()) {
+            try {
+                useCompatPadding = Boolean.parseBoolean(compatPadding);
+            } catch (Exception e) {
+            }
+        }
+        cardView.setUseCompatPadding(useCompatPadding);
+
+        int width = 2;
+        if (!strokeWidth.isEmpty()) {
+            try {
+                width = Integer.parseInt(strokeWidth.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+
+        cardView.setStrokeWidth(width);
+
+        int defaultColor = Color.WHITE;
+        if (!strokeColor.isEmpty()) {
+            try {
+                defaultColor = getColorFromString(strokeColor, "#FFFFFF");
+            } catch (Exception e) {
+            }
+        }
+        cardView.setStrokeColor(defaultColor);
+    }
+
+    private int getColorFromString(String color, String defaultColor) {
+        String hexColor = color.replaceFirst("#", "");
+        String formattedColor = String.format("#%8s", hexColor).replaceAll(" ", "F");
+        int result = Color.parseColor(color.startsWith("@") ? defaultColor : formattedColor);
+        return color != Color.TRANSPARENT ? result : Color.parseColor(defaultColor);
     }
 }
