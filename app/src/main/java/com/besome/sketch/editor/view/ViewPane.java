@@ -902,6 +902,6 @@ public class ViewPane extends RelativeLayout {
         String hexColor = color.replaceFirst("#", "");
         String formattedColor = String.format("#%8s", hexColor).replaceAll(" ", "F");
         int result = Color.parseColor(color.startsWith("@") ? defaultColor : formattedColor);
-        return color != Color.TRANSPARENT ? result : Color.parseColor(defaultColor);
+        return result != Color.TRANSPARENT ? result : Color.parseColor(defaultColor);
     }
 }
