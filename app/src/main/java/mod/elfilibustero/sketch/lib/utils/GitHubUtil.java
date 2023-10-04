@@ -399,7 +399,7 @@ public class GitHubUtil {
             FileUtil.copyFile(srcBlockInfo, wq.b(sc_id));
         }
         String srcBlocks = getGitHubProject("src/block/blocks.json");
-        String customBlockTempPath = FileUtil.getExternalStorageDir() + File.separator + wq.l + File.separator + "block/My Block/temp.json";
+        String customBlockDataPath = FileUtil.getExternalStorageDir() + File.separator + wq.l + File.separator + "block" + File.separator + sc_id + File.separator + "data.json";
         if (isFileExists(repository, "src/block/blocks.json")) {
             ArrayList<HashMap<String, Object>> custom_blocks = new ArrayList<>();
             try {
