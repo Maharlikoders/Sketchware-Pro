@@ -50,6 +50,7 @@ public class EventsHandler {
         array.add("onPause");
         array.add("onStop");
         array.add("onDestroy");
+        array.add("onClick");
         array.add("onSaveInstanceState");
         array.add("onRestoreInstanceState");
         array.add("onCreateOptionsMenu");
@@ -227,6 +228,7 @@ public class EventsHandler {
             case "onPause":
             case "onStop":
             case "onDestroy":
+            case "onClick":
             case "onTabLayoutNewTabAdded":
                 return R.drawable.widget_source;
 
@@ -438,6 +440,9 @@ public class EventsHandler {
             case "onPreExecute":
                 return "";
 
+            case "onClick":
+                return "%m.view";
+
             case "onActivityResult":
                 return "%d.requestCode %d.resultCode %m.intent";
 
@@ -481,6 +486,9 @@ public class EventsHandler {
         switch (event) {
             case "Import":
                 return "create new import";
+
+            case "onClick":
+                return "when " + name + " clicked"; 
 
             case "onActivityResult":
                 return "OnActivityResult %d.requestCode %d.resultCode %m.intent.data";
