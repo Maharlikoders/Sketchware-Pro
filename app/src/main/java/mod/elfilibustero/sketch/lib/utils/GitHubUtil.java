@@ -404,11 +404,11 @@ public class GitHubUtil {
             ArrayList<HashMap<String, Object>> custom_blocks = new ArrayList<>();
             try {
                 ArrayList<HashMap<String, Object>> blocks = new Gson().fromJson(FileUtil.readFile(srcBlocks), Helper.TYPE_MAP_LIST);
-                if (FileUtil.isExistFile(customBlockTempPath)) {
-                    custom_blocks = new Gson().fromJson(FileUtil.readFile(customBlockTempPath), Helper.TYPE_MAP_LIST);
+                if (FileUtil.isExistFile(customBlockDataPath)) {
+                    custom_blocks = new Gson().fromJson(FileUtil.readFile(customBlockDataPath), Helper.TYPE_MAP_LIST);
                 }
                 custom_blocks.addAll(blocks);
-                FileUtil.writeFile(customBlockTempPath, new Gson().toJson(custom_blocks));
+                FileUtil.writeFile(customBlockDataPath, new Gson().toJson(custom_blocks));
             } catch (Exception e) {
                 e.printStackTrace();
             }
