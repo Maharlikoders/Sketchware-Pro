@@ -475,15 +475,15 @@ public class ViewPane extends RelativeLayout {
                 case "icon_only" -> ItemSignInButton.ButtonSize.ICON_ONLY;
                 case "wide" -> ItemSignInButton.ButtonSize.WIDE;
                 default -> ItemSignInButton.ButtonSize.STANDARD;
-            }
+            };
 
             button.setSize(btnSizeValue);
 
             ItemSignInButton.ColorScheme colorSchemeValue = switch (colorScheme) {
                 case "dark" -> ItemSignInButton.ColorScheme.DARK;
                 default -> ItemSignInButton.ColorScheme.LIGHT;
-            }
-            
+            };
+
             button.setColorScheme(colorSchemeValue);
         }
         view.setVisibility(VISIBLE);
