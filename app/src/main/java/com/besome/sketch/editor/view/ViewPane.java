@@ -26,8 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.core.view.ViewCompat;
-
 import com.besome.sketch.beans.ImageBean;
 import com.besome.sketch.beans.LayoutBean;
 import com.besome.sketch.beans.ProjectResourceBean;
@@ -461,7 +459,7 @@ public class ViewPane extends RelativeLayout {
         }
         if (classInfo.b("MaterialButton")) {
             ItemMaterialButton button = (ItemMaterialButton) view;
-            ViewCompat.setBackgroundTintList(button, ColorStateList.valueOf(viewBean.layout.backgroundColor));
+            button.setBackgroundTintList(ColorStateList.valueOf(viewBean.layout.backgroundColor));
             button.setBackgroundColor(Color.TRANSPARENT);
         }
         if (classInfo.b("SignInButton")) {

@@ -236,7 +236,7 @@ public class Gx {
                 break;
 
             case "MaterialButton":
-                classInfos = "View.Clickable.TextView.Button";
+                classInfos = "View.Clickable.TextView.Button.MaterialButton";
                 break;
 
             case "CircleImageView":
