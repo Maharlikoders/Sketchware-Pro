@@ -77,7 +77,7 @@ public class Jx {
     private final ArrayList<String> filePickerRequestCodes = new ArrayList<>();
     private Hx eventManager;
     private ArrayList<String> imports = new ArrayList<>();
-    private ArrayList<String> implements = new ArrayList<>();
+    private ArrayList<String> implementsList = new ArrayList<>();
     private String onCreateEventCode = "";
 
     public Jx(jq jqVar, ProjectFileBean projectFileBean, eC eCVar) {
@@ -133,12 +133,12 @@ public class Jx {
 
     private void removeExtraImplements() {
         ArrayList<String> newImplements = new ArrayList<>();
-        for (String value : implements) {
+        for (String value : implementsList) {
             if (!newImplements.contains(value) && !value.trim().isEmpty()) {
                 newImplements.add(value);
             }
         }
-        implements = newImplements;
+        implementsList = newImplements;
     }
 
     /**
@@ -261,7 +261,7 @@ public class Jx {
 
         removeExtraImplements();
         boolean firstImplement = true;
-        for (String classToImplement : implements) {
+        for (String classToImplement : implementsList) {
             if (firstImplement) {
                 firstImplement = false;
                 sb.append( "implements ")
@@ -714,8 +714,8 @@ public class Jx {
     }
 
     private void addImplement(String classToImplement) {
-        if (!implements.contains(classToImplement)) {
-            implements.add(classToImplement);
+        if (!implementsList.contains(classToImplement)) {
+            implementsList.add(classToImplement);
         }
     }
 
