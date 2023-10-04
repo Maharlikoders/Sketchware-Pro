@@ -1052,7 +1052,7 @@ public class Jx {
     }
 
     private void addInterfaces() {
-        ArrayList<EventBean> events = eC.g(projectFileBean.getJavaName());
+        ArrayList<EventBean> events = projectDataManager.g(projectFileBean.getJavaName());
         for (EventBean bean : events) {
             switch (bean.eventName) {
                 case "onClick":
