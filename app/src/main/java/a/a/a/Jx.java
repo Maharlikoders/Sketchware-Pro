@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import com.besome.sketch.beans.BlockBean;
 import com.besome.sketch.beans.ComponentBean;
+import com.besome.sketch.beans.EventBean;
 import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.beans.ViewBean;
 
@@ -76,6 +77,7 @@ public class Jx {
     private final ArrayList<String> filePickerRequestCodes = new ArrayList<>();
     private Hx eventManager;
     private ArrayList<String> imports = new ArrayList<>();
+    private ArrayList<String> interfaces = new ArrayList<>();
     private String onCreateEventCode = "";
 
     public Jx(jq jqVar, ProjectFileBean projectFileBean, eC eCVar) {
@@ -244,6 +246,17 @@ public class Jx {
             } else {
                 sb.append("Activity");
             }
+        }
+
+        addInterfaces();
+        boolean firstInterface = true;
+        for (String classToInterface : interfaces) {
+            if (firstInterface) {
+                firstInterface = false;
+            } else {
+                sb.append(", ");
+            }
+            sb.append(classToInterface);
         }
         sb.append(" {").append(EOL);
 
@@ -688,6 +701,12 @@ public class Jx {
         }
     }
 
+    private void addInterface(String classToInterface) {
+        if (!interfaces.contains(classToInterface)) {
+            interfaces.add(classToInterface);
+        }
+    }
+
     /**
      * @see Lx#getComponentInitializerCode(String, String, String...)
      */
@@ -1029,6 +1048,17 @@ public class Jx {
     private void addLocalLibraryImports() {
         for (String value : mll.getImportLocalLibrary()) {
             addImport(value);
+        }
+    }
+
+    private void addInterfaces() {
+        ArrayList<EventBean> events = eC.g(projectFileBean.getJavaName());
+        for (EventBean bean : events) {
+            switch (bean.eventName) {
+                case "onClick":
+                    addInterface("View.OnClickListener");
+                    break;
+            }
         }
     }
 }
