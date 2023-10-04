@@ -359,7 +359,6 @@ public class ViewPane extends RelativeLayout {
             view.setVisibility(View.VISIBLE);
             return;
         }
-        updateLayout(view, viewBean);
         view.setRotation(viewBean.image.rotate);
         view.setAlpha(viewBean.alpha);
         view.setTranslationX(wB.a(getContext(), viewBean.translationX));
@@ -392,6 +391,7 @@ public class ViewPane extends RelativeLayout {
             }
         }
         Gx classInfo = viewBean.getClassInfo();
+        updateLayout(classInfo, view, viewBean);
         if (classInfo.a("LinearLayout")) {
             LinearLayout linearLayout = (LinearLayout) view;
             linearLayout.setOrientation(viewBean.layout.orientation);
@@ -456,11 +456,6 @@ public class ViewPane extends RelativeLayout {
                     viewBean.layout.paddingTop,
                     viewBean.layout.paddingRight,
                     viewBean.layout.paddingBottom);
-        }
-        if (classInfo.b("MaterialButton")) {
-            ItemMaterialButton button = (ItemMaterialButton) view;
-            button.setBackgroundTintList(ColorStateList.valueOf(viewBean.layout.backgroundColor));
-            button.setBackgroundColor(Color.TRANSPARENT);
         }
         if (classInfo.b("SignInButton")) {
             ItemSignInButton button = (ItemSignInButton) view;
@@ -776,7 +771,7 @@ public class ViewPane extends RelativeLayout {
         }
     }
 
-    private void updateLayout(View view, ViewBean viewBean) {
+    private void updateLayout(Gx classInfo, View view, ViewBean viewBean) {
         LayoutBean layoutBean = viewBean.layout;
         int width = layoutBean.width;
         int height = layoutBean.height;
@@ -786,7 +781,11 @@ public class ViewPane extends RelativeLayout {
         if (height > 0) {
             height = (int) wB.a(getContext(), (float) viewBean.layout.height);
         }
-        view.setBackgroundColor(viewBean.layout.backgroundColor);
+        if (classInfo.b("MaterialButton")) {
+            ((ItemMaterialButton) view).setBackgroundTintList(ColorStateList.valueOf(viewBean.layout.backgroundColor));
+        } else {
+            view.setBackgroundColor(viewBean.layout.backgroundColor);
+        }
         if (viewBean.id.equals("root")) {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
             layoutParams.leftMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
