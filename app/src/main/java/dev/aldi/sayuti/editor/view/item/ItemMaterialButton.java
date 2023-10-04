@@ -76,6 +76,7 @@ public class ItemMaterialButton extends AppCompatButton implements sy {
 
     public void setBackgroundTint(int color) {
         if (color == 0xffffff) {
+            super.setBackgroundTintList(null);
             setBackground(background);
         } else {
             super.setBackgroundTintList(ColorStateList.valueOf(color));
