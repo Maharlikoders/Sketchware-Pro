@@ -91,6 +91,7 @@ import mod.agus.jcoderz.editor.view.item.ItemRatingBar;
 import mod.agus.jcoderz.editor.view.item.ItemSearchView;
 import mod.agus.jcoderz.editor.view.item.ItemTimePicker;
 import mod.agus.jcoderz.editor.view.item.ItemVideoView;
+import mod.elfilibustero.sketch.lib.handler.InjectAttributeHandler;
 import mod.hey.studios.util.ProjectFile;
 
 @SuppressLint({"RtlHardcoded", "DiscouragedApi"})
@@ -461,49 +462,29 @@ public class ViewPane extends RelativeLayout {
         if (classInfo.b("MaterialButton")) {
             ItemMaterialButton button = (ItemMaterialButton) view;
             ViewCompat.setBackgroundTintList(button, ColorStateList.valueOf(viewBean.layout.backgroundColor));
+            button.setBackgroundColor(Color.TRANSPARENT);
         }
         if (classInfo.b("SignInButton")) {
             ItemSignInButton button = (ItemSignInButton) view;
-            boolean hasButtonSize = false;
-            boolean hasColorScheme = false;
-            for (String line : viewBean.inject.split("\n")) {
-                if (line.contains("buttonSize")) {
-                    String buttonSize = extractAttrValue(line, "app:buttonSize");
-                    if (!buttonSize.startsWith("@")) {
-                        hasButtonSize = true;
-                        switch (buttonSize) {
-                        case "icon_only":
-                            button.setSize(ItemSignInButton.ButtonSize.ICON_ONLY);
-                            break;
-                        case "wide":
-                            button.setSize(ItemSignInButton.ButtonSize.WIDE);
-                            break;
-                        case "standard":
-                        default:
-                            button.setSize(ItemSignInButton.ButtonSize.STANDARD);
-                            break;
-                        }
-                    }
-                }
-                if (line.contains("colorScheme")) {
-                    String colorScheme = extractAttrValue(line, "app:colorScheme");
-                    if (!colorScheme.startsWith("@")) {
-                        hasColorScheme = true;
-                        switch (colorScheme) {
-                        case "dark":
-                            button.setColorScheme(ItemSignInButton.ColorScheme.DARK);
-                            break;
-                        case "auto":
-                        case "light":
-                        default:
-                            button.setColorScheme(ItemSignInButton.ColorScheme.LIGHT);
-                            break;
-                        }
-                    }
-                }
-                if (!hasButtonSize) button.setSize(ItemSignInButton.ButtonSize.STANDARD);
-                if (!hasColorScheme) button.setColorScheme(ItemSignInButton.ColorScheme.LIGHT);
+
+            InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+            String buttonSize = handler.getAttributeValueOf("buttonSize");
+            String colorScheme = handler.getAttributeValueOf("colorScheme");
+
+            ItemSignInButton.ButtonSize btnSizeValue = switch (buttonSize) {
+                case "icon_only" -> ItemSignInButton.ButtonSize.ICON_ONLY;
+                case "wide" -> ItemSignInButton.ButtonSize.WIDE;
+                default -> ItemSignInButton.ButtonSize.STANDARD;
             }
+
+            button.setSize(btnSizeValue);
+
+            ItemSignInButton.ColorScheme colorSchemeValue = switch (colorScheme) {
+                case "dark" -> ItemSignInButton.ColorScheme.DARK;
+                default -> ItemSignInButton.ColorScheme.LIGHT;
+            }
+            
+            button.setColorScheme(colorSchemeValue);
         }
         view.setVisibility(VISIBLE);
     }
