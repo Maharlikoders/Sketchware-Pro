@@ -1068,7 +1068,7 @@ public class Jx {
         for (EventBean bean : events) {
             switch (bean.eventName) {
                 case "onClick":
-                    addImplement("View.OnClickListener");
+                    if (bean.eventType == EventBean.EVENT_TYPE_ACTIVITY) addImplement("View.OnClickListener");
                     break;
             }
         }
