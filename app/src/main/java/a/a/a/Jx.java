@@ -116,6 +116,12 @@ public class Jx {
                             initializeMethodCode.add(block.parameters.get(0));
                         }
                         break;
+
+                    case "implement":
+                        if (!block.parameters.get(0).trim().isEmpty()) {
+                            addImplement(block.parameters.get(0));
+                        }
+                        break;
                 }
             }
         }
@@ -174,7 +180,8 @@ public class Jx {
         boolean isDialogFragment = projectFileBean.fileName.contains("_dialog_fragment");
         boolean isBottomDialogFragment = projectFileBean.fileName.contains("_bottomdialog_fragment");
         boolean isFragment = projectFileBean.fileName.contains("_fragment");
-
+        
+        addImplements();
         extraVariables();
         handleAppCompat();
         addFieldsDeclaration();
@@ -185,7 +192,6 @@ public class Jx {
         addRequestCodeConstants();
         addImportsForBlocks();
         addLocalLibraryImports();
-        addImplements();
 
         StringBuilder sb = new StringBuilder(8192);
         sb.append("package ").append(packageName).append(";").append(EOL)
