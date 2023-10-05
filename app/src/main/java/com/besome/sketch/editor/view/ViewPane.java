@@ -11,7 +11,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.core.widget.TextViewCompat;
 
 import com.besome.sketch.beans.ImageBean;
 import com.besome.sketch.beans.LayoutBean;
@@ -837,19 +838,15 @@ public class ViewPane extends RelativeLayout {
 
         InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
         String textAppearance = handler.getAttributeValueOf("textAppearance");
-        int appearance = 0;
+        
         if (!textAppearance.isEmpty()) {
             try {
                 String resource = textAppearance.substring(textAppearance.lastIndexOf('/') + 1);
-                appearance = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
+                int appearance = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
+                TextViewCompat.setTextAppearance(textView, appearance);
             } catch (Exception e) {
             }
         }
-
-        if (appearance == 0) {
-            appearance = R.style.TextAppearance_MaterialComponents_Button;
-        }
-        textView.setTextAppearance(new ContextThemeWrapper(getContext(), appearance), appearance);
     }
 
     private void updateEditText(EditText editText, ViewBean viewBean) {
