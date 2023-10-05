@@ -154,10 +154,10 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
             EventBean eventBean2 = new EventBean(EventBean.EVENT_TYPE_ACTIVITY, -1, "onCreate", "initializeLogic");
             eventBean2.initValue();
             activityEvents.add(eventBean2);
-            EventBean eventBean3 = new EventBean(EventBean.EVENT_TYPE_COMMAND, -1, "customImport", "Import");
+            EventBean eventBean3 = new EventBean(EventBean.EVENT_TYPE_COMMAND, -1, "import", "Import");
             eventBean3.initValue();
             commandEvents.add(eventBean3);
-            EventBean eventBean4 = new EventBean(EventBean.EVENT_TYPE_COMMAND, 0, "customImplement", "Implement");
+            EventBean eventBean4 = new EventBean(EventBean.EVENT_TYPE_COMMAND, 0, "implements", "Implement");
             eventBean4.initValue();
             commandEvents.add(eventBean4);
             for (EventBean eventBean : jC.a(sc_id).g(currentActivity.getJavaName())) {
@@ -516,8 +516,8 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
                 if (eventBean.eventType == EventBean.EVENT_TYPE_VIEW) {
                     holder.targetType.setText(ViewBean.getViewTypeName(eventBean.targetType));
                 } else if (eventBean.eventType == EventBean.EVENT_TYPE_COMMAND) {
-                    holder.targetType.setText(ViewBean.getViewTypeName(eventBean.targetType));
                     holder.optionsLayout.hideDelete();
+                    holder.targetId.setText(eventBean.eventName);
                     holder.type.setBackgroundResource(oq.a(eventBean.eventName));
                     holder.name.setText(eventBean.eventName);
                     holder.description.setText(oq.a(eventBean.eventName, requireContext()));
