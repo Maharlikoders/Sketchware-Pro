@@ -65,6 +65,7 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
     });
 
     private HashMap<Integer, ArrayList<EventBean>> events;
+    private ArrayList<EventBean> commandEvents;
     private ArrayList<EventBean> moreBlocks;
     private ArrayList<EventBean> viewEvents;
     private ArrayList<EventBean> componentEvents;
@@ -74,36 +75,26 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
     private TextView importMoreBlockFromCollection;
     private String sc_id;
 
-    public static int a(int i) {
-        if (i == 4) {
-            return R.drawable.more_block_96dp;
-        }
-        if (i == 1) {
-            return R.drawable.multiple_devices_48;
-        }
-        if (i == 0) {
-            return R.drawable.ic_cycle_color_48dp;
-        }
-        if (i == 3) {
-            return R.drawable.ic_drawer_color_48dp;
-        }
-        return i == 2 ? R.drawable.component_96 : 0;
+    public static int a(int eventType) {
+        return switch (eventType) {
+            case EventBean.EVENT_TYPE_ACTIVITY -> R.drawable.ic_cycle_color_48dp;
+            case EventBean.EVENT_TYPE_VIEW -> R.drawable.multiple_devices_48;
+            case EventBean.EVENT_TYPE_COMPONENT -> R.drawable.component_96;
+            case EventBean.EVENT_TYPE_DRAWER_VIEW -> R.drawable.ic_drawer_color_48dp;
+            case EventBean.EVENT_TYPE_ETC -> R.more_block_96dp;
+            default -> R.drawable.connected_96;
+        };
     }
 
     public static String a(Context context, int i) {
-        if (i == 4) {
-            return xB.b().a(context, R.string.common_word_moreblock);
-        }
-        if (i == 1) {
-            return xB.b().a(context, R.string.common_word_view);
-        }
-        if (i == 0) {
-            return xB.b().a(context, R.string.common_word_activity);
-        }
-        if (i == 3) {
-            return xB.b().a(context, R.string.common_word_drawer);
-        }
-        return i == 2 ? xB.b().a(context, R.string.common_word_component) : "";
+        return switch (eventType) {
+            case EventBean.EVENT_TYPE_ACTIVITY -> xB.b().a(context, R.string.common_word_activity);
+            case EventBean.EVENT_TYPE_VIEW -> xB.b().a(context, R.string.common_word_view);
+            case EventBean.EVENT_TYPE_COMPONENT -> xB.b().a(context, R.string.common_word_component);
+            case EventBean.EVENT_TYPE_DRAWER_VIEW -> xB.b().a(context, R.string.common_word_drawer);
+            case EventBean.EVENT_TYPE_ETC -> xB.b().a(context, R.string.common_word_moreblock);
+            default -> "Command";
+        };
     }
 
     @Override
@@ -147,6 +138,7 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
 
     public void refreshEvents() {
         if (currentActivity != null) {
+            commandEvents.clear();
             moreBlocks.clear();
             viewEvents.clear();
             componentEvents.clear();
@@ -160,6 +152,8 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
             EventBean eventBean2 = new EventBean(EventBean.EVENT_TYPE_ACTIVITY, -1, "onCreate", "initializeLogic");
             eventBean2.initValue();
             activityEvents.add(eventBean2);
+            EventBean eventBean3 = new EventBean(EventBean.EVENT_TYPE_COMMAND, -1, "implement", "Implement");
+            commandEvents.add(eventBean3);
             for (EventBean eventBean : jC.a(sc_id).g(currentActivity.getJavaName())) {
                 eventBean.initValue();
                 int i = eventBean.eventType;
@@ -171,6 +165,8 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
                     activityEvents.add(eventBean);
                 } else if (i == EventBean.EVENT_TYPE_DRAWER_VIEW) {
                     drawerViewEvents.add(eventBean);
+                } else if (i == EventBean.EVENT_TYPE_COMMAND) {
+                    commandEvents.add(eventBean);
                 }
             }
             if (categoryAdapter.index == -1) {
@@ -247,6 +243,7 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
             }
         });
         events = new HashMap<>();
+        commandEvents = new ArrayList<>();
         moreBlocks = new ArrayList<>();
         viewEvents = new ArrayList<>();
         componentEvents = new ArrayList<>();
@@ -257,6 +254,7 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
         events.put(2, componentEvents);
         events.put(3, drawerViewEvents);
         events.put(4, moreBlocks);
+        events.put(5, commandEvents);
         importMoreBlockFromCollection = parent.findViewById(R.id.tv_import);
         importMoreBlockFromCollection.setText(xB.b().a(requireContext(), R.string.logic_button_import_more_block));
         importMoreBlockFromCollection.setOnClickListener(v -> showImportMoreBlockFromCollectionsDialog());
@@ -464,6 +462,11 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
                 } else {
                     importMoreBlockFromCollection.setVisibility(View.GONE);
                 }
+                if (index == 5) {
+                    fab.hide();
+                } else {
+                    fab.show();
+                }
                 eventAdapter.a(events.get(index));
                 eventAdapter.notifyDataSetChanged();
             }
@@ -506,6 +509,9 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
                 holder.icon.setImageResource(EventBean.getEventIconResource(eventBean.eventType, eventBean.targetType));
                 if (eventBean.eventType == EventBean.EVENT_TYPE_VIEW) {
                     holder.targetType.setText(ViewBean.getViewTypeName(eventBean.targetType));
+                } else if (eventBean.eventType == EventBean.EVENT_TYPE_COMMAND) {
+                    holder.targetType.setText(ViewBean.getViewTypeName(eventBean.targetType));
+                    holder.optionsLayout.hideDelete();
                 } else if (eventBean.eventType == EventBean.EVENT_TYPE_DRAWER_VIEW) {
                     holder.targetType.setText(ViewBean.getViewTypeName(eventBean.targetType));
                 } else if (eventBean.eventType == EventBean.EVENT_TYPE_COMPONENT) {
