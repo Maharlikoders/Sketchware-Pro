@@ -70,13 +70,13 @@ public class ItemMaterialButton extends AppCompatButton implements sy {
         if (hasSelection) {
             rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
             canvas.drawRect(rect, paint);
-        } else {
+        }/* else {
             ColorStateList colorState = ColorStateList.valueOf(getResources().getColor(R.color.color_primary));
             if (mainColor != 0) {
                 colorState = ColorStateList.valueOf(mainColor);
             }
             super.setBackgroundTintList(colorState);
-        }
+        }*/
         super.onDraw(canvas);
     }
 
