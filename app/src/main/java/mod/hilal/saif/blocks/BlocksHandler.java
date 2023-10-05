@@ -2311,33 +2311,33 @@ public class BlocksHandler {
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
-        hashMap.put("name", "asdBoolean");
+        hashMap.put("name", "addSourceDirectly");
         hashMap.put("type", "b");
         hashMap.put("typeName", "");
         hashMap.put("code", "%s");
         hashMap.put("color", "#5cb722");
         hashMap.put("palette", "-1");
-        hashMap.put("spec", "boolean %s.inputOnly");
+        hashMap.put("spec", "add source directly %s.inputOnly");
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
-        hashMap.put("name", "asdNumber");
+        hashMap.put("name", "addSourceDirectly");
         hashMap.put("type", "d");
         hashMap.put("typeName", "");
         hashMap.put("code", "%s");
         hashMap.put("color", "#5cb722");
         hashMap.put("palette", "-1");
-        hashMap.put("spec", "number %s.inputOnly");
+        hashMap.put("spec", "add source directly %s.inputOnly");
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
-        hashMap.put("name", "asdString");
+        hashMap.put("name", "addSourceDirectly");
         hashMap.put("type", "s");
         hashMap.put("typeName", "");
         hashMap.put("code", "%s");
         hashMap.put("color", "#5cb722");
         hashMap.put("palette", "-1");
-        hashMap.put("spec", "string %s.inputOnly");
+        hashMap.put("spec", "add source directly %s.inputOnly");
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
@@ -2425,6 +2425,15 @@ public class BlocksHandler {
         hashMap.put("color", "#5cb722");
         hashMap.put("palette", "-1");
         hashMap.put("spec", "get color %m.resColor");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
+        hashMap.put("name", "implement");
+        hashMap.put("type", " ");
+        hashMap.put("code", "");
+        hashMap.put("color", "#EE7D15");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "implement %s.implement");
         arrayList.add(hashMap);
     }
 
@@ -2668,8 +2677,8 @@ public class BlocksHandler {
         logicEditorActivity.a("", "v", "int", "getResColor");
         logicEditorActivity.a("add source directly", 0xff555555);
         logicEditorActivity.a(" ", "addSourceDirectly");
-        logicEditorActivity.a("b", "asdBoolean");
-        logicEditorActivity.a("d", "asdNumber");
-        logicEditorActivity.a("s", "asdString");
+        logicEditorActivity.a("b", "addSourceDirectly");
+        logicEditorActivity.a("d", "addSourceDirectly");
+        logicEditorActivity.a("s", "addSourceDirectly");
     }
 }

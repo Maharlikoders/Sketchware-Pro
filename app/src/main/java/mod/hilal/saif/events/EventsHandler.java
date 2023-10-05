@@ -41,6 +41,7 @@ public class EventsHandler {
         ArrayList<String> array = new ArrayList<>();
 
         array.add("Import");
+        array.add("Implement");
         array.add("initializeLogic");
         array.add("onActivityResult");
         array.add("onBackPressed");
@@ -219,6 +220,7 @@ public class EventsHandler {
     public static int getIcon(String name) {
         switch (name) {
             case "Import":
+            case "Implement":
             case "onActivityResult":
             case "initializeLogic":
             case "onBackPressed":
@@ -288,6 +290,9 @@ public class EventsHandler {
             case "Import":
                 return "add custom imports";
 
+            case "Implement":
+                return "add implement in activity";
+
             case "onActivityResult":
                 return "onActivityResult";
 
@@ -350,7 +355,7 @@ public class EventsHandler {
                 return "//Ul5kmZqmO867OV0QTGOpjwX7MXmgzxzQBSZTf0Y16PnDXkhLsZfvF\r\n" +
                         param + "\r\n" +
                         "//3b5IqsVG57gNqLi7FBO2MeOW6iI7tOustUGwcA7HKXm0o7lovZ";
-
+            case "Implement";
             case "onActivityResult":
             case "initializeLogic":
                 return "";
@@ -434,6 +439,7 @@ public class EventsHandler {
     public static String getBlocks(String name) {
         switch (name) {
             case "Import":
+            case "Implement"
             case "initializeLogic":
             case "onSwipeRefreshLayout":
             case " onLongClick":
@@ -486,6 +492,9 @@ public class EventsHandler {
         switch (event) {
             case "Import":
                 return "create new import";
+
+            case "Implement":
+                return "add new implement";
 
             case "onClick":
                 return "when " + name + " clicked %m.view.view"; 

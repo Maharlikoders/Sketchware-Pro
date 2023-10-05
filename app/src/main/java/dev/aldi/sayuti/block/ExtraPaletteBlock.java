@@ -388,6 +388,11 @@ public class ExtraPaletteBlock {
             return;
         }
 
+        if (eventName.equals("Implement")) {
+            logicEditor.a(" ", "implement");
+            return;
+        }
+
         switch (paletteId) {
             case 0:
                 logicEditor.b("Add variable", "variableAdd");
