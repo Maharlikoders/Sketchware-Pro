@@ -40,8 +40,6 @@ public class EventsHandler {
     public static String[] getActivityEvents() {
         ArrayList<String> array = new ArrayList<>();
 
-        array.add("Import");
-        array.add("Implement");
         array.add("initializeLogic");
         array.add("onActivityResult");
         array.add("onBackPressed");
