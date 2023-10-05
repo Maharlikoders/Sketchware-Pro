@@ -154,9 +154,12 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
             EventBean eventBean2 = new EventBean(EventBean.EVENT_TYPE_ACTIVITY, -1, "onCreate", "initializeLogic");
             eventBean2.initValue();
             activityEvents.add(eventBean2);
-            EventBean eventBean3 = new EventBean(EventBean.EVENT_TYPE_COMMAND, -1, "implement", "Implement");
+            EventBean eventBean3 = new EventBean(EventBean.EVENT_TYPE_COMMAND, -1, "customImport", "Import");
             eventBean3.initValue();
             commandEvents.add(eventBean3);
+            EventBean eventBean4 = new EventBean(EventBean.EVENT_TYPE_COMMAND, 0, "customImplement", "Implement");
+            eventBean4.initValue();
+            commandEvents.add(eventBean4);
             for (EventBean eventBean : jC.a(sc_id).g(currentActivity.getJavaName())) {
                 eventBean.initValue();
                 int i = eventBean.eventType;
