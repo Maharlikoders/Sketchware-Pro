@@ -355,7 +355,7 @@ public class EventsHandler {
                 return "//Ul5kmZqmO867OV0QTGOpjwX7MXmgzxzQBSZTf0Y16PnDXkhLsZfvF\r\n" +
                         param + "\r\n" +
                         "//3b5IqsVG57gNqLi7FBO2MeOW6iI7tOustUGwcA7HKXm0o7lovZ";
-            case "Implement";
+            case "Implement":
             case "onActivityResult":
             case "initializeLogic":
                 return "";
@@ -439,7 +439,7 @@ public class EventsHandler {
     public static String getBlocks(String name) {
         switch (name) {
             case "Import":
-            case "Implement"
+            case "Implement":
             case "initializeLogic":
             case "onSwipeRefreshLayout":
             case " onLongClick":
