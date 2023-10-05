@@ -25,8 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import androidx.core.widget.TextViewCompat;
-
 import com.besome.sketch.beans.ImageBean;
 import com.besome.sketch.beans.LayoutBean;
 import com.besome.sketch.beans.ProjectResourceBean;
@@ -835,18 +833,6 @@ public class ViewPane extends RelativeLayout {
         textView.setTextSize(viewBean.text.textSize);
         textView.setLines(viewBean.text.line);
         textView.setSingleLine(viewBean.text.singleLine != 0);
-
-        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
-        String textAppearance = handler.getAttributeValueOf("textAppearance");
-        
-        if (!textAppearance.isEmpty()) {
-            try {
-                String resource = textAppearance.substring(textAppearance.lastIndexOf('/') + 1);
-                int appearance = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
-                TextViewCompat.setTextAppearance(textView, appearance);
-            } catch (Exception e) {
-            }
-        }
     }
 
     private void updateEditText(EditText editText, ViewBean viewBean) {
