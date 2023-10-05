@@ -81,12 +81,12 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
             case EventBean.EVENT_TYPE_VIEW -> R.drawable.multiple_devices_48;
             case EventBean.EVENT_TYPE_COMPONENT -> R.drawable.component_96;
             case EventBean.EVENT_TYPE_DRAWER_VIEW -> R.drawable.ic_drawer_color_48dp;
-            case EventBean.EVENT_TYPE_ETC -> R.more_block_96dp;
+            case EventBean.EVENT_TYPE_ETC -> R.drawable.more_block_96dp;
             default -> R.drawable.connected_96;
         };
     }
 
-    public static String a(Context context, int i) {
+    public static String a(Context context, int eventType) {
         return switch (eventType) {
             case EventBean.EVENT_TYPE_ACTIVITY -> xB.b().a(context, R.string.common_word_activity);
             case EventBean.EVENT_TYPE_VIEW -> xB.b().a(context, R.string.common_word_view);
