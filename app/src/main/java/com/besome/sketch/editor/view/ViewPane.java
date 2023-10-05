@@ -777,7 +777,9 @@ public class ViewPane extends RelativeLayout {
             height = (int) wB.a(getContext(), (float) viewBean.layout.height);
         }
         if (classInfo.b("MaterialButton")) {
-            ((ItemMaterialButton) view).setBackgroundTint(viewBean.layout.backgroundColor);
+            ItemMaterialButton button = (ItemMaterialButton) view;
+            button.setMainColor(ProjectFile.getColor(sc_id, "color_primary"));
+            button.setBackgroundTint(viewBean.layout.backgroundColor);
         } else {
             view.setBackgroundColor(viewBean.layout.backgroundColor);
         }
