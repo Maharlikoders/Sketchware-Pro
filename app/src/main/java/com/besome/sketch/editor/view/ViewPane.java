@@ -2,6 +2,7 @@ package com.besome.sketch.editor.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.ContextThemeWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -474,6 +475,9 @@ public class ViewPane extends RelativeLayout {
 
             button.setColorScheme(colorSchemeValue);
         }
+        if (classInfo.b("MaterialButton")) {
+            updateMaterialButton((ItemMaterialButton) view, viewBean);
+        }
         view.setVisibility(VISIBLE);
     }
 
@@ -898,6 +902,49 @@ public class ViewPane extends RelativeLayout {
             }
         }
         cardView.setStrokeColor(defaultColor);
+    }
+
+    private void updateMaterialButton(ItemMaterialButton button, ViewBean viewBean) {
+        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+
+        String cornerRadius = handler.getAttributeValueOf("cornerRadius");
+        String textAppearance = handler.getAttributeValueOf("textAppearance");
+        String styleAppearance = handler.getAttributeValueOf("style");
+
+        int radius = 8;
+        if (!cornerRadius.isEmpty()) {
+            try {
+                radius = Integer.parseInt(cornerRadius.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+        button.setCornerRadius((float) radius);
+
+        int appearance = 0;
+        if (!textAppearance.isEmpty()) {
+            try {
+                String resource = textAppearance.substring(textAppearance.lastIndexOf('/') + 1);
+                appearance = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
+            }
+        }
+
+        if (appearance == 0) {
+            appearance = R.style.TextAppearance_MaterialComponents_Button;
+        }
+        button.setTextAppearance(new ContextThemeWrapper(getContext(), appearance), appearance);
+
+        int styleValue = 0;
+        if (!styleAppearance.isEmpty()) {
+            try {
+                String resource = styleAppearance.substring(styleAppearance.lastIndexOf('/') + 1);
+                styleValue = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
+            }
+        }
+
+        if (styleValue == 0) {
+            styleValue = R.style.Widget_MaterialComponents_Button;
+        }
+        button.setStyle(new ContextThemeWrapper(getContext(), styleValue), styleValue);
     }
 
     private int getColorFromString(String color, String defaultColor) {
