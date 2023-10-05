@@ -925,6 +925,7 @@ public class ViewPane extends RelativeLayout {
             try {
                 String resource = textAppearance.substring(textAppearance.lastIndexOf('/') + 1);
                 appearance = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
+            } catch (Exception e) {
             }
         }
 
@@ -938,6 +939,7 @@ public class ViewPane extends RelativeLayout {
             try {
                 String resource = styleAppearance.substring(styleAppearance.lastIndexOf('/') + 1);
                 styleValue = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
+            } catch (Exception e) {
             }
         }
 
