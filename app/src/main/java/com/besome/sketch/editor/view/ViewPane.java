@@ -946,7 +946,7 @@ public class ViewPane extends RelativeLayout {
         if (styleValue == 0) {
             styleValue = R.style.Widget_MaterialComponents_Button;
         }
-        button.setStyle(getContext(), styleValue);
+        button.setStyle(styleValue);
     }
 
     private int getColorFromString(String color, String defaultColor) {
