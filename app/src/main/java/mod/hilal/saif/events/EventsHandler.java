@@ -289,7 +289,7 @@ public class EventsHandler {
                 return "add custom imports";
 
             case "Implement":
-                return "add implement in activity";
+                return "add implements to activity";
 
             case "onActivityResult":
                 return "onActivityResult";
