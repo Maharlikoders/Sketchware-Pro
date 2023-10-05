@@ -2,7 +2,6 @@ package com.besome.sketch.editor.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.ContextThemeWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -918,7 +918,7 @@ public class ViewPane extends RelativeLayout {
             } catch (Exception e) {
             }
         }
-        button.setCornerRadius((float) radius);
+        button.setCornerRadius(radius);
 
         int appearance = 0;
         if (!textAppearance.isEmpty()) {
