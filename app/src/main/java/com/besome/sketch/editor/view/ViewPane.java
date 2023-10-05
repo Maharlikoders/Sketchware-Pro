@@ -475,9 +475,6 @@ public class ViewPane extends RelativeLayout {
 
             button.setColorScheme(colorSchemeValue);
         }
-        if (classInfo.b("MaterialButton")) {
-            updateMaterialButton((ItemMaterialButton) view, viewBean);
-        }
         view.setVisibility(VISIBLE);
     }
 
@@ -837,6 +834,22 @@ public class ViewPane extends RelativeLayout {
         textView.setTextSize(viewBean.text.textSize);
         textView.setLines(viewBean.text.line);
         textView.setSingleLine(viewBean.text.singleLine != 0);
+
+        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+        String textAppearance = handler.getAttributeValueOf("textAppearance");
+        int appearance = 0;
+        if (!textAppearance.isEmpty()) {
+            try {
+                String resource = textAppearance.substring(textAppearance.lastIndexOf('/') + 1);
+                appearance = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
+            } catch (Exception e) {
+            }
+        }
+
+        if (appearance == 0) {
+            appearance = R.style.TextAppearance_MaterialComponents_Button;
+        }
+        textView.setTextAppearance(new ContextThemeWrapper(getContext(), appearance), appearance);
     }
 
     private void updateEditText(EditText editText, ViewBean viewBean) {
@@ -902,51 +915,6 @@ public class ViewPane extends RelativeLayout {
             }
         }
         cardView.setStrokeColor(defaultColor);
-    }
-
-    private void updateMaterialButton(ItemMaterialButton button, ViewBean viewBean) {
-        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
-
-        String cornerRadius = handler.getAttributeValueOf("cornerRadius");
-        String textAppearance = handler.getAttributeValueOf("textAppearance");
-        String styleAppearance = handler.getAttributeValueOf("style");
-
-        int radius = 8;
-        if (!cornerRadius.isEmpty()) {
-            try {
-                radius = Integer.parseInt(cornerRadius.replaceAll("\\D+", ""));
-            } catch (Exception e) {
-            }
-        }
-        //button.setCornerRadius(radius);
-
-        int appearance = 0;
-        if (!textAppearance.isEmpty()) {
-            try {
-                String resource = textAppearance.substring(textAppearance.lastIndexOf('/') + 1);
-                appearance = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
-            } catch (Exception e) {
-            }
-        }
-
-        if (appearance == 0) {
-            appearance = R.style.TextAppearance_MaterialComponents_Button;
-        }
-        button.setTextAppearance(new ContextThemeWrapper(getContext(), appearance), appearance);
-
-        int styleValue = 0;
-        if (!styleAppearance.isEmpty()) {
-            try {
-                String resource = styleAppearance.substring(styleAppearance.lastIndexOf('/') + 1);
-                styleValue = getContext().getResources().getIdentifier(resource, "style", getContext().getPackageName());
-            } catch (Exception e) {
-            }
-        }
-
-        if (styleValue == 0) {
-            styleValue = R.style.Widget_MaterialComponents_Button;
-        }
-        button.setStyle(styleValue);
     }
 
     private int getColorFromString(String color, String defaultColor) {
