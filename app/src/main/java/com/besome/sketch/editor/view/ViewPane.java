@@ -918,7 +918,7 @@ public class ViewPane extends RelativeLayout {
             } catch (Exception e) {
             }
         }
-        button.setCornerRadius(radius);
+        //button.setCornerRadius(radius);
 
         int appearance = 0;
         if (!textAppearance.isEmpty()) {
@@ -946,7 +946,7 @@ public class ViewPane extends RelativeLayout {
         if (styleValue == 0) {
             styleValue = R.style.Widget_MaterialComponents_Button;
         }
-        button.setStyle(new ContextThemeWrapper(getContext(), styleValue), styleValue);
+        button.setStyle(getContext(), styleValue);
     }
 
     private int getColorFromString(String color, String defaultColor) {
