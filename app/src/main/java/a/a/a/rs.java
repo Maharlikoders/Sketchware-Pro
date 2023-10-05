@@ -77,23 +77,25 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
 
     public static int a(int eventType) {
         return switch (eventType) {
-            case EventBean.EVENT_TYPE_ACTIVITY -> R.drawable.ic_cycle_color_48dp;
-            case EventBean.EVENT_TYPE_VIEW -> R.drawable.multiple_devices_48;
-            case EventBean.EVENT_TYPE_COMPONENT -> R.drawable.component_96;
-            case EventBean.EVENT_TYPE_DRAWER_VIEW -> R.drawable.ic_drawer_color_48dp;
-            case EventBean.EVENT_TYPE_ETC -> R.drawable.more_block_96dp;
-            default -> R.drawable.connected_96;
+            case 0 -> R.drawable.ic_cycle_color_48dp;
+            case 1 -> R.drawable.multiple_devices_48;
+            case 2 -> R.drawable.component_96;
+            case 3 -> R.drawable.ic_drawer_color_48dp;
+            case 4 -> R.drawable.more_block_96dp;
+            case 5 -> R.drawable.connected_96;
+            default -> 0;
         };
     }
 
     public static String a(Context context, int eventType) {
         return switch (eventType) {
-            case EventBean.EVENT_TYPE_ACTIVITY -> xB.b().a(context, R.string.common_word_activity);
-            case EventBean.EVENT_TYPE_VIEW -> xB.b().a(context, R.string.common_word_view);
-            case EventBean.EVENT_TYPE_COMPONENT -> xB.b().a(context, R.string.common_word_component);
-            case EventBean.EVENT_TYPE_DRAWER_VIEW -> xB.b().a(context, R.string.common_word_drawer);
-            case EventBean.EVENT_TYPE_ETC -> xB.b().a(context, R.string.common_word_moreblock);
-            default -> "Command";
+            case 0 -> xB.b().a(context, R.string.common_word_activity);
+            case 1 -> xB.b().a(context, R.string.common_word_view);
+            case 2 -> xB.b().a(context, R.string.common_word_component);
+            case 3 -> xB.b().a(context, R.string.common_word_drawer);
+            case 4 -> xB.b().a(context, R.string.common_word_moreblock);
+            case 5 -> "Command";
+            default -> "";
         };
     }
 
@@ -153,6 +155,7 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
             eventBean2.initValue();
             activityEvents.add(eventBean2);
             EventBean eventBean3 = new EventBean(EventBean.EVENT_TYPE_COMMAND, -1, "implement", "Implement");
+            eventBean3.initValue();
             commandEvents.add(eventBean3);
             for (EventBean eventBean : jC.a(sc_id).g(currentActivity.getJavaName())) {
                 eventBean.initValue();
@@ -243,12 +246,12 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
             }
         });
         events = new HashMap<>();
-        commandEvents = new ArrayList<>();
         moreBlocks = new ArrayList<>();
         viewEvents = new ArrayList<>();
         componentEvents = new ArrayList<>();
         activityEvents = new ArrayList<>();
         drawerViewEvents = new ArrayList<>();
+        commandEvents = new ArrayList<>();
         events.put(0, activityEvents);
         events.put(1, viewEvents);
         events.put(2, componentEvents);
@@ -512,6 +515,12 @@ public class rs extends qA implements View.OnClickListener, MoreblockImporterDia
                 } else if (eventBean.eventType == EventBean.EVENT_TYPE_COMMAND) {
                     holder.targetType.setText(ViewBean.getViewTypeName(eventBean.targetType));
                     holder.optionsLayout.hideDelete();
+                    holder.type.setBackgroundResource(oq.a(eventBean.eventName));
+                    holder.name.setText(eventBean.eventName);
+                    holder.description.setText(oq.a(eventBean.eventName, requireContext()));
+                    holder.icon.setImageResource(R.drawable.widget_source);
+                    holder.preview.setVisibility(View.GONE);
+                    holder.targetType.setVisibility(View.GONE);
                 } else if (eventBean.eventType == EventBean.EVENT_TYPE_DRAWER_VIEW) {
                     holder.targetType.setText(ViewBean.getViewTypeName(eventBean.targetType));
                 } else if (eventBean.eventType == EventBean.EVENT_TYPE_COMPONENT) {
