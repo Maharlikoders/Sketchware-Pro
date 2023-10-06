@@ -206,7 +206,6 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                     case 24:
                         designActivity.toGitHubManager();
                         break;
-                    case 2:
                     default:
                 }
             }
