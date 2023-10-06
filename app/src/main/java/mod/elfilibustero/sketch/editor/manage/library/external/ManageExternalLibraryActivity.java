@@ -7,10 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,17 +23,10 @@ import com.sketchware.pro.R;
 import com.sketchware.pro.databinding.ManageExternalLibraryBinding;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import a.a.a.aB;
 import a.a.a.wq;
-import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
 import mod.hey.studios.util.Helper;
@@ -46,6 +40,12 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
 	private LibraryAdapter adapter;
     private List<ExternalLibraryBean> libraries = new ArrayList<>();
+
+    private final ActivityResultLauncher<Intent> openLibraryManager = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == RESULT_OK) {
+            loadLibraries();
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,14 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         adapter = new LibraryAdapter(libraries);
         binding.recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(position -> {
+            Intent intent = new Intent(getApplicationContext(), ManageExternalLibraryItemActivity.class);
+            intent.putExtra("sc_id", sc_id);
+            intent.putExtra("postion", position);
+            intent.putExtra("library", libraries.get(position));
+            startActivity(intent);
+        });
+        loadLibraries();
     }
 
     @Override
@@ -107,10 +115,15 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void loadLibraries(List<ExternalLibraryBean> libraries, LibraryAdapter adapter) {
+    private void loadLibraries() {
         libraries.clear();
         if (FileUtil.isExistFile(dataPath)) {
+            FileUtil.writeFile(dataPath, "[]");
+        }
+        try {
             libraries = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>(){}.getType());
+            if (libraries == null) libraries = new ArrayList<>();
+        } catch (Exception e) {
         }
         if (libraries != null && libraries.isEmpty()) {
         	binding.guide.setVisibility(View.VISIBLE);
@@ -135,7 +148,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         }
 
         public interface OnItemClickListener {
-            void onItemClick(ExternalLibraryBean bean);
+            void onItemClick(int position);
         }
 
         @NonNull
@@ -149,7 +162,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
             var bean = libraries.get(position);
             holder.name.setText(bean.name);
-            holder.dep.setText(bean.dep);
+            holder.dep.setText(bean.dependency);
         }
 
         @Override
@@ -170,9 +183,8 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                var bean = libraries.get(getAdapterPosition());
                 if (itemClickListener != null) {
-                    itemClickListener.onItemClick(bean);
+                    itemClickListener.onItemClick(getAdapterPosition());
                 }
             }
         }
