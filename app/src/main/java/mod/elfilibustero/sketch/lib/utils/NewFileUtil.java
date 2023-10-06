@@ -1,6 +1,7 @@
 package mod.elfilibustero.sketch.lib.utils;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
@@ -9,14 +10,19 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class NewFileUtil {
+
+	public static final String TYPE_FILE = 0;
+	public static final String TYPE_DIRECTORY = 1;
 
 	public static long getSize(String path) throws IOException {
 		Path paths = Paths.get(path);
@@ -53,13 +59,19 @@ public class NewFileUtil {
 		return size;
 	}
 
-	public static List<String> listDir(String directoryPath) throws IOException {
-		try (Stream<Path> stream =Files.walk(Paths.get(directoryPath))) {
-			return stream
-				.filter(Files::isDirectory)
-				.map(Path::getFileName)
-				.map(Path::toString)
-				.collect(Collectors.toList());
+	public static List<String> listDir(String directoryPath, int type) throws IOException {
+		List<String> contents = new ArrayList<>();
+		try (DirectoryStream<Path> stream = Files.newDirectory(Paths.get(directoryPath))) {
+			Stream<Path> subDirStream = StreamSupport.stream(stream.spliterator(), false)
+				.filter(path -> {
+					return switch (type) {
+						case TYPE_FILE -> Files.isRegularFile(path);
+						case TYPE_DIRECTORY -> Files.isDirectory(path);
+						default -> true;
+					};
+				});
+			subDirStream.forEach(subDir -> contents.add(entry.getFileName().toString()));
+			return contents;
 		}
 	}
 
