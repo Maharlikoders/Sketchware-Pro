@@ -177,9 +177,6 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
                 if (FileUtil.isExistFile(dependencies)) {
                     bean.dependency = FileUtil.readFile(dependencies);
                 }
-                if (isContainsLibrary(name)) {
-                    bean.useYn = "Y";
-                }
             }
             beans.add(bean);
         }
@@ -246,11 +243,11 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
             var bean = files.get(position);
             String name = bean.name;
             holder.name.setText(name);
-            boolean isEnabled = isContainsLibrary(name);
+            boolean isEnabled = bean.useYn.equals("Y");
             holder.enabled.setText(isEnabled ? "ON" : "OFF");
             holder.enabled.setSelected(isEnabled);
             String dependency = bean.dependency;
-            if (dependency.isEmpty()) {
+            if (!dependency.isEmpty()) {
                 holder.dep.setText(dependency);
                 holder.dep.setTextColor(0xffc6c6c6);
             } else {
