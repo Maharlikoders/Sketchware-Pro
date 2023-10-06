@@ -44,7 +44,6 @@ import com.besome.sketch.common.SrcViewerActivity;
 import com.besome.sketch.editor.manage.ManageCollectionActivity;
 import com.besome.sketch.editor.manage.font.ManageFontActivity;
 import com.besome.sketch.editor.manage.image.ManageImageActivity;
-import com.besome.sketch.editor.manage.library.ManageLibraryActivity;
 import com.besome.sketch.editor.manage.sound.ManageSoundActivity;
 import com.besome.sketch.editor.manage.view.ManageViewActivity;
 import com.besome.sketch.editor.view.ProjectFileSelector;
@@ -83,7 +82,6 @@ import a.a.a.yB;
 import a.a.a.yq;
 import a.a.a.zy;
 import dev.aldi.sayuti.editor.manage.ManageCustomAttributeActivity;
-import dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;
@@ -94,11 +92,11 @@ import mod.agus.jcoderz.editor.manage.resource.ManageResourceActivity;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.GitHubBean;
 import mod.elfilibustero.sketch.editor.manage.github.ManageGitHubActivity;
+import mod.elfilibustero.sketch.editor.manage.library.ManageLibrariesActivity;
 import mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity;
 import mod.elfilibustero.sketch.lib.utils.GitHubUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
 import mod.hey.studios.activity.managers.java.ManageJavaActivity;
-import mod.hey.studios.activity.managers.nativelib.ManageNativelibsActivity;
 import mod.hey.studios.build.BuildSettingsDialog;
 import mod.hey.studios.compiler.kotlin.KotlinCompilerBridge;
 import mod.hey.studios.project.custom_blocks.CustomBlocksDialog;
@@ -771,20 +769,6 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
-     * Opens {@link ManageLocalLibraryActivity}.
-     */
-    void toLocalLibraryManager() {
-        launchActivity(ManageLocalLibraryActivity.class, null);
-    }
-
-    /**
-     * Opens {@link ManageNativelibsActivity}.
-     */
-    void toNativeLibraryManager() {
-        launchActivity(ManageNativelibsActivity.class, null);
-    }
-
-    /**
      * Opens {@link ManagePermissionActivity}.
      */
     void toPermissionManager() {
@@ -841,10 +825,10 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
-     * Opens {@link ManageLibraryActivity}.
+     * Opens {@link ManageLibrariesActivity}.
      */
     void toLibraryManager() {
-        launchActivity(ManageLibraryActivity.class, openLibraryManager);
+        launchActivity(ManageLibrariesActivity.class, openLibraryManager);
     }
 
     /**
