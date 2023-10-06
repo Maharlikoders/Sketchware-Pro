@@ -95,6 +95,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         switchLib = binding.switchLib;
         binding.layoutSwitch.setOnClickListener(this);
         binding.download.setOnClickListener(this);
+        binding.download.setText("Download");
     }
 
     private void setup() {
