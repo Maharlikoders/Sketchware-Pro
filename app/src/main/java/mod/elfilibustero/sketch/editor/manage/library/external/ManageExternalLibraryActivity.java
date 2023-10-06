@@ -48,6 +48,12 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         }
     });
 
+    private final ActivityResultLauncher<Intent> downloadLibrary = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == RESULT_OK) {
+            loadLibraries();
+        }
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,9 +83,10 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
             intent.putExtra("sc_id", sc_id);
             intent.putExtra("postion", position);
             intent.putExtra("library", libraries.get(position));
-            startActivity(intent);
+            openLibraryManager.launch(intent);
         });
         loadLibraries();
+        binding.fab.setOnClickListener(v -> downloadLibrary());
     }
 
     @Override
@@ -134,6 +141,12 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         	binding.guide.setVisibility(View.GONE);
         	binding.recyclerView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void downloadLibrary() {
+        Intent intent = new Intent(getApplicationContext(), ManageExternalLibraryItemActivity.class);
+        intent.putExtra("sc_id", sc_id);
+        openLibraryManager.launch(intent);
     }
 
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
