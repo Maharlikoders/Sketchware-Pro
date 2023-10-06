@@ -37,6 +37,7 @@ import a.a.a.wq;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
+import mod.elfilibustero.sketch.lib.utils.NewFileUtil;
 import mod.hey.studios.util.Helper;
 
 public class ManageExternalLibraryItemActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,9 +48,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
     private LibraryAdapter adapter;
     private String initialPath;
-    private String currentPath;
-    private File filePath;
-    private List<File> fileList = new ArrayList<>();
+    private List<String> files = new ArrayList<>();
 
     private ExternalLibraryBean bean;
 
@@ -63,14 +62,13 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         } else {
             sc_id = savedInstanceState.getString("sc_id");
         }
+        bean = getIntent().getParcelableExtra("library");
         init();
     }
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        bean = getIntent().getParcelableExtra("library");
-        setup();
     }
 
     @Override
@@ -95,29 +93,15 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
-    }
 
-    private void setup() {
-        initialPath = wq.getExternalLibrary(sc_id) + bean.name;
+        initialPath = wq.getExternalLibrary(sc_id) + "/" + bean.name;
         currentPath = initialPath;
-        adapter = new LibraryAdapter(fileList);
+        adapter = new LibraryAdapter(files);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
 
         });
-        var currentDirectory = new File(currentPath);
-        if (!currentDirectory.exists() || !currentDirectory.isDirectory()) {
-            currentDirectory = new File(initialPath);
-            currentPath = currentDirectory.getAbsolutePath();
-        }
-        loadFiles(currentDirectory, fileList, adapter);
-        adapter.setOnItemClickListener(file -> {
-            filePath = file;
-            if (file.isDirectory()) {
-                currentPath = file.getAbsolutePath();
-                loadFiles(file, fileList, adapter);
-            }
-        });
+        loadFiles();
     }
 
     @Override
@@ -128,20 +112,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
     @Override
     public void onBackPressed() {
-        if (currentPath.equals(initialPath)) {
-            //setResult(RESULT_OK, new Intent());
-            finish();
-        } else if (adapter != null) {
-            var lastPath = currentPath.substring(0, currentPath.lastIndexOf(File.separator));
-            var currentDirectory = new File(lastPath);
-            if (!currentDirectory.exists() || !currentDirectory.isDirectory()) {
-                currentDirectory = new File(initialPath);
-                currentPath = currentDirectory.getAbsolutePath();
-            } else {
-                currentPath = lastPath;
-            }
-            loadFiles(currentDirectory, fileList, adapter);
-        }
+        super.onBackPressed();
     }
 
     @Override
@@ -167,24 +138,13 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         super.onStop();
     }
 
-    private void loadFiles(File directory, List<File> fileList, LibraryAdapter adapter) {
-        fileList.clear();
-        File[] files = directory.listFiles();
-        if (files != null) {
-            Arrays.sort(files, (file1, file2) -> {
-                if (file1.isDirectory() && !file2.isDirectory()) {
-                    return -1;
-                } else if (!file1.isDirectory() && file2.isDirectory()) {
-                    return 1;
-                } else {
-                    return file1.getName().compareToIgnoreCase(file2.getName());
-                }
-            });
-            for (File file : files) {
-                fileList.add(file);
-            }
+    private void loadFiles() {
+        files.clear();
+        try {
+            files.addAll(NewFileUtil.listDir(initialPath, -1));
+        } catch (IOException e) {
         }
-        if (fileList.isEmpty()) {
+        if (files == null || files.isEmpty()) {
             binding.guide.setVisibility(View.VISIBLE);
             binding.recyclerView.setVisibility(View.GONE);
         } else {
@@ -197,10 +157,10 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
 
         private OnItemClickListener itemClickListener;
-        private final List<File> fileList;
+        private final List<String> files;
 
-        public LibraryAdapter(List<File> fileList) {
-            this.fileList = fileList;
+        public LibraryAdapter(List<String> files) {
+            this.files = files;
         }
 
         public void setOnItemClickListener(OnItemClickListener listener) {
@@ -221,13 +181,13 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
         @Override
         public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
-            var file = fileList.get(position);
-            holder.name.setText(file.getName());
+            var file = files.get(position);
+            holder.name.setText(file);
         }
 
         @Override
         public int getItemCount() {
-            return fileList.size();
+            return files.size();
         }
 
         public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -242,9 +202,8 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
             @Override
             public void onClick(View view) {
-                var file = fileList.get(getAdapterPosition());
                 if (itemClickListener != null) {
-                    itemClickListener.onItemClick(file);
+                    itemClickListener.onItemClick(files.get(getAdapterPosition()));
                 }
             }
         }
