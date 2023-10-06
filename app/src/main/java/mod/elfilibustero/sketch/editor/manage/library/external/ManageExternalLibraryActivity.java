@@ -168,7 +168,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
     private List<ExternalLibraryBean> getExternalLibraries() throws IOException {
         List<ExternalLibraryBean> beans = new ArrayList<>();
-        List<String> names = NewFileUtil.listDir(initialPath);
+        List<String> names = NewFileUtil.listDir(initialPath, NewFileUtil.TYPE_DIRECTORY);
         for (String name : names) {
             ExternalLibraryBean bean = getExternalLibrary(name);
             if (bean == null) {
