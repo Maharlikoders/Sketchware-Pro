@@ -71,8 +71,7 @@ class DependencyResolver(
             """.trimMargin()
     }
 
-    private var downloadPath: String = ""
-    private var sc_id: String = ""
+    private var downloadPath: String = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs"
 
     private val repositoriesJson = Paths.get(
         Environment.getExternalStorageDirectory().absolutePath,
@@ -123,15 +122,10 @@ class DependencyResolver(
     }
 
     fun setScId(scId: String) {
-        sc_id = scId
+        downloadPath = wq.getExternalLibrary(scId)
     }
 
     fun resolveDependency(callback: DependencyResolverCallback) {
-        if (sc_id.isNullOrEmpty()) {
-            downloadPath = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs"
-        } else {
-            downloadPath = wq.getExternalLibrary(sc_id)
-        }
         // this is pretty much the same as `Artifact.downloadArtifact()`, but with some modifications for checks and callbacks
         val dependencies = mutableListOf<Artifact>()
         callback.startResolving("$groupId:$artifactId:$version")
