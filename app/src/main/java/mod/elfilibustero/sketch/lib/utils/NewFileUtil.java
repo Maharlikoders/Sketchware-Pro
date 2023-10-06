@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,7 +53,7 @@ public class NewFileUtil {
 		return size;
 	}
 
-	private List<String> listDir(String directoryPath) throws IOException {
+	public static List<String> listDir(String directoryPath) throws IOException {
 		try (Stream<Path> stream =Files.walk(Paths.get(directoryPath), 1, FileVisitOption.FOLLOW_LINKS)) {
 			return stream
 				.filter(Files::isDirectory)
