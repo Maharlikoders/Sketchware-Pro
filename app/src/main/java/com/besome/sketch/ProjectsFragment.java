@@ -21,6 +21,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -130,8 +131,6 @@ public class ProjectsFragment extends DA {
 
         projectsAdapter = new ProjectsAdapter(this, new ArrayList<>(projectsList));
         myProjects.setAdapter(projectsAdapter);
-        
-        refreshProjectsList();
 
         view.findViewById(R.id.bottom_sheet_content_holder).setOnClickListener(v -> {
             if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
@@ -311,6 +310,12 @@ public class ProjectsFragment extends DA {
         setHasOptionsMenu(true);
         initialize(viewGroup);
         return viewGroup;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        refreshProjectsList();
     }
 
     public void hideBottomSheet() {
