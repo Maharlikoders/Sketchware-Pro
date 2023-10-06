@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sketchware.pro.R;
 import com.sketchware.pro.databinding.ManageExternalLibraryBinding;
 
@@ -33,6 +34,7 @@ import a.a.a.aB;
 import a.a.a.wq;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
 import mod.hey.studios.util.Helper;
 
 public class ManageExternalLibraryActivity extends AppCompatActivity {
@@ -40,12 +42,10 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 	private ManageExternalLibraryBinding binding;
 
 	private String sc_id;
-	private String initialPath;
-	private String currentPath;
-    private File filePath;
+    private String dataPath;
 
 	private LibraryAdapter adapter;
-    private List<File> fileList = new ArrayList<>();
+    private List<ExternalLibraryBean> libraries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,25 +67,10 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
 
-        initialPath = wq.getExternalLibrary(sc_id);
-        currentPath = initialPath;
+        dataPath = wq.b(sc_id) + File.separator + "external_library";
 
-        adapter = new LibraryAdapter(fileList);
+        adapter = new LibraryAdapter(libraries);
         binding.recyclerView.setAdapter(adapter);
-
-        var currentDirectory = new File(currentPath);
-        if (!currentDirectory.exists() || !currentDirectory.isDirectory()) {
-            currentDirectory = new File(initialPath);
-            currentPath = currentDirectory.getAbsolutePath();
-        }
-        loadFiles(currentDirectory, fileList, adapter);
-        adapter.setOnItemClickListener(file -> {
-            filePath = file;
-            if (file.isDirectory()) {
-                currentPath = file.getAbsolutePath();
-                loadFiles(file, fileList, adapter);
-            }
-        });
     }
 
     @Override
@@ -96,19 +81,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (currentPath.equals(initialPath)) {
-            finish();
-        } else if (adapter != null) {
-            var lastPath = currentPath.substring(0, currentPath.lastIndexOf(File.separator));
-            var currentDirectory = new File(lastPath);
-            if (!currentDirectory.exists() || !currentDirectory.isDirectory()) {
-                currentDirectory = new File(initialPath);
-                currentPath = currentDirectory.getAbsolutePath();
-            } else {
-                currentPath = lastPath;
-            }
-            loadFiles(currentDirectory, fileList, adapter);
-        }
+        super.onBackPressed();
     }
 
     @Override
@@ -134,40 +107,27 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void loadFiles(File directory, List<File> fileList, LibraryAdapter adapter) {
-        fileList.clear();
-        File[] files = directory.listFiles();
-        if (files != null) {
-            Arrays.sort(files, (file1, file2) -> {
-                if (file1.isDirectory() && !file2.isDirectory()) {
-                    return -1;
-                } else if (!file1.isDirectory() && file2.isDirectory()) {
-                    return 1;
-                } else {
-                    return file1.getName().compareToIgnoreCase(file2.getName());
-                }
-            });
-            for (File file : files) {
-            	fileList.add(file);
-            }
+    private void loadLibraries(List<ExternalLibraryBean> libraries, LibraryAdapter adapter) {
+        libraries.clear();
+        if (FileUtil.isExistFile(dataPath)) {
+            libraries = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>(){}.getType());
         }
-        if (fileList.isEmpty()) {
+        if (libraries != null && libraries.isEmpty()) {
         	binding.guide.setVisibility(View.VISIBLE);
         	binding.recyclerView.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
         } else {
         	binding.guide.setVisibility(View.GONE);
         	binding.recyclerView.setVisibility(View.VISIBLE);
         }
-        adapter.notifyDataSetChanged();
     }
 
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
-        private final List<File> fileList;
+        private List<ExternalLibraryBean> libraries;
         private OnItemClickListener itemClickListener;
-        private int lastCheckedPosition = -1;
 
-        public LibraryAdapter(List<File> fileList) {
-            this.fileList = fileList;
+        public LibraryAdapter(List<ExternalLibraryBean> libraries) {
+            this.libraries = libraries;
         }
 
         public void setOnItemClickListener(OnItemClickListener listener) {
@@ -175,7 +135,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         }
 
         public interface OnItemClickListener {
-            void onItemClick(File file);
+            void onItemClick(ExternalLibraryBean bean);
         }
 
         @NonNull
@@ -187,20 +147,14 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
-            var file = fileList.get(position);
-            holder.name.setText(file.getName());
-            var dependency = new File(file, "dependencies");
-            if (dependency.exists() && dependency.isFile()) {
-            	holder.dep.setText(FileUtil.readFile(dependency.getAbsolutePath()));
-            	holder.dep.setVisibility(View.VISIBLE);
-            } else {
-            	holder.dep.setVisibility(View.GONE);
-            }
+            var bean = libraries.get(position);
+            holder.name.setText(bean.name);
+            holder.dep.setText(bean.dep);
         }
 
         @Override
         public int getItemCount() {
-            return fileList.size();
+            return libraries.size();
         }
 
         public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -216,17 +170,9 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                var file = fileList.get(getAdapterPosition());
-                if (!file.isDirectory()) {
-                    int copyOfLastCheckedPosition = lastCheckedPosition;
-                    lastCheckedPosition = getAdapterPosition();
-                    notifyItemChanged(copyOfLastCheckedPosition);
-                    notifyItemChanged(lastCheckedPosition);
-                } else {
-                    lastCheckedPosition = -1;
-                }
+                var bean = libraries.get(getAdapterPosition());
                 if (itemClickListener != null) {
-                    itemClickListener.onItemClick(file);
+                    itemClickListener.onItemClick(bean);
                 }
             }
         }
