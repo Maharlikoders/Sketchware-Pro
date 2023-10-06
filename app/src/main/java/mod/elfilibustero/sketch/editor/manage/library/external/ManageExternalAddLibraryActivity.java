@@ -190,7 +190,10 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
 
                 @Override
                 public void onDependencyNotFound(@NonNull String dep) {
-                    handler.post(new SetTextRunnable("Dependency " + dep + " not found"));
+                    handler.post(() -> {
+                        SketchwareUtil.toastError("Dependency " + dep + " not found");
+                        dialog.dismiss();
+                    });
                 }
 
                 @Override
