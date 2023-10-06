@@ -248,6 +248,10 @@
         <activity
             android:name="mod.elfilibustero.sketch.editor.manage.github.SetupGitHubActivity"
             android:configChanges="orientation|screenSize" />
+        <activity android:name="mod.elfilibustero.sketch.editor.manage.library.ManageLibrariesActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name="mod.elfilibustero.sketch.editor.manage.library.external.ManageExternalActivity"
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name="mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity"
             android:configChanges="orientation|screenSize" />
