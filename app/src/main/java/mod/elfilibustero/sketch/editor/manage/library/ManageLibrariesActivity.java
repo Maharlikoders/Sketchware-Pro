@@ -62,7 +62,9 @@ public class ManageLibrariesActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onBackPressed() {
-        if (isResultOK) setResult(RESULT_OK, new Intent());
+        if (isResultOK) {
+            setResult(RESULT_OK, new Intent());
+        }
         finish();
     }
 
@@ -105,11 +107,16 @@ public class ManageLibrariesActivity extends AppCompatActivity implements View.O
 
     private int getResourceType(LibraryType libraryType) {
         return switch (libraryType) {
-            case BUILT_IN -> LibrariesConstant.TYPE_BUILT_IN;
-            case EXTERNAL -> LibrariesConstant.TYPE_EXTERNAL;
-            case NATIVE -> LibrariesConstant.TYPE_NATIVE;
-            case LOCAL -> LibrariesConstant.TYPE_LOCAL;
-            default -> 0;
+            case BUILT_IN ->
+                LibrariesConstant.TYPE_BUILT_IN;
+            case EXTERNAL ->
+                LibrariesConstant.TYPE_EXTERNAL;
+            case NATIVE ->
+                LibrariesConstant.TYPE_NATIVE;
+            case LOCAL ->
+                LibrariesConstant.TYPE_LOCAL;
+            default ->
+                0;
         };
     }
 
