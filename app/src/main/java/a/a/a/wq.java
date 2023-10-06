@@ -55,6 +55,7 @@ public class wq {
     public static final String CUSTOM_COMPONENT_FILE = EXTRA_SYSTEM_DATA + File.separator + "component.json";
     public static final String EXTRA_DATA_EXPORT = EXTRA_SYSTEM_DATA + File.separator + "export";
 
+    public static final String SKETCH_EXTERNAL_LIBRARY = a + File.separator + "external" + File.separator + "list";
     public static String getAbsolutePathOf(String path) {
         return new File(Environment.getExternalStorageDirectory(), path).getAbsolutePath();
     }
@@ -270,6 +271,10 @@ public class wq {
 
     public static String getGitHubSrc(String sc_id) {
         return getAbsolutePathOf(SKETCH_GITHUB_SRC + File.separator + sc_id);
+    }
+
+    public static String getExternalLibrary(String sc_id) {
+        return getAbsolutePathOf(SKETCH_EXTERNAL_LIBRARY + File.separator + sc_id);
     }
 
     public static String y() {
