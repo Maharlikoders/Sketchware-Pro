@@ -1,6 +1,7 @@
 package mod.elfilibustero.sketch.editor.manage.library.external;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,7 +38,7 @@ import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
 import mod.hey.studios.util.Helper;
 
-public class ManageExternalLibraryItemActivity extends AppCompatActivity {
+public class ManageExternalLibraryItemActivity extends AppCompatActivity implements View.OnClickListener {
 
 	private ManageExternalLibraryItemBinding binding;
 
