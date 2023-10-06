@@ -21,8 +21,8 @@ import java.util.stream.StreamSupport;
 
 public class NewFileUtil {
 
-	public static final String TYPE_FILE = 0;
-	public static final String TYPE_DIRECTORY = 1;
+	public static final int TYPE_FILE = 0;
+	public static final int TYPE_DIRECTORY = 1;
 
 	public static long getSize(String path) throws IOException {
 		Path paths = Paths.get(path);
@@ -61,7 +61,7 @@ public class NewFileUtil {
 
 	public static List<String> listDir(String directoryPath, int type) throws IOException {
 		List<String> contents = new ArrayList<>();
-		try (DirectoryStream<Path> stream = Files.newDirectory(Paths.get(directoryPath))) {
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(directoryPath))) {
 			Stream<Path> subDirStream = StreamSupport.stream(stream.spliterator(), false)
 				.filter(path -> {
 					return switch (type) {
@@ -70,7 +70,7 @@ public class NewFileUtil {
 						default -> true;
 					};
 				});
-			subDirStream.forEach(subDir -> contents.add(entry.getFileName().toString()));
+			subDirStream.forEach(entry -> contents.add(entry.getFileName().toString()));
 			return contents;
 		}
 	}
