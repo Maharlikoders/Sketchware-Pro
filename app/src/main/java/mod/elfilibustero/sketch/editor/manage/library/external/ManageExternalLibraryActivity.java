@@ -95,7 +95,6 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(bean -> {
             Intent intent = new Intent(getApplicationContext(), ManageExternalLibraryItemActivity.class);
             intent.putExtra("sc_id", sc_id);
-            intent.putExtra("postion", position);
             intent.putExtra("library", bean);
             openLibraryManager.launch(intent);
         });
