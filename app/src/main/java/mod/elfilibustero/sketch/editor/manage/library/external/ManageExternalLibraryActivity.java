@@ -136,6 +136,18 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
     private void loadLibraries() {
         libraries.clear();
+        if (!FileUtil.isExistFile(dataPath)) {
+            FileUtil.writeFile(dataPath, "[]");
+        } else {
+            try {
+                String content = FileUtil.readFile(dataPath);
+                if (content != null && !content.isEmpty()) {
+                    libraries = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
+                    }.getType());
+                } 
+            } catch (Exception e) {
+            }
+        }
         getExternalLibraryList(libraries);
         if (libraries == null || libraries.isEmpty()) {
             binding.guide.setVisibility(View.VISIBLE);
@@ -154,19 +166,6 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     }
 
     private void getExternalLibraryList(final List<ExternalLibraryBean> libraries) {
-        if (!FileUtil.isExistFile(dataPath)) {
-            FileUtil.writeFile(dataPath, "[]");
-        } else {
-            try {
-                String content = FileUtil.readFile(dataPath);
-                if (content != null && !content.isEmpty()) {
-                    libraries = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
-                    }.getType());
-                } 
-            } catch (Exception e) {
-            }
-        }
-
         libraries.removeIf(bean -> !Files.exists(Paths.get(initialPath + "/" + bean.getName())));
         
         if (libraries != null || !libraries.isEmpty()) {
