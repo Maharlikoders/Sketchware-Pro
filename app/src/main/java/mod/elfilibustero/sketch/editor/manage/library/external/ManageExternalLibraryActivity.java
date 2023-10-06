@@ -181,7 +181,6 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
             } catch (IOException e) {
             }
         }
-        return libraries;
     }
 
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
