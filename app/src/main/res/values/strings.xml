@@ -1186,6 +1186,7 @@ ex)\"*/*\", \"image/*\", \"audio/*\", \"text/*\""</string>
     <string name="design_drawer_menu_description_github">GitHub settings</string>
     <string name="design_drawer_menu_description_image">Import photos and icons</string>
     <string name="design_drawer_menu_description_library">Component settings</string>
+    <string name="design_drawer_menu_description_project">Configure settings</string>
     <string name="design_drawer_menu_description_sound">Import music and sound efects</string>
     <string name="design_drawer_menu_description_source_code">View Java and XML files</string>
     <string name="design_drawer_menu_description_theme">Color theme</string>
@@ -1197,6 +1198,8 @@ ex)\"*/*\", \"image/*\", \"audio/*\", \"text/*\""</string>
     <string name="design_drawer_menu_title_github">GitHub</string>
     <string name="design_drawer_menu_title_image">Image</string>
     <string name="design_drawer_menu_title_library">Library</string>
+    <string name="design_drawer_menu_title_libraries">Libraries</string>
+    <string name="design_drawer_menu_title_project">Project</string>
     <string name="design_drawer_menu_title_sound">Sound</string>
     <string name="design_drawer_menu_title_source_code">Show Source Code</string>
     <string name="design_drawer_menu_title_theme">Theme</string>
