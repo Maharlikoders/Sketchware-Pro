@@ -2,6 +2,7 @@ package mod.elfilibustero.sketch.editor.manage.library.external;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -91,11 +92,11 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         adapter = new LibraryAdapter(beans);
         binding.recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(position -> {
+        adapter.setOnItemClickListener(bean -> {
             Intent intent = new Intent(getApplicationContext(), ManageExternalLibraryItemActivity.class);
             intent.putExtra("sc_id", sc_id);
             intent.putExtra("postion", position);
-            intent.putExtra("name", beans.get(position));
+            intent.putExtra("library", bean);
             openLibraryManager.launch(intent);
         });
         loadLibraries();
@@ -231,7 +232,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         public interface OnItemClickListener {
 
-            void onItemClick(int position);
+            void onItemClick(ExternalLibraryBean bean);
         }
 
         @NonNull
@@ -279,8 +280,9 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                ExternalLibraryBean bean = files.get(getAdapterPosition());
                 if (itemClickListener != null) {
-                    itemClickListener.onItemClick(getAdapterPosition());
+                    itemClickListener.onItemClick(bean);
                 }
             }
         }
