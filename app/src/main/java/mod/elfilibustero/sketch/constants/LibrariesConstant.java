@@ -32,7 +32,7 @@ public class LibrariesConstant {
             case TYPE_LOCAL ->
                 "Deprecated";
             default ->
-                0;
+                "";
         };
     }
 
@@ -47,7 +47,7 @@ public class LibrariesConstant {
             case TYPE_LOCAL ->
                 "Local";
             default ->
-                0;
+                "";
         };
     }
 }

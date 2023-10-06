@@ -51,7 +51,7 @@ public class ManageLibrariesActivity extends AppCompatActivity implements View.O
         addItem(LibraryType.BUILT_IN);
         addItem(LibraryType.EXTERNAL);
         addItem(LibraryType.NATIVE);
-        addItem(LibraryType.LIBRARY);
+        addItem(LibraryType.LOCAL);
     }
 
     @Override

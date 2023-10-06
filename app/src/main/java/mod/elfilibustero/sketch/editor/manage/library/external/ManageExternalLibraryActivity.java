@@ -42,6 +42,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 	private String sc_id;
 	private String initialPath;
 	private String currentPath;
+    private File filePath;
 
 	private LibraryAdapter adapter;
     private List<File> fileList = new ArrayList<>();
@@ -96,7 +97,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (currentPath.equals(initialPath)) {
-            dismiss();
+            finish();
         } else if (adapter != null) {
             var lastPath = currentPath.substring(0, currentPath.lastIndexOf(File.separator));
             var currentDirectory = new File(lastPath);
@@ -133,7 +134,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void loadFiles(File directory, List<File> fileList, FileAdapter adapter) {
+    private void loadFiles(File directory, List<File> fileList, LibraryAdapter adapter) {
         fileList.clear();
         File[] files = directory.listFiles();
         if (files != null) {
@@ -171,6 +172,10 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         public void setOnItemClickListener(OnItemClickListener listener) {
             this.itemClickListener = listener;
+        }
+
+        public interface OnItemClickListener {
+            void onItemClick(File file);
         }
 
         @NonNull
