@@ -240,12 +240,11 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         }
 
         private boolean isContainsLibrary(String name) {
-            if (beans == null || !beans.isEmpty()) {
-                return false;
-            }
-            for (ExternalLibraryBean bean : beans) {
-                if (bean.name.equals(name)) {
-                    return true;
+            if (beans != null && !beans.isEmpty()) {
+                for (ExternalLibraryBean bean : beans) {
+                    if (bean.name.equals(name)) {
+                        return true;
+                    }
                 }
             }
             return false;
