@@ -1,6 +1,7 @@
 package mod.elfilibustero.sketch.editor.manage.library.external;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -68,7 +70,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         int id = v.getId();
         if (id == R.id.layout_switch) {
             switchLib.setChecked(!switchLib.isChecked());
-        } else if (oid == R.id.download) {
+        } else if (id == R.id.download) {
             setup();
         }
     }
