@@ -71,8 +71,8 @@ class DependencyResolver(
             """.trimMargin()
     }
 
-    private val downloadPath: String = ""
-    private val sc_id: String = ""
+    private var downloadPath: String = ""
+    private var sc_id: String = ""
 
     private val repositoriesJson = Paths.get(
         Environment.getExternalStorageDirectory().absolutePath,
