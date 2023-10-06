@@ -24,6 +24,7 @@ import com.sketchware.pro.R;
 import com.sketchware.pro.databinding.ManageExternalLibraryItemBinding;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,7 +96,6 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
 
         initialPath = wq.getExternalLibrary(sc_id) + "/" + bean.name;
-        currentPath = initialPath;
         adapter = new LibraryAdapter(files);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
@@ -169,7 +169,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
         public interface OnItemClickListener {
 
-            void onItemClick(File file);
+            void onItemClick(String name);
         }
 
         @NonNull
@@ -181,8 +181,8 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
         @Override
         public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
-            var file = files.get(position);
-            holder.name.setText(file);
+            var name = files.get(position);
+            holder.name.setText(name);
         }
 
         @Override
@@ -191,7 +191,6 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         }
 
         public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
             public final TextView name;
 
             public FileViewHolder(@NonNull View itemView) {
