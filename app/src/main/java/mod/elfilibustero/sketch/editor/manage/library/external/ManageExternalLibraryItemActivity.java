@@ -41,11 +41,11 @@ import mod.hey.studios.util.Helper;
 
 public class ManageExternalLibraryItemActivity extends AppCompatActivity implements View.OnClickListener {
 
-	private ManageExternalLibraryItemBinding binding;
+    private ManageExternalLibraryItemBinding binding;
 
-	private String sc_id;
+    private String sc_id;
 
-	private LibraryAdapter adapter;
+    private LibraryAdapter adapter;
     private String initialPath;
     private String currentPath;
     private File filePath;
@@ -103,7 +103,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         adapter = new LibraryAdapter(fileList);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
-            
+
         });
         var currentDirectory = new File(currentPath);
         if (!currentDirectory.exists() || !currentDirectory.isDirectory()) {
@@ -167,7 +167,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         super.onStop();
     }
 
-     private void loadFiles(File directory, List<File> fileList, LibraryAdapter adapter) {
+    private void loadFiles(File directory, List<File> fileList, LibraryAdapter adapter) {
         fileList.clear();
         File[] files = directory.listFiles();
         if (files != null) {
@@ -195,6 +195,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
     }
 
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
+
         private OnItemClickListener itemClickListener;
         private final List<File> fileList;
 
@@ -207,6 +208,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         }
 
         public interface OnItemClickListener {
+
             void onItemClick(File file);
         }
 
@@ -229,6 +231,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         }
 
         public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
             public final TextView name;
 
             public FileViewHolder(@NonNull View itemView) {
