@@ -200,6 +200,7 @@ class DependencyResolver(
                 val packageName =
                     findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
                 path.parent.resolve("config").writeText(packageName)
+                path.parent.resolve("dependencies").writeText(artifact.toStr())
             }
         }
         println(dependencyClasspath)
