@@ -1,5 +1,6 @@
 package mod.pranav.dependency.resolver
 
+import a.a.a.wq
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -70,8 +71,8 @@ class DependencyResolver(
             """.trimMargin()
     }
 
-    private val downloadPath: String =
-        FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs"
+    private val downloadPath: String = ""
+    private val sc_id: String = ""
 
     private val repositoriesJson = Paths.get(
         Environment.getExternalStorageDirectory().absolutePath,
@@ -121,7 +122,16 @@ class DependencyResolver(
         return "$groupId:$artifactId:$version"
     }
 
+    fun setScId(scId: String) {
+        sc_id = scId
+    }
+
     fun resolveDependency(callback: DependencyResolverCallback) {
+        if (sc_id.isNullOrEmpty()) {
+            downloadPath = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs"
+        } else {
+            downloadPath = wq.getExternalLibrary(sc_id)
+        }
         // this is pretty much the same as `Artifact.downloadArtifact()`, but with some modifications for checks and callbacks
         val dependencies = mutableListOf<Artifact>()
         callback.startResolving("$groupId:$artifactId:$version")
