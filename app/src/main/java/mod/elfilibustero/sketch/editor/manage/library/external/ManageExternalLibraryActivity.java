@@ -154,38 +154,31 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     }
 
     private List<ExternalLibraryBean> getExternalLibraryList() {
+        List<ExternalLibraryBean> libraries = new ArrayList<>();
         if (!FileUtil.isExistFile(dataPath)) {
             FileUtil.writeFile(dataPath, "[]");
-        }
-        List<ExternalLibraryBean> libraries = new ArrayList<>();
-        try {
-            libraries = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
-            }.getType());
-            for (ExternalLibraryBean bean : libraries) {
-                if (!Files.exists(Paths.get(initialPath + "/" + bean.getName()))) {
-                    libraries.remove(bean);
-                }
+        } else {
+            try {
+                String content = FileUtil.readFile(dataPath);
+                if (content != null && !content.isEmpty()) {
+                    libraries = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
+                    }.getType());
+                } 
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
         }
 
+        libraries.removeIf(bean -> !Files.exists(Paths.get(initialPath + "/" + bean.getName())));
+        
         if (libraries != null || !libraries.isEmpty()) {
             try (Stream<Path> folderStream = Files.walk(Paths.get(initialPath), 1, FileVisitOption.FOLLOW_LINKS)) {
                 List<ExternalLibraryBean> beans = folderStream.filter(Files::isDirectory)
                     .map(Path::getFileName)
                     .map(Path::toString)
                     .map(ExternalLibraryBean::new)
+                    .filter(bean -> libraries.contains(bean))
                     .collect(Collectors.toList());
-                if (beans != null && !beans.isEmpty()) {
-                    int position = 0;
-                    for (ExternalLibraryBean bean : beans) {
-                        if (!libraries.contains(bean)) {
-                            beans.remove(bean);
-                        }
-                        position++;
-                    }
-                    libraries.addAll(beans);
-                }
+                libraries.addAll(beans);
             } catch (IOException e) {
             }
         }
