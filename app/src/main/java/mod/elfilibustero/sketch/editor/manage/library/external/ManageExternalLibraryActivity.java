@@ -186,10 +186,9 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         private List<ExternalLibraryBean> beans;
         private OnItemClickListener itemClickListener;
-        private List<String> currentNames;
 
         public LibraryAdapter(List<ExternalLibraryBean> libraries) {
-            currentNames = libraries.stream().map(ExternalLibraryBean::getName).collect(Collectors.toList());
+            beans = libraries;
         }
 
         public void setOnItemClickListener(OnItemClickListener listener) {
