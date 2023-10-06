@@ -3,6 +3,7 @@ package mod.elfilibustero.sketch.editor.manage.library.external;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import a.a.a.aB;
 import a.a.a.wB;
@@ -22,13 +25,16 @@ import com.sketchware.pro.R;
 import com.sketchware.pro.databinding.ManageExternalAddLibraryBinding;
 
 import mod.SketchwareUtil;
+import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.util.Helper;
+import mod.jbk.build.BuiltInLibraries;
+import mod.pranav.dependency.resolver.DependencyResolver;
 
 public class ManageExternalAddLibraryActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ManageExternalAddLibraryBinding binding;
     private String sc_id;
-    private Switch libSwitch;
+    private Switch switchLib;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,5 +87,87 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
         switchLib = binding.switchLib;
         binding.layoutSwitch.setOnClickListener(this);
+    }
+
+    private void downloadLibrary(String group, String artifact, String version, boolean skip) {
+        var resolver = new DependencyResolver(group, artifact, version, skip);
+        var handler = new Handler(Looper.getMainLooper());
+
+        class SetTextRunnable implements Runnable {
+
+            private final String message;
+
+            SetTextRunnable(String message) {
+                this.message = message;
+            }
+
+            @Override
+            public void run() {
+                text.setText(message);
+            }
+        }
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            BuiltInLibraries.maybeExtractAndroidJar(progress -> handler.post(new SetTextRunnable(progress)));
+            BuiltInLibraries.maybeExtractCoreLambdaStubsJar();
+
+            resolver.resolveDependency(new DependencyResolver.DependencyResolverCallback() {
+                @Override
+                public void invalidPackaging(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Invalid packaging for dependency " + dep));
+                }
+
+                @Override
+                public void dexing(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Dexing dependency " + dep));
+                }
+
+                @Override
+                public void dexingFailed(@NonNull String dependency, @NonNull Exception e) {
+                    handler.post(() -> {
+                        SketchwareUtil.showAnErrorOccurredDialog(ManageExternalAddLibraryActivity.this,
+                            "Dexing dependency '" + dependency + "' failed: " + Log.getStackTraceString(e));
+                    });
+                }
+
+                @Override
+                public void log(@NonNull String msg) {
+                    handler.post(new SetTextRunnable(msg));
+                }
+
+                @Override
+                public void downloading(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Downloading dependency " + dep));
+                }
+
+                @Override
+                public void startResolving(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Resolving dependency " + dep));
+                }
+
+                @Override
+                public void onTaskCompleted(@NonNull List<String> dependencies) {
+                    handler.post(() -> {
+                        dialog.dismiss();
+                        //loadFiles();
+                    });
+                }
+
+                @Override
+                public void onDependencyNotFound(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Dependency " + dep + " not found"));
+                }
+
+                @Override
+                public void onDependencyResolveFailed(@NonNull Exception e) {
+                    handler.post(new SetTextRunnable(e.getMessage()));
+                }
+
+                @Override
+                public void onDependencyResolved(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Dependency " + dep + " resolved"));
+                }
+            });
+        });
     }
 }
