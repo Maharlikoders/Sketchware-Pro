@@ -136,7 +136,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
     private void loadLibraries() {
         libraries.clear();
-        libraries = getExternalLibraryList();
+        getExternalLibraryList(libraries);
         if (libraries == null || libraries.isEmpty()) {
             binding.guide.setVisibility(View.VISIBLE);
             binding.recyclerView.setVisibility(View.GONE);
@@ -153,8 +153,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         openLibraryManager.launch(intent);
     }
 
-    private List<ExternalLibraryBean> getExternalLibraryList() {
-        List<ExternalLibraryBean> libraries = new ArrayList<>();
+    private void getExternalLibraryList(final List<ExternalLibraryBean> libraries) {
         if (!FileUtil.isExistFile(dataPath)) {
             FileUtil.writeFile(dataPath, "[]");
         } else {
