@@ -250,6 +250,8 @@
             android:configChanges="orientation|screenSize" />
         <activity android:name="mod.elfilibustero.sketch.editor.manage.library.ManageLibrariesActivity"
             android:configChanges="orientation|screenSize" />
+            <activity android:name="mod.elfilibustero.sketch.editor.manage.library.external.ManageExternalAddLibraryActivity"
+            android:configChanges="orientation|screenSize" />
         <activity android:name="mod.elfilibustero.sketch.editor.manage.library.external.ManageExternalLibraryActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name="mod.elfilibustero.sketch.editor.manage.library.external.ManageExternalLibraryItemActivity"
