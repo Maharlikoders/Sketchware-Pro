@@ -1,8 +1,10 @@
 package mod.elfilibustero.sketch.editor.manage.library.external;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 import a.a.a.aB;
 import a.a.a.wB;
 
+import com.besome.sketch.design.BuildingDialog;
 import com.sketchware.pro.R;
 import com.sketchware.pro.databinding.ManageExternalAddLibraryBinding;
 
@@ -65,6 +68,8 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         int id = v.getId();
         if (id == R.id.layout_switch) {
             switchLib.setChecked(!switchLib.isChecked());
+        } else if (oid == R.id.download) {
+            setup();
         }
     }
 
@@ -87,10 +92,37 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
         switchLib = binding.switchLib;
         binding.layoutSwitch.setOnClickListener(this);
+        binding.download.setOnClickListener(this);
+    }
+
+    private void setup() {
+        String groupId = binding.group.getText().toString();
+        String artifactId = binding.artifact.getText().toString();
+        String version = binding.version.getText().toString();
+
+        if (TextUtils.isEmpty(groupId)) {
+            SketchwareUtil.toastError("Please enter Group ID");
+            return;
+        }
+
+        if (TextUtils.isEmpty(artifactId)) {
+            SketchwareUtil.toastError("Please enter Artifact ID");
+            return;
+        }
+
+        if (TextUtils.isEmpty(version)) {
+            SketchwareUtil.toastError("Please enter Version Name");
+            return;
+        }
+        downloadLibrary(groupId, artifactId, version, switchLib.isChecked());
     }
 
     private void downloadLibrary(String group, String artifact, String version, boolean skip) {
+        var dialog = new BuildingDialog(this);
+        dialog.setCancelable(false);
+        dialog.setIsCancelableOnBackPressed(false);
         var resolver = new DependencyResolver(group, artifact, version, skip);
+        resolver.setScId(sc_id);
         var handler = new Handler(Looper.getMainLooper());
 
         class SetTextRunnable implements Runnable {
@@ -103,7 +135,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
 
             @Override
             public void run() {
-                text.setText(message);
+                dialog.setProgress(message);
             }
         }
 
@@ -149,7 +181,8 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
                 public void onTaskCompleted(@NonNull List<String> dependencies) {
                     handler.post(() -> {
                         dialog.dismiss();
-                        //loadFiles();
+                        setResult(RESULT_OK, new Intent());
+                        finish();
                     });
                 }
 
@@ -160,7 +193,10 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
 
                 @Override
                 public void onDependencyResolveFailed(@NonNull Exception e) {
-                    handler.post(new SetTextRunnable(e.getMessage()));
+                    handler.post(() -> {
+                        SketchwareUtil.toastError(e.getMessage());
+                        dialog.dismiss();
+                    });
                 }
 
                 @Override
@@ -169,5 +205,6 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
                 }
             });
         });
+        dialog.show();
     }
 }
