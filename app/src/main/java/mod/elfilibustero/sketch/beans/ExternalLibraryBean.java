@@ -11,6 +11,7 @@ import com.sketchware.pro.R;
 import java.util.ArrayList;
 
 public class ExternalLibraryBean implements Parcelable {
+
     public static final Parcelable.Creator<ExternalLibraryBean> CREATOR = new Parcelable.Creator<>() {
         @Override
         public ExternalLibraryBean createFromParcel(Parcel source) {
@@ -39,10 +40,20 @@ public class ExternalLibraryBean implements Parcelable {
         dependency = "";
     }
 
+    public ExternalLibraryBean(String newName) {
+        useYn = LIB_USE_N;
+        name = newName;
+        dependency = "";
+    }
+
     public ExternalLibraryBean(Parcel parcel) {
         useYn = parcel.readString();
         name = parcel.readString();
         dependency = parcel.readString();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static Parcelable.Creator<ExternalLibraryBean> getCreator() {

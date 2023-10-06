@@ -28,6 +28,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
 
     private ManageExternalAddLibraryBinding binding;
     private String sc_id;
+    private Switch libSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,6 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.layout_switch) {
-            Switch switchLib = binding.switchLib;
             switchLib.setChecked(!switchLib.isChecked());
         }
     }
@@ -79,6 +79,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
+        switchLib = binding.switchLib;
         binding.layoutSwitch.setOnClickListener(this);
     }
 }

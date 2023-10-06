@@ -23,9 +23,16 @@ import com.google.gson.reflect.TypeToken;
 import com.sketchware.pro.R;
 import com.sketchware.pro.databinding.ManageExternalLibraryBinding;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import a.a.a.wq;
 import mod.agus.jcoderz.lib.FileUtil;
@@ -34,12 +41,13 @@ import mod.hey.studios.util.Helper;
 
 public class ManageExternalLibraryActivity extends AppCompatActivity {
 
-	private ManageExternalLibraryBinding binding;
+    private ManageExternalLibraryBinding binding;
 
-	private String sc_id;
+    private String sc_id;
     private String dataPath;
+    private String initialPath;
 
-	private LibraryAdapter adapter;
+    private LibraryAdapter adapter;
     private List<ExternalLibraryBean> libraries = new ArrayList<>();
 
     private final ActivityResultLauncher<Intent> openLibraryManager = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -70,11 +78,14 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private void init() {
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("External Library Manager");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
 
-        dataPath = wq.b(sc_id) + File.separator + "external_library";
+        dataPath = wq.b(sc_id) + "/external_library";
+        initialPath = wq.getExternalLibrary(sc_id);
+        FileUtil.makeDir(initialPath);
 
         adapter = new LibraryAdapter(libraries);
         binding.recyclerView.setAdapter(adapter);
@@ -125,36 +136,70 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
     private void loadLibraries() {
         libraries.clear();
-        if (FileUtil.isExistFile(dataPath)) {
-            FileUtil.writeFile(dataPath, "[]");
-        }
-        try {
-            libraries = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>(){}.getType());
-            if (libraries == null) libraries = new ArrayList<>();
-        } catch (Exception e) {
-        }
-        if (libraries != null && libraries.isEmpty()) {
-        	binding.guide.setVisibility(View.VISIBLE);
-        	binding.recyclerView.setVisibility(View.GONE);
-            adapter.notifyDataSetChanged();
+        libraries = getExternalLibraryList();
+        if (libraries == null || libraries.isEmpty()) {
+            binding.guide.setVisibility(View.VISIBLE);
+            binding.recyclerView.setVisibility(View.GONE);
         } else {
-        	binding.guide.setVisibility(View.GONE);
-        	binding.recyclerView.setVisibility(View.VISIBLE);
+            binding.guide.setVisibility(View.GONE);
+            binding.recyclerView.setVisibility(View.VISIBLE);
         }
+        adapter.notifyDataSetChanged();
     }
 
     private void downloadLibrary() {
-        Intent intent = new Intent(getApplicationContext(), ManageExternalLibraryItemActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ManageExternalAddLibraryActivity.class);
         intent.putExtra("sc_id", sc_id);
         openLibraryManager.launch(intent);
     }
 
+    private List<ExternalLibraryBean> getExternalLibraryList() {
+        if (!FileUtil.isExistFile(dataPath)) {
+            FileUtil.writeFile(dataPath, "[]");
+        }
+        List<ExternalLibraryBean> libraries = new ArrayList<>();
+        try {
+            libraries = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
+            }.getType());
+            for (ExternalLibraryBean bean : libraries) {
+                if (!Files.exists(Paths.get(initialPath + "/" + bean.getName()))) {
+                    libraries.remove(bean);
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        if (libraries != null || !libraries.isEmpty()) {
+            try (Stream<Path> folderStream = Files.walk(Paths.get(initialPath), 1, FileVisitOption.FOLLOW_LINKS)) {
+                List<ExternalLibraryBean> beans = folderStream.filter(Files::isDirectory)
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .map(ExternalLibraryBean::new)
+                    .collect(Collectors.toList());
+                if (beans != null && !beans.isEmpty()) {
+                    int position = 0;
+                    for (ExternalLibraryBean bean : beans) {
+                        if (!libraries.contains(bean)) {
+                            beans.remove(bean);
+                        }
+                        position++;
+                    }
+                    libraries.addAll(beans);
+                }
+            } catch (IOException e) {
+            }
+        }
+        return libraries;
+    }
+
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
-        private List<ExternalLibraryBean> libraries;
+
+        private List<ExternalLibraryBean> beans;
         private OnItemClickListener itemClickListener;
+        private List<String> currentNames;
 
         public LibraryAdapter(List<ExternalLibraryBean> libraries) {
-            this.libraries = libraries;
+            currentNames = libraries.stream().map(ExternalLibraryBean::getName).collect(Collectors.toList());
         }
 
         public void setOnItemClickListener(OnItemClickListener listener) {
@@ -162,6 +207,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         }
 
         public interface OnItemClickListener {
+
             void onItemClick(int position);
         }
 
@@ -174,17 +220,18 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
-            var bean = libraries.get(position);
+            var bean = beans.get(position);
             holder.name.setText(bean.name);
             holder.dep.setText(bean.dependency);
         }
 
         @Override
         public int getItemCount() {
-            return libraries.size();
+            return beans.size();
         }
 
         public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
             public final TextView name;
             public final TextView dep;
 
