@@ -54,7 +54,7 @@ public class NewFileUtil {
 	}
 
 	public static List<String> listDir(String directoryPath) throws IOException {
-		try (Stream<Path> stream =Files.walk(Paths.get(directoryPath), 1, FileVisitOption.FOLLOW_LINKS)) {
+		try (Stream<Path> stream =Files.walk(Paths.get(directoryPath))) {
 			return stream
 				.filter(Files::isDirectory)
 				.map(Path::getFileName)
