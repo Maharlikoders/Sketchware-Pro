@@ -49,10 +49,14 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         bottomMenusLayout.addView(addDrawerItem(1, false,
                 R.drawable.ic_bookmark_red_48dp, R.string.design_drawer_menu_title_collection, R.string.design_drawer_menu_description_collection
         ));
+        /* Add project settings item */
+        bottomMenusLayout.addView(addDrawerItem(2, false,
+                R.drawable.ic_detail_setting_48dp, R.string.design_drawer_menu_title_project, R.string.design_drawer_menu_description_project
+        ));
         /* Add built-in Library Manager (AppCompat, Firebase, AdMob, Google Maps SDK) */
         /* INCLUDES SECTION SEPARATOR */
         menusLayout.addView(addDrawerItem(3, true,
-                R.drawable.categorize_48, R.string.design_drawer_menu_title_library, R.string.design_drawer_menu_description_library
+                R.drawable.categorize_48, R.string.design_drawer_menu_title_libraries, R.string.design_drawer_menu_description_library
         ));
         /* Add View Manager */
         menusLayout.addView(addDrawerItem(4, false,
@@ -128,6 +132,9 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                 switch ((Integer) view.getTag()) {
                     case 1:
                         designActivity.toCollectionManager();
+                        return;
+
+                    case 2:
                         return;
 
                     case 3:
