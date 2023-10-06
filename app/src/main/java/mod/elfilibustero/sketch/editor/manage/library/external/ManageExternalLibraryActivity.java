@@ -49,8 +49,8 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private String initialPath;
 
     private LibraryAdapter adapter;
-    private List<String> files = new ArrayList<>();
     private List<ExternalLibraryBean> beans = new ArrayList<>();
+    private List<ExternalLibraryBean> temps = new ArrayList<>();
 
     private final ActivityResultLauncher<Intent> openLibraryManager = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK) {
@@ -89,13 +89,13 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         initialPath = wq.getExternalLibrary(sc_id);
         FileUtil.makeDir(initialPath);
 
-        adapter = new LibraryAdapter(files);
+        adapter = new LibraryAdapter(beans);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
             Intent intent = new Intent(getApplicationContext(), ManageExternalLibraryItemActivity.class);
             intent.putExtra("sc_id", sc_id);
             intent.putExtra("postion", position);
-            intent.putExtra("name", files.get(position));
+            intent.putExtra("name", beans.get(position));
             openLibraryManager.launch(intent);
         });
         loadLibraries();
@@ -137,14 +137,14 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     }
 
     private void loadLibraries() {
-        files.clear();
+        beans.clear();
         if (!FileUtil.isExistFile(dataPath)) {
             FileUtil.writeFile(dataPath, "[]");
         }
         try {
             String content = FileUtil.readFile(dataPath);
             if (content != null && !content.isEmpty()) {
-                beans = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
+                temps = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
                 }.getType());
             } else {
                 FileUtil.writeFile(dataPath, "[]");
@@ -153,10 +153,10 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         }
 
         try {
-            files.addAll(NewFileUtil.listDir(initialPath));
+            beans.addAll(getExternalLibraries());
         } catch (IOException e) {
         }
-        if (files == null || files.isEmpty()) {
+        if (beans == null || beans.isEmpty()) {
             binding.guide.setVisibility(View.VISIBLE);
             binding.recyclerView.setVisibility(View.GONE);
         } else {
@@ -166,17 +166,62 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    private List<ExternalLibraryBean> getExternalLibraries() throws IOException {
+        List<ExternalLibraryBean> beans = new ArrayList<>();
+        List<String> names = NewFileUtil.listDir(initialPath);
+        for (String name : names) {
+            ExternalLibraryBean bean = getExternalLibrary(name);
+            if (bean == null) {
+                bean = new ExternalLibraryBean(name);
+                String dependencies = getDependencies(name);
+                if (FileUtil.isExistFile(dependencies)) {
+                    bean.dependency = FileUtil.readFile(dependencies);
+                }
+                if (isContainsLibrary(name)) {
+                    bean.useYn = "Y";
+                }
+            }
+            beans.add(bean);
+        }
+        return beans;
+    }
+
+    private String getDependencies(String name) {
+        return initialPath + "/" + name + "/" + "dependencies";
+    }
+
     private void downloadLibrary() {
         Intent intent = new Intent(getApplicationContext(), ManageExternalAddLibraryActivity.class);
         intent.putExtra("sc_id", sc_id);
         openLibraryManager.launch(intent);
     }
 
+    private ExternalLibraryBean getExternalLibrary(String name) {
+        for (int i = 0; i < temps.size(); i++) {
+            ExternalLibraryBean bean = temps.get(i);
+            if (bean.name.equals(name)) {
+                return bean;
+            }
+        }
+        return null;
+    }
+
+    private boolean isContainsLibrary(String name) {
+        if (temps != null && !temps.isEmpty()) {
+            for (ExternalLibraryBean bean : temps) {
+                if (bean.name.equals(name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
-        private List<String> files;
+        private List<ExternalLibraryBean> files;
         private OnItemClickListener itemClickListener;
 
-        public LibraryAdapter(List<String> libraries) {
+        public LibraryAdapter(List<ExternalLibraryBean> libraries) {
             files = libraries;
         }
 
@@ -198,19 +243,20 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
-            var name = files.get(position);
+            var bean = files.get(position);
+            String name = bean.name;
             holder.name.setText(name);
             boolean isEnabled = isContainsLibrary(name);
             holder.enabled.setText(isEnabled ? "ON" : "OFF");
             holder.enabled.setSelected(isEnabled);
-            String dependency = initialPath + "/" + name + "/" + "dependencies";
-            if (FileUtil.isExistFile(dependency)) {
-                holder.dep.setText(FileUtil.readFile(dependency));
-                holder.dep.setVisibility(View.VISIBLE);
+            String dependency = bean.dependency;
+            if (dependency.isEmpty()) {
+                holder.dep.setText(dependency);
+                holder.dep.setTextColor(0xffc6c6c6);
             } else {
-                holder.dep.setVisibility(View.GONE);
+                holder.dep.setText("Missing dependencies");
+                holder.dep.setTextColor(Color.RED);
             }
-            
         }
 
         @Override
@@ -237,17 +283,6 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
                     itemClickListener.onItemClick(getAdapterPosition());
                 }
             }
-        }
-
-        private boolean isContainsLibrary(String name) {
-            if (beans != null && !beans.isEmpty()) {
-                for (ExternalLibraryBean bean : beans) {
-                    if (bean.name.equals(name)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
     }
 }
