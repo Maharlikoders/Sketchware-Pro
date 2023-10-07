@@ -59,12 +59,12 @@ public class ExternalLibraryHandler {
 		return String.join(":", get(ResourceType.JAR));
 	}
 
-	public String getConfig() {
+	public String getPackageName() {
 		List<String> packages = new ArrayList<>();
 		for (String path : get("config")) {
 			packages.add(FileUtil.readFile(path));
 		}
-		return String.join(":", packages);
+		return String.join(packages, ":");
 	}
 
 	public enum ResourceType {
