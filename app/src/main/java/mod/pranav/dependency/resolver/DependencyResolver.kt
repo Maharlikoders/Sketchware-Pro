@@ -25,6 +25,7 @@ import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.ArrayList
 import java.util.regex.Pattern
 import java.util.zip.ZipFile
 import javax.xml.parsers.DocumentBuilderFactory
@@ -217,6 +218,7 @@ class DependencyResolver {
                 unzip(path)
                 Files.delete(path)
             }
+            deleteUnnecessaryFiles(path.parent.toAbsolutePath().toString())
             val packageName = findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
             path.parent.resolve("config").writeText(packageName)
             path.parent.resolve("dependencies").writeText(artifact.toStr())
@@ -406,6 +408,28 @@ class DependencyResolver {
                     }
                 }
             }
+        }
+    }
+
+    private fun deleteUnnecessaryFiles(path: String) {
+        val list = arrayOf(
+            "res", 
+            "classes.dex", 
+            "classes.jar", 
+            "AndroidManifest.xml", 
+            "jni", 
+            "assets", 
+            "proguard.txt"
+        )
+
+        val validFile = list.toList()
+        val files = ArrayList<String>()
+        FileUtil.listDir(path, files)
+
+        for (f in files) {
+            val p = Uri.parse(f).lastPathSegment
+            if (p.startsWith("classes") && p.endsWith(".dex")) continue
+            if (!validFiles.contains(p)) FileUtil.deleteFile(f)
         }
     }
 
