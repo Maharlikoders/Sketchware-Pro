@@ -17,7 +17,7 @@ public class ExternalLibraryHandler {
 	private final String sc_id;
 	private final String dataPath;
 	private final String initialPath;
-	public final List<ExternalLibraryBean> beans;
+	public List<ExternalLibraryBean> beans;
 
 	public ExternalLibraryHandler(String sc_id) {
 		this.sc_id = sc_id;
