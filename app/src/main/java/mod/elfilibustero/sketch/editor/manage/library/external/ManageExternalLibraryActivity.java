@@ -38,6 +38,7 @@ import java.util.stream.Stream;
 import a.a.a.wq;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.elfilibustero.sketch.lib.utils.NewFileUtil;
 import mod.hey.studios.util.Helper;
 
@@ -46,12 +47,13 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private ManageExternalLibraryBinding binding;
 
     private String sc_id;
-    private String dataPath;
     private String initialPath;
 
     private LibraryAdapter adapter;
     private List<ExternalLibraryBean> beans = new ArrayList<>();
     private List<ExternalLibraryBean> temps = new ArrayList<>();
+
+    private ExternalLibraryHandler handler;
 
     private final ActivityResultLauncher<Intent> openLibraryManager = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK) {
@@ -86,8 +88,8 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
 
-        dataPath = wq.b(sc_id) + "/external_library";
-        initialPath = wq.getExternalLibrary(sc_id);
+        handler = new ExternalLibraryHandler(sc_id);
+        initialPath = handler.initialPath;
         FileUtil.makeDir(initialPath);
 
         adapter = new LibraryAdapter(beans);
@@ -138,22 +140,13 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
     private void loadLibraries() {
         beans.clear();
-        if (!FileUtil.isExistFile(dataPath)) {
-            FileUtil.writeFile(dataPath, "[]");
-        }
         try {
-            String content = FileUtil.readFile(dataPath);
-            if (content != null && !content.isEmpty()) {
-                temps = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
-                }.getType());
-            } else {
-                FileUtil.writeFile(dataPath, "[]");
-            }
+            temps = handler.getBeans();
         } catch (Exception e) {
         }
-
         try {
             beans.addAll(getExternalLibraries());
+            handler.setBeans(beans);
         } catch (IOException e) {
         }
         if (beans == null || beans.isEmpty()) {
@@ -173,10 +166,10 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
             ExternalLibraryBean bean = getExternalLibrary(name);
             if (bean == null) {
                 bean = new ExternalLibraryBean(name);
-                String dependencies = getDependencies(name);
-                if (FileUtil.isExistFile(dependencies)) {
-                    bean.dependency = FileUtil.readFile(dependencies);
-                }
+            }
+            String dependencies = getDependencies(name);
+            if (FileUtil.isExistFile(dependencies)) {
+                bean.dependency = FileUtil.readFile(dependencies);
             }
             beans.add(bean);
         }

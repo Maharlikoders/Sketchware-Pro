@@ -15,8 +15,8 @@ import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
 public class ExternalLibraryHandler {
 
 	private final String sc_id;
-	private final String dataPath;
-	private final String initialPath;
+	public final String dataPath;
+	public final String initialPath;
 	public List<ExternalLibraryBean> beans;
 
 	public ExternalLibraryHandler(String sc_id) {
@@ -24,21 +24,28 @@ public class ExternalLibraryHandler {
 		dataPath = wq.b(sc_id) + File.separator +"external_library";
 		initialPath = wq.getExternalLibrary(sc_id);
 		if (FileUtil.isExistFile(dataPath)) {
-			try {
-	            String content = FileUtil.readFile(dataPath);
-	            if (content != null && !content.isEmpty()) {
-	                beans = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
-	                }.getType());
-	            }
-	            if (beans != null) {
-	            	return;
-	            }
-	        } catch (Exception e) {
-	        }
+			beans = getBeans();
+			return;
 		}
 		beans = new ArrayList<>();
 		FileUtil.writeFile(dataPath, "[]");
 	}
+
+	public List<ExternalLibraryBean> getBeans() {
+        List<ExternalLibraryBean> beans = null;
+        if (FileUtil.isExistFile(dataPath)) {
+        	try {
+        		beans = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
+        		}.getType());
+	        } catch (Exception e) {
+	        }
+        }
+        return beans == null || beans.isEmpty() ? new ArrayList<>() : beans;
+    }
+
+    public void setBeans(List<ExternalLibraryBean> beans) {
+        FileUtil.writeFile(dataPath, new Gson().toJson(beans != null ? beans : new ArrayList<>()));
+    }
 
 	public List<String> get(ResourceType type) {
 		return get(type.getType());

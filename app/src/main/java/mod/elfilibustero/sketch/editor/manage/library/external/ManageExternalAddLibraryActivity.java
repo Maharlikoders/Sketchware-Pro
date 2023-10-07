@@ -32,6 +32,8 @@ import com.sketchware.pro.databinding.ManageExternalAddLibraryBinding;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.DependencyBean;
+import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuiltInLibraries;
 import mod.pranav.dependency.resolver.DependencyResolver;
@@ -186,6 +188,17 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
                 public void onTaskCompleted(@NonNull List<String> dependencies) {
                     handler.post(() -> {
                         dialog.dismiss();
+                        ExternalLibraryHandler handler = new ExternalLibraryHandler(sc_id);
+                        List<ExternalLibraryBean> beans = handler.getBeans();
+                        for (String dependency : dependencies) {
+                            ExternalLibraryBean bean = new ExternalLibraryBean(dependency);
+                            bean.useYn = "Y";
+                            String dep = getDependencies(handler, dependency);
+                            if (FileUtil.isExistFile(dep)) {
+                                bean.dependency = FileUtil.readFile(dep);
+                            }
+                            beans.add(bean);
+                        }
                         setResult(RESULT_OK, new Intent());
                         finish();
                     });
@@ -214,5 +227,9 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
             });
         });
         dialog.show();
+    }
+
+    private String getDependencies(ExternalLibraryHandler handler, String name) {
+        return handler.initialPath + "/" + name + "/" + "dependencies";
     }
 }

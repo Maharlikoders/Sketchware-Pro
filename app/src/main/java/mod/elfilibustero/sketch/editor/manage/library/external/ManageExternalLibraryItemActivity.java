@@ -94,6 +94,9 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
+        binding.layoutSwitch.setOnClickListener(this);
+        binding.openFile.setOnClickListener(this);
+        binding.openFile.setText("Open");
 
         initialPath = wq.getExternalLibrary(sc_id) + "/" + bean.name;
         adapter = new LibraryAdapter(files);
