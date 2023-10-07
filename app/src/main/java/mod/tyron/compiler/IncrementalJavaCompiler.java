@@ -20,6 +20,7 @@ import a.a.a.yq;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.jbk.build.BuiltInLibraries;
