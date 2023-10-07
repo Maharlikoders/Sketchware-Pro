@@ -83,6 +83,7 @@ import a.a.a.Lx;
 import a.a.a.MA;
 import a.a.a.Mp;
 import a.a.a.NB;
+import a.a.a.oq;
 import a.a.a.Pp;
 import a.a.a.Rs;
 import a.a.a.Ss;
@@ -670,7 +671,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         } else {
             description = oq.a(bean.eventName, this);
         }
-        d.setTitle(description);
+        getSupportActionBar().setTitle(description);
         o.invalidate();
     }
 
