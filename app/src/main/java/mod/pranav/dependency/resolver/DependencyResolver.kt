@@ -422,12 +422,12 @@ class DependencyResolver {
             "proguard.txt"
         )
 
-        val validFile = list.toList()
+        val validFiles = list.toList()
         val files = ArrayList<String>()
         FileUtil.listDir(path, files)
 
         for (f in files) {
-            val p = Uri.parse(f).lastPathSegment
+            val p = Uri.parse(f)?.lastPathSegment
             if (p.startsWith("classes") && p.endsWith(".dex")) continue
             if (!validFiles.contains(p)) FileUtil.deleteFile(f)
         }
