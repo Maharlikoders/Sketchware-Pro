@@ -281,7 +281,7 @@ class DependencyResolver {
                     callback.log("Cannot resolve ${artifact.toStr()}")
                     return
                 }
-                resolve(dep, dependencies, callback)
+                //resolve(dep, dependencies, callback)
             }
         }
     }
@@ -411,6 +411,10 @@ class DependencyResolver {
         }
     }
 
+    private fun getLastSegment(path: String) {
+        return Uri.parse(path)?.lastPathSegment
+    }
+
     private fun deleteUnnecessaryFiles(path: String) {
         val list = arrayOf(
             "res", 
@@ -427,9 +431,13 @@ class DependencyResolver {
         FileUtil.listDir(path, files)
 
         for (f in files) {
-            val p = Uri.parse(f)?.lastPathSegment
-            if ((p?.startsWith("classes")) && (p?.endsWith(".dex"))) continue
-            if (!validFiles.contains(p)) FileUtil.deleteFile(f)
+            val p = getLastSegment(f)
+            if (p.startsWith("classes") && p.endsWith(".dex")) {
+                continue
+            }
+            if (!validFiles.contains(p)) {
+                FileUtil.deleteFile(f)
+            }
         }
     }
 
