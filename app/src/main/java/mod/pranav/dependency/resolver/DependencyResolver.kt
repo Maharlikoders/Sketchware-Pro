@@ -428,7 +428,7 @@ class DependencyResolver {
 
         for (f in files) {
             val p = Uri.parse(f)?.lastPathSegment
-            if (p?.startsWith("classes") && p.endsWith(".dex")) continue
+            if ((p?.startsWith("classes")) && (p?.endsWith(".dex"))) continue
             if (!validFiles.contains(p)) FileUtil.deleteFile(f)
         }
     }
