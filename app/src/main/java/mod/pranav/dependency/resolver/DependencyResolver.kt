@@ -80,6 +80,8 @@ class DependencyResolver {
 
     private var downloadPath: String = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs"
 
+    private var skipDependencies = false
+
     private val repositoriesJson = Paths.get(
         Environment.getExternalStorageDirectory().absolutePath,
         SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY, "libs", "repositories.json"
@@ -132,12 +134,16 @@ class DependencyResolver {
         downloadPath = wq.getExternalLibrary(scId)
     }
 
+    fun skipSubDependencies(skip: Boolean) {
+        skipDependencies = skip
+    }
+
     fun resolveDependency(callback: DependencyResolverCallback) {
         // this is pretty much the same as `Artifact.downloadArtifact()`, but with some modifications for checks and callbacks
         val dependencies = mutableListOf<Artifact>()
         dependencyBeans.forEach { bean ->
             callback.startResolving(bean.toString())
-            val dependency = getArtifact(bean.groupId, bean.artifactId, bean.version)
+            val dependency = getArtifact("${bean.getGroupId}", "${bean.artifactId}", "${bean.version}")
             if (dependency == null) {
                 callback.onDependencyNotFound(bean.toString())
                 return
@@ -253,7 +259,7 @@ class DependencyResolver {
                 callback.log("Cannot resolve sub-dependencies for ${artifact.toStr()}")
                 return
             }
-            val deps = pom.resolvePOM(dependencies, callback)
+            val deps = pom.resolvePOM(artifact, dependencies, callback)
             deps.forEach { dep ->
                 callback.log("Resolving ${dep.groupId}:${dep.artifactId}")
                 if (dep.version.isEmpty()) {
@@ -279,6 +285,7 @@ class DependencyResolver {
     }
 
     private fun InputStream.resolvePOM(
+        artifactParent: Artifact,
         deps: List<Artifact>,
         callback: DependencyResolverCallback
     ): List<Artifact> {
