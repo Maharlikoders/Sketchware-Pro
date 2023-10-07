@@ -11,6 +11,7 @@ import com.android.tools.r8.OutputMode
 import com.google.gson.Gson
 import mod.agus.jcoderz.dx.command.dexer.Main
 import mod.agus.jcoderz.lib.FileUtil
+import mod.elfilibustero.sketch.beans.DependencyBean
 import mod.elfilibustero.sketch.lib.utils.SketchFileUtil
 import mod.hey.studios.util.Helper
 import mod.jbk.build.BuiltInLibraries
@@ -30,12 +31,18 @@ import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
-class DependencyResolver(
-    private val groupId: String,
-    private val artifactId: String,
-    private val version: String,
-    private val skipDependencies: Boolean,
-) {
+class DependencyResolver {
+
+    private val dependencyBeans = mutableListOf<DependencyBean>()
+
+    constructor(dependencies: List<DependencyBean>) {
+        dependencyBeans.addAll(dependencies)
+    }
+
+    constructor(dependency: DependencyBean) {
+        dependencyBeans.add(dependency)
+    }
+
     companion object {
         private val DEFAULT_REPOS = """
             |[
@@ -128,15 +135,17 @@ class DependencyResolver(
     fun resolveDependency(callback: DependencyResolverCallback) {
         // this is pretty much the same as `Artifact.downloadArtifact()`, but with some modifications for checks and callbacks
         val dependencies = mutableListOf<Artifact>()
-        callback.startResolving("$groupId:$artifactId:$version")
-        val dependency = getArtifact(groupId, artifactId, version)
-        if (dependency == null) {
-            callback.onDependencyNotFound("$groupId:$artifactId:$version")
-            return
-        }
+        dependencyBeans.forEach { bean ->
+            callback.startResolving(bean.toString())
+            val dependency = getArtifact(bean.groupId, bean.artifactId, bean.version)
+            if (dependency == null) {
+                callback.onDependencyNotFound(bean.toString())
+                return
+            }
 
-        callback.onDependencyResolved(dependency.toStr())
-        resolve(dependency, dependencies, callback)
+            callback.onDependencyResolved(dependency.toStr())
+            resolve(dependency, dependencies, callback)
+        }
 
         // basically, remove all the duplicates and keeps the latest among them
         val latestDeps =
@@ -201,11 +210,10 @@ class DependencyResolver(
                 callback.log("Unzipping ${artifact.toStr()}")
                 unzip(path)
                 Files.delete(path)
-                val packageName =
-                    findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
-                path.parent.resolve("config").writeText(packageName)
-                path.parent.resolve("dependencies").writeText("${artifact.toStr()}")
             }
+            val packageName = findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
+            path.parent.resolve("config").writeText(packageName)
+            path.parent.resolve("dependencies").writeText(artifact.toStr())
         }
         println(dependencyClasspath)
         latestDeps.forEach { artifact ->
