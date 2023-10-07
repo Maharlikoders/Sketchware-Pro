@@ -148,6 +148,9 @@ public class ExtraMenuBean {
 
             case "m":
                 switch (menuName) {
+                    case "events":
+                        logicEditor.selectEvent(ss);
+                        return;
                     case "resource":
                         logicEditor.pickImage(ss, "property_image");
                         return;
