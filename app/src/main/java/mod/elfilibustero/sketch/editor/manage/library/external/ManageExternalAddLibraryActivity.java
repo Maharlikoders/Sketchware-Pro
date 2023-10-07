@@ -31,6 +31,7 @@ import com.sketchware.pro.databinding.ManageExternalAddLibraryBinding;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.DependencyBean;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuiltInLibraries;
 import mod.pranav.dependency.resolver.DependencyResolver;
@@ -124,8 +125,9 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         var dialog = new BuildingDialog(this);
         dialog.setCancelable(false);
         dialog.setIsCancelableOnBackPressed(false);
-        var resolver = new DependencyResolver(group, artifact, version, skip);
+        var resolver = new DependencyResolver(DependencyBean.Companion.from(group + ":" + artifact + ":" + version));
         resolver.setScId(sc_id);
+        resolver.skipDependencies(skip);
         var handler = new Handler(Looper.getMainLooper());
 
         class SetTextRunnable implements Runnable {
