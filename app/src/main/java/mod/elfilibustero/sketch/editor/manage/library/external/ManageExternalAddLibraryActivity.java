@@ -127,7 +127,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         dialog.setIsCancelableOnBackPressed(false);
         var resolver = new DependencyResolver(DependencyBean.Companion.from(group + ":" + artifact + ":" + version));
         resolver.setScId(sc_id);
-        resolver.skipDependencies(skip);
+        resolver.skipSubDependencies(skip);
         var handler = new Handler(Looper.getMainLooper());
 
         class SetTextRunnable implements Runnable {
