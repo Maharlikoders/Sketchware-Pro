@@ -15,6 +15,7 @@ import a.a.a.zy;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.BinaryExecutor;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
 import mod.jbk.build.BuildProgressReceiver;
@@ -200,6 +201,13 @@ public class ResourceCompiler {
                     args.add("-A");
                     args.add(assetsPath);
                 }
+            }
+
+            /* Add external libraries' assets */
+            for (String dir : new ExternalLibraryHandler(buildHelper.yq.sc_id).get(ExternalLibraryHandler.ResourceType.ASSETS)) {
+                linkingAssertDirectoryExists(dir);
+                args.add("-A");
+                args.add(dir);
             }
 
             /* Add local libraries' assets */

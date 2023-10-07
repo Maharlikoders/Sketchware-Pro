@@ -40,6 +40,7 @@ public class IncrementalJavaCompiler extends Compiler {
     private final BuildSettings buildSettings;
     private final ProjectBuilder compileHelper;
     private final ManageLocalLibrary manageLocalLibrary;
+    private final ExternalLibraryHandler externalLibraryHandler;
     private final ArrayList<String> builtInLibraries = new ArrayList<>();
     private final oB fileUtil;
     private final File libs;
@@ -54,6 +55,7 @@ public class IncrementalJavaCompiler extends Compiler {
         BuiltInLibraries.extractCompileAssets();
         compileHelper.buildBuiltInLibraryInformation();
         manageLocalLibrary = new ManageLocalLibrary(projectConfig.sc_id);
+        externalLibraryHandler = new ExternalLibraryHandler(projectConfig.sc_id);
         fileUtil = new oB(false);
         libs = new File(getContext().getFilesDir(), "libs");
     }
@@ -363,6 +365,7 @@ public class IncrementalJavaCompiler extends Compiler {
         }
 
         sb.append(manageLocalLibrary.getJarLocalLibrary());
+        sb.append(externalLibraryHandler.getJar());
 
         return sb.toString();
     }

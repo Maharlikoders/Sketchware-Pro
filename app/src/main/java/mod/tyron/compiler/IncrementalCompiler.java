@@ -17,6 +17,7 @@ import java.util.List;
 import a.a.a.yq;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 
 public class IncrementalCompiler {
@@ -29,12 +30,14 @@ public class IncrementalCompiler {
 
     private final yq projectConfig;
     private final ManageLocalLibrary mll;
+    private final ExternalLibraryHandler externalLibraryHandler;
 
     private Compiler.Result resultListener;
 
     public IncrementalCompiler(yq projectConfig) {
         this.projectConfig = projectConfig;
         this.mll = new ManageLocalLibrary(projectConfig.sc_id);
+        externalLibraryHandler = new ExternalLibraryHandler(projectConfig.sc_id);
         javaCompiler = new IncrementalJavaCompiler(projectConfig);
         d8Compiler = new IncrementalD8Compiler(projectConfig);
         dexMerger = new IncrementalDexMerger(projectConfig, javaCompiler.getBuiltInLibraries());
@@ -110,6 +113,9 @@ public class IncrementalCompiler {
             if (!jarPath.equals("null")) {
                 builder.addResourcesFromJar(new File(jarPath));
             }
+        }
+        for (String jarPath : externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.JAR)) {
+            builder.addResourcesFromJar(new File(jarPath));
         }
         File file = new File(Environment.getExternalStorageDirectory(),
                 SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/".concat(projectConfig.sc_id.concat("/files/native_libs")));

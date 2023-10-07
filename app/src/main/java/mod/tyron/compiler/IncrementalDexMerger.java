@@ -17,6 +17,7 @@ import mod.agus.jcoderz.dx.command.dexer.DxContext;
 import mod.agus.jcoderz.dx.merge.CollisionPolicy;
 import mod.agus.jcoderz.dx.merge.DexMerger;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 
 public class IncrementalDexMerger extends Compiler {
 
@@ -26,6 +27,7 @@ public class IncrementalDexMerger extends Compiler {
 
     private final yq projectConfig;
     private final ManageLocalLibrary manageLocalLibrary;
+    private final ExternalLibraryHandler externalLibraryHandler;
     private final ArrayList<String> builtInLibraries;
     private final List<String> generatedDexes = new ArrayList<>();
     private int currentDexNo = 0;
@@ -37,6 +39,7 @@ public class IncrementalDexMerger extends Compiler {
         this.builtInLibraries = builtInLibraries;
 
         this.manageLocalLibrary = new ManageLocalLibrary(projectConfig.sc_id);
+        externalLibraryHandler = new ExternalLibraryHandler(projectConfig.sc_id);
         DEX_PATH = projectConfig.projectMyscPath + "/incremental/build";
     }
 
@@ -66,6 +69,9 @@ public class IncrementalDexMerger extends Compiler {
                 }
             }
 
+            for (String dexPath : externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.DEX)) {
+                sources.add(new Dex(new File(dexPath)));
+            }
 
             List<String> extraDexes = manageLocalLibrary.getExtraDexes();
             if (extraDexes != null) {
