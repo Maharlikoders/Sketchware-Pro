@@ -108,7 +108,7 @@ public class EventBean extends CollapsibleBean implements Parcelable {
             case EVENT_TYPE_DRAWER_VIEW -> "Drawer View";
             case EVENT_TYPE_ETC -> "MoreBlock";
             default -> "";
-        }
+        };
     }
 
     public static String getEventTypeName(int eventType) {

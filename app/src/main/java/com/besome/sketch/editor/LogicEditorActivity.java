@@ -658,7 +658,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         C();
     }
 
-    public final void selectEvent(ss) {
+    public final void selectEvent(Ss ss) {
         aB dialog = new aB(this);
         List<EventBean> events = new ArrayList<>();
         EventBean eventBean2 = new EventBean(EventBean.EVENT_TYPE_ACTIVITY, -1, "onCreate", "initializeLogic");
