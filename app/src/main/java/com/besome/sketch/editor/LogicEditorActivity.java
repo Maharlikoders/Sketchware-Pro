@@ -74,6 +74,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import a.a.a.DB;
 import a.a.a.FB;
 import a.a.a.Fx;
@@ -658,6 +659,45 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         C();
     }
 
+    private void refreshEvent(Ss ss, Object obj) {
+        a(ss, obj);
+        EventBean bean = getEvent((String) obj);
+        C = bean.targetId;
+        D = bean.eventName;
+        String description = "";
+        if (bean.eventType == EventBean.EVENT_TYPE_ETC) {
+            description = ReturnMoreblockManager.getMbTypeList(bean.targetId);
+        } else {
+            description = oq.a(bean.eventName, this);
+        }
+        d.setTitle(description);
+        o.invalidate();
+    }
+
+    private EventBean getEvent(String targetId) {
+        List<EventBean> events = new ArrayList<>();
+        EventBean eventBean2 = new EventBean(EventBean.EVENT_TYPE_ACTIVITY, -1, "onCreate", "initializeLogic");
+        eventBean2.initValue();
+        events.add(eventBean2);
+        for (EventBean eventBean : jC.a(B).g(M.getJavaName())) {
+            eventBean.initValue();
+            events.add(eventBean);
+        }
+
+        for (Pair<String, String> moreBlock : jC.a(B).i(M.getJavaName())) {
+            EventBean eventBean = new EventBean(EventBean.EVENT_TYPE_ETC, -1, moreBlock.first, "moreBlock");
+            eventBean.initValue();
+            events.add(eventBean);
+        }
+
+        for (EventBean bean : events) {
+            if (bean.targetId.equals(targetId)) {
+                return bean;
+            }
+        }
+        return null;
+    }
+
     public final void selectEvent(Ss ss) {
         aB dialog = new aB(this);
         List<EventBean> events = new ArrayList<>();
@@ -704,7 +744,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
                 }
                 RadioButton radioButton = (RadioButton) viewGroup.getChildAt(j);
                 if (radioButton.isChecked()) {
-                    //a(ss, radioButton.getTag());
+                    refreshEvent(ss, radioButton.getTag());
                     break;
                 }
                 j++;
@@ -2042,7 +2082,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         } else {
             title = xB.b().a(getContext(), C, D);
         }
-        String specs = "%m.events." + C + " " + title;
+        String specs = "%m.events " + title;
 
         o.a(specs, D);
 
@@ -2050,7 +2090,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         int blockId = 0;
         for (int i = 0; i < spec.size(); i++) {
             String specBit = spec.get(i);
-            if (specBit.charAt(0) == '%') {
+            if (specBit.charAt(0) == '%' && !specBit.equals("%m.events")) {
                 Rs block = BlockUtil.getVariableBlock(getContext(), blockId + 1, specBit, "getArg");
                 if (block != null) {
                     block.setBlockType(1);
