@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.DependencyBean;
 import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuiltInLibraries;
@@ -93,7 +94,8 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             var group = parts[0];
             var artifact = parts[1];
             var version = parts[2];
-            var resolver = new DependencyResolver(group, artifact, version, skipDownloadingDependencies.isChecked());
+            var resolver = new DependencyResolver(DependencyBean.Companion.from(url));
+            resolver.skipSubDependencies(skipDownloadingDependencies.isChecked());
             var handler = new Handler(Looper.getMainLooper());
 
             class SetTextRunnable implements Runnable {
