@@ -48,6 +48,7 @@ import androidx.core.content.FileProvider;
 import com.besome.sketch.beans.BlockBean;
 import com.besome.sketch.beans.BlockCollectionBean;
 import com.besome.sketch.beans.ComponentBean;
+import com.besome.sketch.beans.EventBean;
 import com.besome.sketch.beans.HistoryBlockBean;
 import com.besome.sketch.beans.MoreBlockCollectionBean;
 import com.besome.sketch.beans.ProjectFileBean;
@@ -655,6 +656,63 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         ss.E.pa.b();
         bC.d(B).a(s(), clone, ss.E.getBean().clone());
         C();
+    }
+
+    public final void selectEvent(ss) {
+        aB dialog = new aB(this);
+        List<EventBean> events = new ArrayList<>();
+        EventBean eventBean2 = new EventBean(EventBean.EVENT_TYPE_ACTIVITY, -1, "onCreate", "initializeLogic");
+        eventBean2.initValue();
+        events.add(eventBean2);
+        for (EventBean eventBean : jC.a(B).g(M.getJavaName())) {
+            eventBean.initValue();
+            events.add(eventBean);
+        }
+
+        for (Pair<String, String> moreBlock : jC.a(B).i(M.getJavaName())) {
+            EventBean eventBean = new EventBean(EventBean.EVENT_TYPE_ETC, -1, moreBlock.first, "moreBlock");
+            eventBean.initValue();
+            events.add(eventBean);
+        }
+
+        View a2 = wB.a(this, R.layout.property_popup_selector_single);
+        ViewGroup viewGroup = a2.findViewById(R.id.rg_content);
+        dialog.b("Select Event");
+        for (EventBean bean : events) {
+            viewGroup.addView(d(EventBean.getEventName(bean.eventType), event.targetId));
+        }
+        int childCount = viewGroup.getChildCount();
+        int i = 0;
+        while (true) {
+            if (i >= childCount) {
+                break;
+            }
+            RadioButton radioButton = (RadioButton) viewGroup.getChildAt(i);
+            if (ss.getArgValue().toString().equals(radioButton.getTag().toString())) {
+                radioButton.setChecked(true);
+                break;
+            }
+            i++;
+        }
+        dialog.a(a2);
+        dialog.b(xB.b().a(getContext(), R.string.common_word_select), v -> {
+            int childCount2 = viewGroup.getChildCount();
+            int j = 0;
+            while (true) {
+                if (j >= childCount2) {
+                    break;
+                }
+                RadioButton radioButton = (RadioButton) viewGroup.getChildAt(j);
+                if (radioButton.isChecked()) {
+                    //a(ss, radioButton.getTag());
+                    break;
+                }
+                j++;
+            }
+            dialog.dismiss();
+        });
+        dialog.a(xB.b().a(getContext(), R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
+        dialog.show();
     }
 
     public final void pickImage(Ss ss, String str) {
@@ -1984,11 +2042,11 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         } else {
             title = xB.b().a(getContext(), C, D);
         }
-        String e1 = title;
+        String specs = "%m.events." + C + " " + title;
 
-        o.a(e1, D);
+        o.a(specs, D);
 
-        ArrayList<String> spec = FB.c(e1);
+        ArrayList<String> spec = FB.c(specs);
         int blockId = 0;
         for (int i = 0; i < spec.size(); i++) {
             String specBit = spec.get(i);
