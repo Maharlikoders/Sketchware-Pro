@@ -143,7 +143,7 @@ class DependencyResolver {
         val dependencies = mutableListOf<Artifact>()
         dependencyBeans.forEach { bean ->
             callback.startResolving(bean.toString())
-            val dependency = getArtifact("${bean.getGroupId}", "${bean.artifactId}", "${bean.version}")
+            val dependency = getArtifact("${bean.groupId}", "${bean.artifactId}", "${bean.version}")
             if (dependency == null) {
                 callback.onDependencyNotFound(bean.toString())
                 return
@@ -362,7 +362,7 @@ class DependencyResolver {
                 artifact.version = version
             }
 
-            if (deps.any { it.groupId == groupId && it.artifactId == artifactId && it.version >= version }) {
+            if (deps.any { it.groupId == groupId && it.artifactId == artifactId && it.version >= artifactParent.version }) {
                 println("Dependency ${artifact.toStr()} already resolved, skipping...")
                 continue
             }
