@@ -30,34 +30,26 @@
         android:padding="16dp">
 
         <LinearLayout
-            android:id="@+id/layout_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:background="?selectableItemBackground"
-            android:gravity="center"
             android:orientation="horizontal"
-            android:paddingVertical="8dp">
+            android:padding="8dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="8dp"
+                android:padding="4dp"
+                android:src="@drawable/group_objects_48" />
 
             <TextView
-                android:id="@+id/tv_enable"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Skip downloading sub-dependencies"
-                android:textColor="@color/scolor_red_02"
+                android:gravity="left"
+                android:text="@string/local_library_manager_dependency_info"
+                android:textColor="#ff757575"
                 android:textSize="14sp"
-                tools:text="@string/design_library_settings_title_enabled" />
-
-            <Switch
-                android:id="@+id/switch_lib"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginLeft="8dp"
-                android:clickable="false" />
+                tools:text="@string/local_library_manager_dependency_info" />
         </LinearLayout>
 
         <ScrollView
@@ -82,7 +74,7 @@
                         android:layout_height="18dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="8dp"
-                        android:src="@drawable/ic_key_48dp" />
+                        android:src="@drawable/ic_title" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -126,7 +118,7 @@
                         android:layout_height="18dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="8dp"
-                        android:src="@drawable/ic_key_48dp" />
+                        android:src="@drawable/connected_96" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -203,6 +195,35 @@
                 </androidx.core.widget.NestedScrollView>
             </LinearLayout>
         </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/layout_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Skip downloading sub-dependencies"
+                android:textColor="@color/scolor_red_02"
+                android:textSize="14sp"
+                tools:text="@string/design_library_settings_title_enabled" />
+
+            <Switch
+                android:id="@+id/switch_lib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="8dp"
+                android:clickable="false" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/download"
