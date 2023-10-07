@@ -73,7 +73,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
+import java.util.List;
 import a.a.a.DB;
 import a.a.a.FB;
 import a.a.a.Fx;
@@ -679,7 +679,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         ViewGroup viewGroup = a2.findViewById(R.id.rg_content);
         dialog.b("Select Event");
         for (EventBean bean : events) {
-            viewGroup.addView(d(EventBean.getEventName(bean.eventType), event.targetId));
+            viewGroup.addView(d(EventBean.getEventName(bean.eventType), bean.targetId));
         }
         int childCount = viewGroup.getChildCount();
         int i = 0;
