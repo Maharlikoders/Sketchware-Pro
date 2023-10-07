@@ -218,7 +218,6 @@ class DependencyResolver {
                 unzip(path)
                 Files.delete(path)
             }
-            deleteUnnecessaryFiles(path.parent.toAbsolutePath().toString())
             val packageName = findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
             path.parent.resolve("config").writeText(packageName)
             path.parent.resolve("dependencies").writeText(artifact.toStr())
@@ -281,7 +280,7 @@ class DependencyResolver {
                     callback.log("Cannot resolve ${artifact.toStr()}")
                     return
                 }
-                //resolve(dep, dependencies, callback)
+                dependencies.add(dep)
             }
         }
     }
@@ -407,36 +406,6 @@ class DependencyResolver {
                         input.copyTo(output)
                     }
                 }
-            }
-        }
-    }
-
-    private fun getLastSegment(path: String) {
-        return Uri.parse(path)?.lastPathSegment
-    }
-
-    private fun deleteUnnecessaryFiles(path: String) {
-        val list = arrayOf(
-            "res", 
-            "classes.dex", 
-            "classes.jar", 
-            "AndroidManifest.xml", 
-            "jni", 
-            "assets", 
-            "proguard.txt"
-        )
-
-        val validFiles = list.toList()
-        val files = ArrayList<String>()
-        FileUtil.listDir(path, files)
-
-        for (f in files) {
-            val p = getLastSegment(f)
-            if (p.startsWith("classes") && p.endsWith(".dex")) {
-                continue
-            }
-            if (!validFiles.contains(p)) {
-                FileUtil.deleteFile(f)
             }
         }
     }
