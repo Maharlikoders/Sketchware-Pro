@@ -8,7 +8,7 @@ class DependencyBean {
 			val strings = string.split(":")
 			require(strings.size >= 3) { "Invalid dependency format, must be groupId:artifactId:version" }
 
-			val dependency = Dependency()
+			val dependency = DependencyBean()
 			dependency.groupId = strings[0]
 			dependency.artifactId = strings[1]
 			dependency.version = strings[2]
@@ -33,7 +33,7 @@ class DependencyBean {
 		if (this === other) return true
 		if (other == null || javaClass != other.javaClass) return false
 
-		val that = other as Dependency
+		val that = other as DependencyBean
 
 		if (groupId != that.groupId) return false
 		return artifactId == that.artifactId
