@@ -26,6 +26,14 @@ public class SketchFileUtil {
         }
     }
 
+    public static String encrypt(String text) {
+        try {
+            return new String(getCipher(false).doFinal(text.getBytes()));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static boolean encrypt(String text, String path) {
         try {
             new RandomAccessFile(path, "rw").write(getCipher(false).doFinal(text.getBytes()));
