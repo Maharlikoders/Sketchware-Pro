@@ -105,7 +105,10 @@ public class GitHubUtil {
         Executor executor = Executors.newFixedThreadPool(3);
         try (Repository repository = Git.open(new File(getGitHubSrc())).getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
+                if (isFileExists(repository, "project.json")) {
                     SketchwareUtil.toast("Parsing files...");
+                }
+                return null;
             }, executor)
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 buildProjectFile(repository);
