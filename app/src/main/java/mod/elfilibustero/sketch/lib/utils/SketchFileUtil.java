@@ -17,33 +17,27 @@ public class SketchFileUtil {
     public static final String SKETCHWARE_DIRECTORY = ".sketchware-pro";
     public static final String SKETCHWARE_WORKSPACE_DIRECTORY = SKETCHWARE_DIRECTORY + File.separator + "workspace";
 
-    public static String decrypt(String path) {
+    public static String decrypt(String path) throws Exception {
         try {
             byte[] fileData = Files.readAllBytes(Paths.get(path));
             return new String(getCipher(true).doFinal(fileData));
-        } catch (Exception e) {
-            return null;
         }
     }
 
-    public static String encrypt(String text) {
+    public static String encrypt(String text) throws Exception {
         try {
             return new String(getCipher(false).doFinal(text.getBytes()));
-        } catch (Exception e) {
-            return null;
         }
     }
 
-    public static boolean encrypt(String text, String path) {
+    public static boolean encrypt(String text, String path) throws Exception {
         try {
             new RandomAccessFile(path, "rw").write(getCipher(false).doFinal(text.getBytes()));
             return true;
-        } catch (Exception e) {
-            return false;
         }
     }
 
-    private static Cipher getCipher(boolean isDecrypt) {
+    private static Cipher getCipher(boolean isDecrypt) throws Exception {
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             byte[] keyBytes = SKETCHWARE_SECURE.getBytes();
@@ -51,8 +45,6 @@ public class SketchFileUtil {
             IvParameterSpec paramSpec = new IvParameterSpec(keyBytes);
             cipher.init(isDecrypt ? Cipher.DECRYPT_MODE : Cipher.ENCRYPT_MODE, spec, paramSpec);
             return cipher;
-        } catch (Exception e) {
-            return null;
         }
     }
 

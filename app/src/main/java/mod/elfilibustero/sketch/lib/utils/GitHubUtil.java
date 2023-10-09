@@ -275,72 +275,72 @@ public class GitHubUtil {
         String data = wq.b(sc_id);
         String errorMessage = "%s data not found";
         FileUtil.makeDir(data + "/");
-        String file = FileUtil.readFile(getFile(getGitHubProject("src")));
-        //if (!isFileExists(repository, getFile("src"))) {
-        //    throw new FileNotFoundException(String.format(errorMessage, "File"));
-        //}
-        if (isFileExists(repository, getFile("src"))) {
-            if (!SketchFileUtil.encrypt(file, getFile(data))) {
+        try {
+            String file = FileUtil.readFile(getFile(getGitHubProject("src")));
+            //if (!isFileExists(repository, getFile("src"))) {
+            //    throw new FileNotFoundException(String.format(errorMessage, "File"));
+            //}
+            if (isFileExists(repository, getFile("src"))) {
+                if (!SketchFileUtil.encrypt(file, getFile(data))) {
+                    throw new RuntimeException("Failed to build file data");
+                }
+            } else if (!SketchFileUtil.encrypt(getDefaultFileData(), getFile(data))) {
                 throw new RuntimeException("Failed to build file data");
             }
-        } else if (!SketchFileUtil.encrypt(getDefaultFileData(), getFile(data))) {
-            throw new RuntimeException("Failed to build file data");
-        }
-        
+            
 
-        String library = FileUtil.readFile(getLibrary(getGitHubProject("src")));
-        //if (!isFileExists(repository, getLibrary("src"))) {
-        //   throw new FileNotFoundException(String.format(errorMessage, "Library"));
-        //}
+            String library = FileUtil.readFile(getLibrary(getGitHubProject("src")));
+            //if (!isFileExists(repository, getLibrary("src"))) {
+            //   throw new FileNotFoundException(String.format(errorMessage, "Library"));
+            //}
 
-        if (isFileExists(repository, getLibrary("src"))) {
-            if (!SketchFileUtil.encrypt(library, getLibrary(data))) {
+            if (isFileExists(repository, getLibrary("src"))) {
+                if (!SketchFileUtil.encrypt(library, getLibrary(data))) {
+                    throw new RuntimeException("Failed to build library data");
+                }
+            } else if (!SketchFileUtil.encrypt(getDefaultLibraryData(), getLibrary(data))) {
                 throw new RuntimeException("Failed to build library data");
             }
-        } else if (!SketchFileUtil.encrypt(getDefaultLibraryData(), getLibrary(data))) {
-            throw new RuntimeException("Failed to build library data");
-        }
 
-        String logic = FileUtil.readFile(getLogic(getGitHubProject("src")));
-        //if (!isFileExists(repository, getLogic("src"))) {
-        //    throw new FileNotFoundException(String.format(errorMessage, "Logic"));
-        //}
+            String logic = FileUtil.readFile(getLogic(getGitHubProject("src")));
+            //if (!isFileExists(repository, getLogic("src"))) {
+            //    throw new FileNotFoundException(String.format(errorMessage, "Logic"));
+            //}
 
-        if (isFileExists(repository, getLogic("src"))) {
-            if (!SketchFileUtil.encrypt(logic, getLogic(data))) {
-                throw new RuntimeException("Failed to build logic data");
+            if (isFileExists(repository, getLogic("src"))) {
+                if (!SketchFileUtil.encrypt(logic, getLogic(data))) {
+                    throw new RuntimeException("Failed to build logic data");
+                }
+            } else {
+                FileUtil.writeFile(getLogic(data), "");
             }
-        } else {
-            FileUtil.writeFile(getLogic(data), "");
-        }
 
-        String res = FileUtil.readFile(getResource(getGitHubProject("src")));
-        //if (!isFileExists(repository, getResource("src"))) {
-        //    throw new FileNotFoundException(String.format(errorMessage, "Resource"));
-        //}
+            String res = FileUtil.readFile(getResource(getGitHubProject("src")));
+            //if (!isFileExists(repository, getResource("src"))) {
+            //    throw new FileNotFoundException(String.format(errorMessage, "Resource"));
+            //}
 
-        if (isFileExists(repository, getResource("src"))) {
-            if (!SketchFileUtil.encrypt(res, getResource(data))) {
+            if (isFileExists(repository, getResource("src"))) {
+                if (!SketchFileUtil.encrypt(res, getResource(data))) {
+                    throw new RuntimeException("Failed to build resource data");
+                }
+            } else if (!SketchFileUtil.encrypt(getDefaultResourceData(), getResource(data))) {
                 throw new RuntimeException("Failed to build resource data");
             }
-        } else if (!SketchFileUtil.encrypt(getDefaultResourceData(), getResource(data))) {
-            throw new RuntimeException("Failed to build resource data");
-        }
 
-        String view = FileUtil.readFile(getView(getGitHubProject("src")));
-        //if (!isFileExists(repository, getView("src"))) {
-        //    throw new FileNotFoundException(String.format(errorMessage, "View"));
-        //}
+            String view = FileUtil.readFile(getView(getGitHubProject("src")));
+            //if (!isFileExists(repository, getView("src"))) {
+            //    throw new FileNotFoundException(String.format(errorMessage, "View"));
+            //}
 
-        if (isFileExists(repository, getView("src"))) {
-            if (!SketchFileUtil.encrypt(view, getView(data))) {
+            if (isFileExists(repository, getView("src"))) {
+                if (!SketchFileUtil.encrypt(view, getView(data))) {
+                    throw new RuntimeException("Failed to build view data");
+                }
+            } else if (!SketchFileUtil.encrypt(getDefaultViewData(), getView(data))) {
                 throw new RuntimeException("Failed to build view data");
             }
-        } else if (!SketchFileUtil.encrypt(getDefaultViewData(), getView(data))) {
-            throw new RuntimeException("Failed to build view data");
-        }
 
-        try {
             String srcDataDir = getGitHubProject("src/data");
             if (!FileUtil.isDirectory(srcDataDir)) {
                 return;
