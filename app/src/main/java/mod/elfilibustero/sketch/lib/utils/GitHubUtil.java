@@ -195,6 +195,7 @@ public class GitHubUtil {
             }
             String encrypted = SketchFileUtil.encrypt(jsonBean);
             if (encrypted != null && !encrypted.isEmpty()) {
+                FileUtil.deleteFile(toProjectPath);
                 FileUtil.writeFile(toProjectPath, encrypted);
             } else {
                 throw new RuntimeException("Failed to build project file");
