@@ -456,7 +456,7 @@ public class GitHubUtil {
         }
     }
 
-    private void writeFile(String from, String to) {
+    private void writeFile(String from, String to) throws Exception {
         if (FileUtil.isExistFile(from)) {
             String content = SketchFileUtil.decrypt(from);
             if (content != null) {
@@ -490,13 +490,13 @@ public class GitHubUtil {
 
     private void generateProjectData() {
         String data = wq.b(sc_id);
-        writeFile(getFile(data), getFile(getGitHubProject("src")));
-        writeFile(getLibrary(data), getLibrary(getGitHubProject("src")));
-        writeFile(getLogic(data), getLogic(getGitHubProject("src")));
-        writeFile(getResource(data), getResource(getGitHubProject("src")));
-        writeFile(getView(data), getView(getGitHubProject("src")));
-
         try {
+            writeFile(getFile(data), getFile(getGitHubProject("src")));
+            writeFile(getLibrary(data), getLibrary(getGitHubProject("src")));
+            writeFile(getLogic(data), getLogic(getGitHubProject("src")));
+            writeFile(getResource(data), getResource(getGitHubProject("src")));
+            writeFile(getView(data), getView(getGitHubProject("src")));
+
             Set<String> exclusions = new HashSet<>();
             for (String exclusion : PROJECT_RESOURCES_FOLDER) {
                 exclusions.add(exclusion);
