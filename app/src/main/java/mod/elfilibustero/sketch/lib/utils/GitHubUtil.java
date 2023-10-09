@@ -105,8 +105,7 @@ public class GitHubUtil {
         Executor executor = Executors.newFixedThreadPool(3);
         try (Repository repository = Git.open(new File(getGitHubSrc())).getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
-                if (isFileExists(repository, "project.json")) {
-                }
+                    SketchwareUtil.toast("Parsing files...");
             }, executor)
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 buildProjectFile(repository);
@@ -122,10 +121,6 @@ public class GitHubUtil {
             }, executor))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 buildProjectResources();
-                return null;
-            }, executor))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
-                buildLocalLibrary();
                 return null;
             }, executor))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
@@ -378,30 +373,6 @@ public class GitHubUtil {
         }
     }
 
-    private void buildLocalLibrary() {
-        File localLibraryDest = new File(getGitHubProject("libs"));
-
-        if (localLibraryDest.exists() && localLibraryDest.isDirectory()) {
-            File[] localLibsContent = localLibraryDest.listFiles();
-            try {
-            if (localLibsContent != null) {
-                for (File localLib : localLibsContent) {
-                    File localLibReal = new File(FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs", localLib.getName());
-                    String localLibRealPath = localLibReal.getAbsolutePath();
-                    FileUtil.makeDir(localLibRealPath);
-                    if (!localLibReal.exists()) {
-                        FileUtil.copyDirectory(localLib, localLibReal);
-                    } else if (isFileSizeChanged(localLib.getAbsolutePath(), localLibRealPath)) {
-                        FileUtil.copyDirectory(localLib, localLibReal);
-                    }
-                }
-            }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private void buildCustomBlock(Repository repository) throws IOException {
         String srcBlockInfo = getGitHubProject("src/block/custom_blocks");
         if (isFileExists(repository, "src/block/custom_blocks")) {
@@ -445,11 +416,6 @@ public class GitHubUtil {
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 //Project Resources
                 generateProjectResources();
-                return null;
-            }, executor))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
-                //Local Library
-                generateLocalLibrary();
                 return null;
             }, executor))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
@@ -550,39 +516,6 @@ public class GitHubUtil {
                 }
             }
         } catch (Exception ignored) {
-        }
-    }
-
-    private void generateLocalLibrary() {
-        File localLibrary = new File(wq.b(sc_id), "local_library");
-
-        if (localLibrary.exists()) {
-            try {
-                JSONArray array = new JSONArray(FileUtil.readFile(localLibrary.getAbsolutePath()));
-                File localLibraryDest = new File(getGitHubProject("libs"));
-                for (int i = 0; i < array.length(); i++) {
-                    String jarPath = array.getJSONObject(i).optString("jarPath");
-                    File jarFile = new File(jarPath).getParentFile();
-                    File gitJarFile = new File(localLibraryDest, jarFile.getName());
-                    if (jarPath != null && !jarPath.isEmpty()) {
-                        if (jarFile != null) {
-                            String libPath = jarFile.getAbsolutePath();
-                            String gitPath = gitJarFile.getAbsolutePath();
-                            if (gitJarFile.exists() && isFileSizeChanged(libPath, gitPath)) {
-                                FileUtil.deleteFile(gitPath);
-                            }
-
-                            if (!isFileSizeChanged(libPath, gitPath)) {
-                                return;
-                            }
-                            FileUtil.makeDir(gitPath);
-                            FileUtil.copyDirectory(jarFile, gitJarFile);
-                            return;
-                        }
-                    }
-                }
-            } catch (Exception ignored) {
-            }
         }
     }
 
