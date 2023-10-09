@@ -163,37 +163,37 @@ public class GitHubUtil {
         try {
             ProjectBean bean;
             if (isFileExists(repository, "project.json")) {
-            String content = FileUtil.readFile(projectPath);
-            TempProjectBean temp = new Gson().fromJson(content, TempProjectBean.class);
-            if (temp != null) {
-                bean = new ProjectBean();
-                bean.setCustomIcon(temp.isCustomIcon());
-                bean.setWorkspaceName(temp.getWorkspaceName());
-                bean.setAppName(temp.getAppName());
-                bean.setPackageName(temp.getPackageName());
-                bean.setVersionCode(temp.getVersionCode());
-                bean.setVersionName(temp.getVersionName());
-                bean.setColorPrimary(temp.getColorPrimary());
-                bean.setColorPrimaryDark(temp.getColorPrimaryDark());
-                bean.setColorAccent(temp.getColorAccent());
-                bean.setColorControlNormal(temp.getColorControlNormal());
-                bean.setColorControlHighlight(temp.getColorControlHighlight());
-                bean.setId(sc_id);
-                bean.setSketchwareVer(GB.d(SketchApplication.getContext()));
-                bean.setRegisteredDate(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+                String content = FileUtil.readFile(projectPath);
+                TempProjectBean temp = new Gson().fromJson(content, TempProjectBean.class);
+                if (temp != null) {
+                    bean = new ProjectBean();
+                    bean.setCustomIcon(temp.isCustomIcon());
+                    bean.setWorkspaceName(temp.getWorkspaceName());
+                    bean.setAppName(temp.getAppName());
+                    bean.setPackageName(temp.getPackageName());
+                    bean.setVersionCode(temp.getVersionCode());
+                    bean.setVersionName(temp.getVersionName());
+                    bean.setColorPrimary(temp.getColorPrimary());
+                    bean.setColorPrimaryDark(temp.getColorPrimaryDark());
+                    bean.setColorAccent(temp.getColorAccent());
+                    bean.setColorControlNormal(temp.getColorControlNormal());
+                    bean.setColorControlHighlight(temp.getColorControlHighlight());
+                    bean.setId(sc_id);
+                    bean.setSketchwareVer(GB.d(SketchApplication.getContext()));
+                    bean.setRegisteredDate(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+                } else {
+                    bean = getDefaultProjectFile();
+                }
             } else {
                 bean = getDefaultProjectFile();
             }
-            } else {
-                bean = getDefaultProjectFile();
-            }
-            FileUtil.makeDir(wq.c(sc_id) + "/");
             SketchwareUtil.toast(new Gson().toJson(bean));
-            if (!SketchFileUtil.encrypt(new Gson().toJson(bean), toProjectPath)) {
+            String encrypted = SketchFileUtil.encrypt(new Gson().toJson(bean));
+            if (encrypted != null || !encrypted.isEmpty()) {
+                FileUtil.writeFile(toProjectPath, encrypted);
+            } else {
                 throw new RuntimeException("Failed to build project file");
             }
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
         }
     }
 
