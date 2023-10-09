@@ -18,34 +18,25 @@ public class SketchFileUtil {
     public static final String SKETCHWARE_WORKSPACE_DIRECTORY = SKETCHWARE_DIRECTORY + File.separator + "workspace";
 
     public static String decrypt(String path) throws Exception {
-        try {
-            byte[] fileData = Files.readAllBytes(Paths.get(path));
-            return new String(getCipher(true).doFinal(fileData));
-        }
+        byte[] fileData = Files.readAllBytes(Paths.get(path));
+        return new String(getCipher(true).doFinal(fileData));
     }
 
     public static String encrypt(String text) throws Exception {
-        try {
-            return new String(getCipher(false).doFinal(text.getBytes()));
-        }
+        return new String(getCipher(false).doFinal(text.getBytes()));
     }
 
     public static boolean encrypt(String text, String path) throws Exception {
-        try {
-            new RandomAccessFile(path, "rw").write(getCipher(false).doFinal(text.getBytes()));
-            return true;
-        }
+        new RandomAccessFile(path, "rw").write(getCipher(false).doFinal(text.getBytes()));
+        return true;
     }
 
     private static Cipher getCipher(boolean isDecrypt) throws Exception {
-        try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            byte[] keyBytes = SKETCHWARE_SECURE.getBytes();
-            SecretKeySpec spec = new SecretKeySpec(keyBytes, "AES");
-            IvParameterSpec paramSpec = new IvParameterSpec(keyBytes);
-            cipher.init(isDecrypt ? Cipher.DECRYPT_MODE : Cipher.ENCRYPT_MODE, spec, paramSpec);
-            return cipher;
-        }
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        byte[] keyBytes = SKETCHWARE_SECURE.getBytes();
+        SecretKeySpec spec = new SecretKeySpec(keyBytes, "AES");
+        IvParameterSpec paramSpec = new IvParameterSpec(keyBytes);
+        cipher.init(isDecrypt ? Cipher.DECRYPT_MODE : Cipher.ENCRYPT_MODE, spec, paramSpec);
+        return cipher;
     }
-
 }
