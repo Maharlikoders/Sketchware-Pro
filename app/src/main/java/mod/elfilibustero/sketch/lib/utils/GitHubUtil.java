@@ -105,11 +105,7 @@ public class GitHubUtil {
         Executor executor = Executors.newFixedThreadPool(3);
         try (Repository repository = Git.open(new File(getGitHubSrc())).getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
-                try {
-                    buildProjectFile(repository);
-                } catch (Exception e) {
-                    SketchwareUtil.toastError(e.toString());
-                }
+                buildProjectFile(repository);
                 return null;
             }, executor)
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
@@ -157,7 +153,7 @@ public class GitHubUtil {
         return false;
     }
 
-    private void buildProjectFile(Repository repository) throws Exception {
+    private void buildProjectFile(Repository repository) {
         String projectPath = getGitHubProject("project.json");
         String toProjectPath = wq.c(sc_id) + File.separator + "project";
         try {
@@ -194,6 +190,8 @@ public class GitHubUtil {
             } else {
                 throw new RuntimeException("Failed to build project file");
             }
+        } catch (Exception e) {
+            SketchwareUtil.toastError(e.toString());
         }
     }
 
