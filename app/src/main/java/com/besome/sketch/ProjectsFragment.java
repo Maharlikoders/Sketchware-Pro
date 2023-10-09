@@ -210,11 +210,9 @@ public class ProjectsFragment extends DA {
                     if (success) {
                         final String errorMessage;
                         try {
-                            requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Generating project sources, please wait"));
                             CompletableFuture<Void> build = gitUtil.build();
                             build.thenRun(() -> requireActivity().startActivity(intent));
                             build.join();
-                            
                             return;
                         } catch (FileNotFoundException e) {
                             errorMessage = e.getMessage();
@@ -392,7 +390,6 @@ public class ProjectsFragment extends DA {
                     gitUtil.setBean(bean);
                     final String errorMessage;
                     try {
-                        requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Generating project sources, please wait"));
                         CompletableFuture<Void> build = gitUtil.build();
                         build.thenRun(() -> {
                             refreshProjectsList();

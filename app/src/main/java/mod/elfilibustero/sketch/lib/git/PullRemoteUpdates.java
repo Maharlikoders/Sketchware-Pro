@@ -48,11 +48,6 @@ public class PullRemoteUpdates {
 		GitHubUtil gitUtil = new GitHubUtil(sc_id);
 		GitHubBean bean = gitUtil.getBean();
 
-        if (bean.username.isEmpty() && bean.token.isEmpty()) {
-            SketchwareUtil.toastError("Please fillup the github details first");
-            return;
-        }
-
 		var dialog = new aB((Activity) context);
         dialog.a(R.drawable.widget_swipe_refresh);
         dialog.b("Fetching...");
@@ -98,16 +93,16 @@ public class PullRemoteUpdates {
                 	pull.setCredentialsProvider(credentials);
                 	pull.call();
                 	ThreadUtils.runOnUiThread(() -> {
+                        success.onSuccess(true);
 	                    SketchwareUtil.toast("Pulled updates from remote branch: " + bean.branch);
 	                    dialog.dismiss();
 	                });
-                    success.onSuccess(true);
                 } else {
                 	ThreadUtils.runOnUiThread(() -> {
+                        success.onSuccess(false);
 	                    SketchwareUtil.toast("The remote branch: " + bean.branch + " is up to date.");
 	                    dialog.dismiss();
 	                });
-                success.onSuccess(false);
                 }
                 return;
             } catch (JGitInternalException | GitAPIException | IOException e) {
