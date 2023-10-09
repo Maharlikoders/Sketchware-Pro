@@ -63,7 +63,7 @@ public class ExternalLibraryHandler {
 	}
 
 	public String getJar() {
-		return String.join(":", get(ResourceType.JAR));
+		return ":" + String.join(":", get(ResourceType.JAR));
 	}
 
 	public String getPackageName() {
