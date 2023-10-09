@@ -106,7 +106,7 @@ public class GitHubUtil {
         try (Repository repository = Git.open(new File(getGitHubSrc())).getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
                 try {
-                    buildProjectFile();
+                    buildProjectFile(repository);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -157,13 +157,14 @@ public class GitHubUtil {
         return false;
     }
 
-    private void buildProjectFile() throws Exception {
+    private void buildProjectFile(Repository repository) throws Exception {
         String projectPath = getGitHubProject("project.json");
         String toProjectPath = wq.c(sc_id) + File.separator + "project";
-        String content = FileUtil.readFile(projectPath);
         try {
-            TempProjectBean temp = new Gson().fromJson(content, TempProjectBean.class);
             ProjectBean bean;
+            if (isFileExists(repository, "project.json")) {
+            String content = FileUtil.readFile(projectPath);
+            TempProjectBean temp = new Gson().fromJson(content, TempProjectBean.class);
             if (temp != null) {
                 bean = new ProjectBean();
                 bean.setCustomIcon(temp.isCustomIcon());
@@ -180,6 +181,9 @@ public class GitHubUtil {
                 bean.setId(sc_id);
                 bean.setSketchwareVer(GB.d(SketchApplication.getContext()));
                 bean.setRegisteredDate(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+            } else {
+                bean = getDefaultProjectFile();
+            }
             } else {
                 bean = getDefaultProjectFile();
             }
