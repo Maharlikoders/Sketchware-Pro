@@ -108,7 +108,7 @@ public class GitHubUtil {
                 try {
                     buildProjectFile(repository);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SketchwareUtil.toastError(e.toString());
                 }
                 return null;
             }, executor)
@@ -116,7 +116,7 @@ public class GitHubUtil {
                 try {
                     buildDataFile(repository);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SketchwareUtil.toastError(e.toString());
                 }
                 return null;
             }, executor))
@@ -132,7 +132,7 @@ public class GitHubUtil {
                 try {
                     buildCustomBlock(repository);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    SketchwareUtil.toastError(e.toString());
                 }
                 return null;
             }, executor));
