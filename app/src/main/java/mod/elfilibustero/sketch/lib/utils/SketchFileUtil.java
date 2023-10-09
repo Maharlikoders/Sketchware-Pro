@@ -21,7 +21,7 @@ public class SketchFileUtil {
     public static final String SKETCHWARE_DIRECTORY = ".sketchware-pro";
     public static final String SKETCHWARE_WORKSPACE_DIRECTORY = SKETCHWARE_DIRECTORY + File.separator + "workspace";
 
-    private oB fileUtil = new oB();
+    private static final oB fileUtil = new oB();
 
     public static String decrypt(String path) throws Exception {
         byte[] fileData = Files.readAllBytes(Paths.get(path));
