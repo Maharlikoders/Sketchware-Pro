@@ -183,9 +183,12 @@ public class GitHubUtil {
             } else {
                 bean = getDefaultProjectFile();
             }
-            SketchwareUtil.toast(new Gson().toJson(bean));
-            String encrypted = SketchFileUtil.encrypt(new Gson().toJson(bean));
-            if (encrypted != null || !encrypted.isEmpty()) {
+            String jsonBean = new Gson().toJson(bean);
+            if (jsonBean == null || jsonBean.isEmpty()) {
+                throw new RuntimeException("Failed to parse project file");
+            }
+            String encrypted = SketchFileUtil.encrypt(jsonBean);
+            if (encrypted != null && !encrypted.isEmpty()) {
                 FileUtil.writeFile(toProjectPath, encrypted);
             } else {
                 throw new RuntimeException("Failed to build project file");
