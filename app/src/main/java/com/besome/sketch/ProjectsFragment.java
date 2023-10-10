@@ -215,7 +215,7 @@ public class ProjectsFragment extends DA {
                                 if (exception == null) {
                                     requireActivity().startActivity(intent);
                                 } else {
-                                    requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + e.getMessage()));
+                                    requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + exception.getMessage()));
                                 }
                             } );
                             build.join();
