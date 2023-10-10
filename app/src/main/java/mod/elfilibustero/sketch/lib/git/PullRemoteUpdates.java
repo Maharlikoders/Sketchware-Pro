@@ -93,24 +93,24 @@ public class PullRemoteUpdates {
                 	pull.setCredentialsProvider(credentials);
                 	pull.call();
                 	ThreadUtils.runOnUiThread(() -> {
-                        success.onSuccess(true);
-	                    SketchwareUtil.toast("Pulled updates from remote branch: " + bean.branch);
+                        success.onSuccess(true, git);
 	                    dialog.dismiss();
 	                });
                 } else {
                 	ThreadUtils.runOnUiThread(() -> {
-                        success.onSuccess(false);
+                        success.onSuccess(false, null);
 	                    SketchwareUtil.toast("The remote branch: " + bean.branch + " is up to date.");
 	                    dialog.dismiss();
 	                });
                 }
+                git.close();
                 return;
             } catch (JGitInternalException | GitAPIException | IOException e) {
                 ThreadUtils.runOnUiThread(() -> {
                     SketchwareUtil.toastError("Fetch failed: " + e.getMessage());
                     dialog.dismiss();
                 });
-                success.onSuccess(false);
+                success.onSuccess(false, null);
             }
         });
         dialog.show();
@@ -118,6 +118,6 @@ public class PullRemoteUpdates {
 
     public interface Callback {
 
-        void onSuccess(boolean success);
+        void onSuccess(boolean success, Git git);
     }
 }

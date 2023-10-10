@@ -206,26 +206,40 @@ public class ProjectsFragment extends DA {
         GitHubUtil gitUtil = new GitHubUtil(sc_id);
         GitHubBean bean = gitUtil.getBean();
         if (!bean.username.isEmpty() && !bean.token.isEmpty() && bean.useYn.equals("Y")) {
-                new PullRemoteUpdates(requireActivity(), sc_id).execute(success -> {
+                new PullRemoteUpdates(requireActivity(), sc_id).execute((success, git) -> {
                     if (success) {
-                        final String errorMessage;
-                        try {
-                            CompletableFuture<Void> build = gitUtil.build();
-                            build.whenComplete((result, exception) -> {
-                                if (exception == null) {
-                                    requireActivity().startActivity(intent);
-                                } else {
-                                    requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + exception.getMessage()));
-                                }
-                            } );
-                            build.join();
-                            return;
-                        } catch (FileNotFoundException e) {
-                            errorMessage = e.getMessage();
-                        } catch (Exception e) {
-                            errorMessage = e.getMessage();
-                        }
-                        requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + errorMessage));
+                        aB dialog = new aB(requireActivity());
+                        dialog.b("Pull");
+                        dialog.a("Do you want to pull changes in remote repository?");
+                        dialog.b("Yes", v -> {    
+                            org.eclipse.jgit.api.PullCommand pull = git.pull();
+                            pull.setRemote("origin");
+                            pull.setRemoteBranchName(bean.branch);
+                            pull.call();
+                            final String errorMessage;
+                            try (CompletableFuture<Void> build = new GitHubUtil(sc_id).build()) {
+                                build.whenComplete((result, exception) -> {
+                                    if (exception == null) {
+                                        requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Pulled updates from remote branch: " + bean.branch));
+                                        requireActivity().startActivity(intent);
+                                    } else {
+                                        requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + exception.getMessage()));
+                                    }
+                                } );
+                                build.join();
+                                return;
+                            } catch (FileNotFoundException e) {
+                                errorMessage = e.getMessage();
+                            } catch (Exception e) {
+                                errorMessage = e.getMessage();
+                            }
+                            requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + errorMessage));
+                        });
+                        dialog.a("No", v -> {
+                            dialog.dismiss();
+                            requireActivity().startActivity(intent);
+                        });
+                        dialog.show();
                     } else {
                         requireActivity().startActivity(intent);
                     }
