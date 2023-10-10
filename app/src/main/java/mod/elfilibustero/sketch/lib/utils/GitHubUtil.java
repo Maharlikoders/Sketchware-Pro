@@ -153,9 +153,10 @@ public class GitHubUtil {
         String projectPath = getGitHubProject("project.json");
         String toProjectPath = wq.c(sc_id) + File.separator + "project";
         try {
+            Map<String, Object> bean = new HashMap<>();
             if (isFileExists(repository, "project.json")) {
                 String content = FileUtil.readFile(projectPath);
-                Map<String, Object> bean = new Gson().fromJson(content, Helper.TYPE_MAP);
+                bean = new Gson().fromJson(content, Helper.TYPE_MAP);
                 if (bean != null) {
                     bean.put("sc_id", sc_id);
                 } else {
