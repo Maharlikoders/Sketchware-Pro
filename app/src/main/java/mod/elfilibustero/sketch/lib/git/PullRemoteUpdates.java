@@ -56,6 +56,7 @@ public class PullRemoteUpdates {
         dialog.setCancelable(false);
         var monitor = new GitProgressMonitor(binding.message, binding.indicator);
         dialog.b(Helper.getResString(R.string.common_word_cancel), v -> {
+            success.onSuccess(false);
             monitor.cancel();
             dialog.dismiss();
         });
@@ -86,19 +87,31 @@ public class PullRemoteUpdates {
                 	}
                 }
                 if (hasUpdates) {
-                	PullCommand pull = git.pull();
-                	pull.setRemote("origin");
-                	pull.setRemoteBranchName(bean.branch);
-                	pull.setProgressMonitor(monitor);
-                	pull.setCredentialsProvider(credentials);
-                	pull.call();
-                	ThreadUtils.runOnUiThread(() -> {
-                        success.onSuccess(true, git);
-	                    dialog.dismiss();
-	                });
+                    ThreadUtils.runOnUiThread(() -> {
+                        dialog.dismiss();
+
+                        var pullDialog = new aB((Activity) context);
+                        pullDialog.b("Pull");
+                        pullDialog.a("Do you want to pull changes in remote repository?");
+                        pullDialog.b("Yes", v -> {
+                            PullCommand pull = git.pull();
+                            pull.setRemote("origin");
+                            pull.setRemoteBranchName(bean.branch);
+                            pull.setProgressMonitor(monitor);
+                            pull.setCredentialsProvider(credentials);
+                            pull.call();
+                            success.onSuccess(true);
+                            pullDialog.dismiss();
+                        });
+                        pullDialog.a("No", v -> {
+                            success.onSuccess(false);
+                            pullDialog.dismiss();
+                        });
+                        pullDialog.show();
+                    });
                 } else {
+                    success.onSuccess(false);
                 	ThreadUtils.runOnUiThread(() -> {
-                        success.onSuccess(false, null);
 	                    SketchwareUtil.toast("The remote branch: " + bean.branch + " is up to date.");
 	                    dialog.dismiss();
 	                });
@@ -110,7 +123,7 @@ public class PullRemoteUpdates {
                     SketchwareUtil.toastError("Fetch failed: " + e.getMessage());
                     dialog.dismiss();
                 });
-                success.onSuccess(false, null);
+                success.onSuccess(false);
             }
         });
         dialog.show();
@@ -118,6 +131,6 @@ public class PullRemoteUpdates {
 
     public interface Callback {
 
-        void onSuccess(boolean success, Git git);
+        void onSuccess(boolean success);
     }
 }
