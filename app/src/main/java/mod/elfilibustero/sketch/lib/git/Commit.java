@@ -70,6 +70,7 @@ public class Commit {
                         .call();
                     ThreadUtils.runOnUiThread(() -> SketchwareUtil.toast("Committed file " + fileName));
                     success.onSuccess(true);
+                    git.close();
                 } catch (IOException | GitAPIException e) {
                     ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError("Commit failed " + e.getMessage()));
                     success.onSuccess(false);
@@ -106,10 +107,9 @@ public class Commit {
                         .setCommitter(new PersonIdent(bean.username, bean.email))
                         .setMessage(message)
                         .call();
-                        ThreadUtils.runOnUiThread(() -> {
-                            SketchwareUtil.toast("Committed all file");
-                        });
+                        ThreadUtils.runOnUiThread(() -> SketchwareUtil.toast("Committed all file"));
                         success.onSuccess(true);
+                        git.close();
                     } catch (IOException | GitAPIException e) {
                         ThreadUtils.runOnUiThread(() -> {
                             SketchwareUtil.toastError("Commit failed " + e.getMessage());

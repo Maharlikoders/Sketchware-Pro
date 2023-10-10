@@ -47,6 +47,7 @@ public class ListUncommittedChanges {
                     list.add(bean);
                 }
             }
+            git.close();
         } catch (IOException | GitAPIException e) {
             ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError("Error listing uncommitted changes: " + e.getMessage()));
         }

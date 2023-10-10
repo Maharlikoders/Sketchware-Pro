@@ -91,6 +91,7 @@ public class Push {
                 ThreadUtils.runOnUiThread(() -> {
                     SketchwareUtil.toast("Push Successfully");
                     dialog.dismiss();
+                    git.close();
                 });
             } catch (JGitInternalException | GitAPIException | IOException e) {
                 ThreadUtils.runOnUiThread(() -> {
