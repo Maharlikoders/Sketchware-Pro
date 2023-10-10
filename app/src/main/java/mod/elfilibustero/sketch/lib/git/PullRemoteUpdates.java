@@ -94,13 +94,17 @@ public class PullRemoteUpdates {
                         pullDialog.b("Pull");
                         pullDialog.a("Do you want to pull changes in remote repository?");
                         pullDialog.b("Yes", v -> {
-                            PullCommand pull = git.pull();
-                            pull.setRemote("origin");
-                            pull.setRemoteBranchName(bean.branch);
-                            pull.setProgressMonitor(monitor);
-                            pull.setCredentialsProvider(credentials);
-                            pull.call();
-                            success.onSuccess(true);
+                            try {
+                                PullCommand pull = git.pull();
+                                pull.setRemote("origin");
+                                pull.setRemoteBranchName(bean.branch);
+                                pull.setProgressMonitor(monitor);
+                                pull.setCredentialsProvider(credentials);
+                                pull.call();
+                                success.onSuccess(true);
+                            } catch (GitAPIException e) {
+                                success.onSuccess(false);
+                            }
                             pullDialog.dismiss();
                         });
                         pullDialog.a("No", v -> {
