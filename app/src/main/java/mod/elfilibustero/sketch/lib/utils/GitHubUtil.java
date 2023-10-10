@@ -159,7 +159,8 @@ public class GitHubUtil {
     private void buildProjectFile(Repository repository) throws Exception {
         String projectPath = getGitHubProject("project.json");
         String toProjectPath = wq.c(sc_id) + File.separator + "project";
-
+        FileUtil.makeDir(wq.c(sc_id));
+        
         if (!isFileExists(repository, "project.json")) {
             throw new Exception("Project file does not exist");
         }
@@ -191,7 +192,6 @@ public class GitHubUtil {
         if (jsonBean == null || jsonBean.isEmpty()) {
             throw new RuntimeException("Failed to parse project file");
         }
-
         if (SketchFileUtil.encrypt(jsonBean, toProjectPath)) {
 
         } else {

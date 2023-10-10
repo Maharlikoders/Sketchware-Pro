@@ -137,6 +137,10 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
             downloadLibrary();
             return true;
         }
+        if (itemId == R.id.menu_select_library) {
+            selectAll();
+            return true;
+        }
         return super.onOptionsItemSelected(menuItem);
     }
 
@@ -216,6 +220,12 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     }
 
     private void downloadLibrary() {
+        dependencies = externalLibrary.getDependencies();
+        if (dependencies == null || dependencies.isEmpty()) {
+            SketchwareUtil.toast("Add dependency first");
+            addLibrary();
+            return;
+        }
         var dialog = new BuildingDialog(this);
         dialog.setCancelable(false);
         dialog.setIsCancelableOnBackPressed(false);
@@ -307,6 +317,14 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
             });
         });
         dialog.show();
+    }
+
+    private void selectAll() {
+        for (LibrariesBean eban : externalLibrary.getLibraries()) {
+            eban.useYn = "Y";
+        }
+        handler.setBean(externalLibrary);
+        loadLibraries();
     }
 
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
