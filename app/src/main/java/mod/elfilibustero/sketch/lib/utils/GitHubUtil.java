@@ -103,7 +103,7 @@ public class GitHubUtil {
 
     public CompletableFuture<Void> build() throws IOException, Exception {
         Executor executor = Executors.newFixedThreadPool(4);
-        try (Repository repository = Git.open(new File(getGitHubSrc())).getRepository()) {
+        try (Repository repository = getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
                 buildProjectFile(repository);
                 return null;
@@ -153,38 +153,6 @@ public class GitHubUtil {
         String projectPath = getGitHubProject("project.json");
         String toProjectPath = wq.c(sc_id) + File.separator + "project";
         try {
-            Map<String, Object> bean = new HashMap<>();
-            if (isFileExists(repository, "project.json")) {
-                String content = FileUtil.readFile(projectPath);
-                bean = new Gson().fromJson(content, Helper.TYPE_MAP);
-                if (bean != null) {
-                    bean.put("sc_id", sc_id);
-                } else {
-                    bean = getOldDefaultProjectFile();
-                }
-            } else {
-                bean = getOldDefaultProjectFile();
-            }
-            String jsonBean = new Gson().toJson(bean);
-            if (jsonBean == null || jsonBean.isEmpty()) {
-                throw new RuntimeException("Failed to parse project file");
-            }
-            String encrypted = SketchFileUtil.encrypt(jsonBean);
-            if (encrypted != null && !encrypted.isEmpty()) {
-                FileUtil.deleteFile(toProjectPath);
-                FileUtil.writeFile(toProjectPath, encrypted);
-            } else {
-                throw new RuntimeException("Failed to build project file");
-            }
-        } catch (Exception e) {
-            SketchwareUtil.toastError(e.toString());
-        }
-    }
-/*
-    private void buildProjectFile(Repository repository) {
-        String projectPath = getGitHubProject("project.json");
-        String toProjectPath = wq.c(sc_id) + File.separator + "project";
-        try {
             ProjectBean bean;
             if (isFileExists(repository, "project.json")) {
                 String content = FileUtil.readFile(projectPath);
@@ -226,7 +194,7 @@ public class GitHubUtil {
             SketchwareUtil.toastError(e.toString());
         }
     }
-*/
+
     private ProjectBean getDefaultProjectFile() {
         String newProject = lC.c();
         ProjectBean bean = new ProjectBean();
@@ -492,18 +460,6 @@ public class GitHubUtil {
         String projectFile = wq.c(sc_id) + File.separator + "project";
         try {
             String content = SketchFileUtil.decrypt(projectFile);
-            Map<String, Object> bean = new Gson().fromJson(content, Helper.TYPE_MAP);
-            bean.remove("sc_id");
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            FileUtil.writeFile(getGitHubProject("project.json"), gson.toJson(bean));
-        } catch (Exception ignored) {
-        }
-    }
-/*
-    private void generateProjectFile() {
-        String projectFile = wq.c(sc_id) + File.separator + "project";
-        try {
-            String content = SketchFileUtil.decrypt(projectFile);
             ProjectBean bean = new Gson().fromJson(content, ProjectBean.class);
             TempProjectBean temp = new TempProjectBean();
             temp.setCustomIcon(bean.isCustomIcon());
@@ -522,7 +478,7 @@ public class GitHubUtil {
         } catch (Exception ignored) {
         }
     }
-*/
+
     private void generateProjectData() {
         String data = wq.b(sc_id);
         try {
