@@ -217,7 +217,8 @@ public class ProjectsFragment extends DA {
                             pull.setRemoteBranchName(bean.branch);
                             pull.call();
                             final String errorMessage;
-                            try (CompletableFuture<Void> build = new GitHubUtil(sc_id).build()) {
+                            try {
+                                CompletableFuture<Void> build = new GitHubUtil(sc_id).build();
                                 build.whenComplete((result, exception) -> {
                                     if (exception == null) {
                                         requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Pulled updates from remote branch: " + bean.branch));
