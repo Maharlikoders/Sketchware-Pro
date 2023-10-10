@@ -102,7 +102,7 @@ public class GitHubUtil {
     }
 
     public CompletableFuture<Void> build() throws IOException, Exception {
-        Executor executor = Executors.newFixedThreadPool(4);
+        Executor executor = Executors.newSingleThreadExecutor();
         try (Repository repository = getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
                 buildProjectFile(repository);
@@ -185,7 +185,6 @@ public class GitHubUtil {
             }
             String encrypted = SketchFileUtil.encrypt(jsonBean);
             if (encrypted != null && !encrypted.isEmpty()) {
-                FileUtil.deleteFile(toProjectPath);
                 FileUtil.writeFile(toProjectPath, encrypted);
             } else {
                 throw new RuntimeException("Failed to build project file");
