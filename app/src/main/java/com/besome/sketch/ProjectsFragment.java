@@ -212,12 +212,12 @@ public class ProjectsFragment extends DA {
                         dialog.b("Pull");
                         dialog.a("Do you want to pull changes in remote repository?");
                         dialog.b("Yes", v -> {    
-                            org.eclipse.jgit.api.PullCommand pull = git.pull();
-                            pull.setRemote("origin");
-                            pull.setRemoteBranchName(bean.branch);
-                            pull.call();
                             final String errorMessage;
                             try {
+                                org.eclipse.jgit.api.PullCommand pull = git.pull();
+                                pull.setRemote("origin");
+                                pull.setRemoteBranchName(bean.branch);
+                                pull.call();
                                 CompletableFuture<Void> build = new GitHubUtil(sc_id).build();
                                 build.whenComplete((result, exception) -> {
                                     if (exception == null) {
@@ -229,6 +229,8 @@ public class ProjectsFragment extends DA {
                                 } );
                                 build.join();
                                 return;
+                            } catch (org.eclipse.jgit.api.errors.GitAPIException e) {
+                                errorMessage = e.getMessage();
                             } catch (FileNotFoundException e) {
                                 errorMessage = e.getMessage();
                             } catch (Exception e) {
