@@ -107,7 +107,7 @@ public class GitHubUtil {
                 try {
                     buildCustomBlock(repository);
                 } catch (Exception e) {
-                    SketchwareUtil.toastError(e.getMessage());
+                    ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
                 }
                 return null;
             })
@@ -115,7 +115,7 @@ public class GitHubUtil {
                 try {
                     buildProjectResources();
                 } catch (Exception e) {
-                    SketchwareUtil.toastError(e.getMessage());
+                    ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
                 }
                 return null;
             }))
@@ -123,7 +123,7 @@ public class GitHubUtil {
                 try {
                     buildDataFile(repository);
                 } catch (Exception e) {
-                    SketchwareUtil.toastError(e.getMessage());
+                    ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
                 }
                 return null;
             }))
@@ -131,7 +131,7 @@ public class GitHubUtil {
                 try {
                     buildProjectFile(repository);
                 } catch (Exception e) {
-                    SketchwareUtil.toastError(e.getMessage());
+                    ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
                 }
                 return null;
             }));
@@ -192,8 +192,8 @@ public class GitHubUtil {
             throw new RuntimeException("Failed to parse project file");
         }
 
-        String encrypted = SketchFileUtil.encrypt(jsonBean);
-        if (encrypted != null && !encrypted.isEmpty()) {
+        if (SketchFileUtil.encrypt(jsonBean, toProjectPath)) {
+
         } else {
             throw new RuntimeException("Failed to build project file");
         }
