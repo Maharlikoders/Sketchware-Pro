@@ -103,7 +103,7 @@ public class GitHubUtil {
 
     public CompletableFuture<Void> build() throws IOException, Exception {
         try (Repository repository = getRepository()) {
-            return CompletableFuture<Void> project = CompletableFuture.supplyAsync(() -> {
+            return CompletableFuture.supplyAsync(() -> {
                 try {
                     buildProjectFile(repository);
                 } catch (Exception e) {
