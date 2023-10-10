@@ -211,7 +211,13 @@ public class ProjectsFragment extends DA {
                         final String errorMessage;
                         try {
                             CompletableFuture<Void> build = gitUtil.build();
-                            build.thenRun(() -> requireActivity().startActivity(intent));
+                            build.whenComplete((result, exception) -> {
+                                if (exception == null) {
+                                    requireActivity().startActivity(intent);
+                                } else {
+                                    requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + e.getMessage()));
+                                }
+                            } );
                             build.join();
                             return;
                         } catch (FileNotFoundException e) {
