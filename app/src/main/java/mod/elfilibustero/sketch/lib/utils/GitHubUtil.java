@@ -105,7 +105,11 @@ public class GitHubUtil {
         Executor executor = Executors.newSingleThreadExecutor();
         try (Repository repository = getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
-                buildProjectFile(repository);
+                try {
+                    buildProjectFile(repository);
+                } catch (Exception e) {
+                    SketchwareUtil.toastError(e.toString());
+                }
                 return null;
             }, executor)
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
@@ -149,48 +153,47 @@ public class GitHubUtil {
         return false;
     }
 
-    private void buildProjectFile(Repository repository) {
+    private void buildProjectFile(Repository repository) throws Exception {
         String projectPath = getGitHubProject("project.json");
         String toProjectPath = wq.c(sc_id) + File.separator + "project";
-        try {
-            ProjectBean bean;
-            if (isFileExists(repository, "project.json")) {
-                String content = FileUtil.readFile(projectPath);
-                TempProjectBean temp = new Gson().fromJson(content, TempProjectBean.class);
-                if (temp != null) {
-                    bean = new ProjectBean();
-                    bean.setCustomIcon(temp.isCustomIcon());
-                    bean.setWorkspaceName(temp.getWorkspaceName());
-                    bean.setAppName(temp.getAppName());
-                    bean.setPackageName(temp.getPackageName());
-                    bean.setVersionCode(temp.getVersionCode());
-                    bean.setVersionName(temp.getVersionName());
-                    bean.setColorPrimary(temp.getColorPrimary());
-                    bean.setColorPrimaryDark(temp.getColorPrimaryDark());
-                    bean.setColorAccent(temp.getColorAccent());
-                    bean.setColorControlNormal(temp.getColorControlNormal());
-                    bean.setColorControlHighlight(temp.getColorControlHighlight());
-                    bean.setId(sc_id);
-                    bean.setSketchwareVer(GB.d(SketchApplication.getContext()));
-                    bean.setRegisteredDate(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
-                } else {
-                    bean = getDefaultProjectFile();
-                }
-            } else {
-                bean = getDefaultProjectFile();
-            }
-            String jsonBean = new Gson().toJson(bean);
-            if (jsonBean == null || jsonBean.isEmpty()) {
-                throw new RuntimeException("Failed to parse project file");
-            }
-            String encrypted = SketchFileUtil.encrypt(jsonBean);
-            if (encrypted != null && !encrypted.isEmpty()) {
-                FileUtil.writeFile(toProjectPath, encrypted);
-            } else {
-                throw new RuntimeException("Failed to build project file");
-            }
-        } catch (Exception e) {
-            SketchwareUtil.toastError(e.toString());
+
+        if (!isFileExists(repository, "project.json")) {
+            throw new Exception("Project file does not exist");
+        }
+
+        String content = FileUtil.readFile(projectPath);
+
+        TempProjectBean temp = new Gson().fromJson(content, TempProjectBean.class);
+        if (temp == null) {
+            throw new Exception("Failed to parse project file");
+        }
+
+        ProjectBean bean = new ProjectBean();
+        bean.setCustomIcon(temp.isCustomIcon());
+        bean.setWorkspaceName(temp.getWorkspaceName());
+        bean.setAppName(temp.getAppName());
+        bean.setPackageName(temp.getPackageName());
+        bean.setVersionCode(temp.getVersionCode());
+        bean.setVersionName(temp.getVersionName());
+        bean.setColorPrimary(temp.getColorPrimary());
+        bean.setColorPrimaryDark(temp.getColorPrimaryDark());
+        bean.setColorAccent(temp.getColorAccent());
+        bean.setColorControlNormal(temp.getColorControlNormal());
+        bean.setColorControlHighlight(temp.getColorControlHighlight());
+        bean.setId(sc_id);
+        bean.setSketchwareVer(GB.d(SketchApplication.getContext()));
+        bean.setRegisteredDate(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+
+        String jsonBean = new Gson().toJson(bean);
+        if (jsonBean == null || jsonBean.isEmpty()) {
+            throw new RuntimeException("Failed to parse project file");
+        }
+
+        String encrypted = SketchFileUtil.encrypt(jsonBean);
+        if (encrypted != null && !encrypted.isEmpty()) {
+            FileUtil.writeFile(toProjectPath, encrypted);
+        } else {
+            throw new RuntimeException("Failed to build project file");
         }
     }
 
