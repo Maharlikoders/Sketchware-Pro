@@ -83,6 +83,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         binding.add.setOnClickListener(this);
         binding.add.setText("Add dependency");
         handler = new ExternalLibraryHandler(sc_id);
+        temps = handler.externalLibrary.getDependencies();
         adapter = new LibraryAdapter(dependencies);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {

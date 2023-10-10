@@ -191,7 +191,6 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private void addLibrary() {
         Intent intent = new Intent(getApplicationContext(), ManageExternalAddLibraryActivity.class);
         intent.putExtra("sc_id", sc_id);
-        intent.putExtra("dependencies", dependencies);
         addLibraryManager.launch(intent);
     }
 
