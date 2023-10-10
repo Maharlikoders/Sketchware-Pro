@@ -320,9 +320,13 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     }
 
     private void selectAll() {
+        List<LibrariesBean> selectedLibraries = new ArrayList<>();
         for (LibrariesBean eban : externalLibrary.getLibraries()) {
             eban.useYn = "Y";
+            selectedLibraries.add(eban);
         }
+        SketchwareUtil.toast("Select all");
+        externalLibrary.setLibraries(selectedLibraries);
         handler.setBean(externalLibrary);
         loadLibraries();
     }
