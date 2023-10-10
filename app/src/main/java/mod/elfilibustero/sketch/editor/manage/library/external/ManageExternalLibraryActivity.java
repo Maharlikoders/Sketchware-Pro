@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -140,7 +142,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private void loadLibraries() {
         beans.clear();
         try {
-            temps = handler.getLibraries();
+            temps = externalLibrary.libraries;
         } catch (Exception e) {
         }
         try {

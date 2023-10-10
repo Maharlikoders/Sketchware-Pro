@@ -53,8 +53,8 @@ public class ExternalLibraryBean implements Parcelable {
     }
 
     public void copy(ExternalLibraryBean externalLibraryBean) {
-        dependencies = externalLibraryBean.dependencies;
-        libraries = externalLibraryBean.libraries;
+        dependencies = new ArrayList<>(externalLibraryBean.dependencies);
+        libraries = new ArrayList<>(externalLibraryBean.libraries);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class ExternalLibraryBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeSerializable(dependencies);
-        parcel.writeSerializable(libraries);
+        parcel.writeSerializable((List<DependencyBean>)dependencies);
+        parcel.writeSerializable((List<LibrariesBean>)libraries);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class ExternalLibraryHandler {
 	        } catch (Exception e) {
 	        }
         }
-        return externalLibrary == null || externalLibrary.isEmpty() ? new ExternalLibraryBean() : externalLibrary;
+        return externalLibrary == null ? new ExternalLibraryBean() : externalLibrary;
     }
 
     public void setBean(ExternalLibraryBean externalLibrary) {
