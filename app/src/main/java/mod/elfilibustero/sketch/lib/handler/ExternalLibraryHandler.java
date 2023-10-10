@@ -11,40 +11,43 @@ import a.a.a.wq;
 
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
+import mod.elfilibustero.sketch.beans.LibrariesBean;
 
 public class ExternalLibraryHandler {
 
 	private final String sc_id;
 	public final String dataPath;
 	public final String initialPath;
-	public List<ExternalLibraryBean> beans;
+	public static final int DEPENDENCIES = 0;
+	public static final int LIBRARIES = 1;
+	public ExternalLibraryBean externalLibrary;
+	public List<LibrariesBean> beans;
 
 	public ExternalLibraryHandler(String sc_id) {
 		this.sc_id = sc_id;
 		dataPath = wq.b(sc_id) + File.separator +"external_library";
 		initialPath = wq.getExternalLibrary(sc_id);
 		if (FileUtil.isExistFile(dataPath)) {
-			beans = getBeans();
+			externalLibrary = getBean();
 			return;
 		}
-		beans = new ArrayList<>();
-		FileUtil.writeFile(dataPath, "[]");
+		externalLibrary = new ExternalLibraryBean();
+		FileUtil.writeFile(dataPath, "{}");
 	}
 
-	public List<ExternalLibraryBean> getBeans() {
-        List<ExternalLibraryBean> beans = null;
+	public ExternalLibraryBean getBean() {
+        ExternalLibraryBean externalLibrary = null;
         if (FileUtil.isExistFile(dataPath)) {
         	try {
-        		beans = new Gson().fromJson(FileUtil.readFile(dataPath), new TypeToken<List<ExternalLibraryBean>>() {
-        		}.getType());
+        		externalLibrary = new Gson().fromJson(FileUtil.readFile(dataPath), ExternalLibraryBean.class);
 	        } catch (Exception e) {
 	        }
         }
-        return beans == null || beans.isEmpty() ? new ArrayList<>() : beans;
+        return externalLibrary == null || externalLibrary.isEmpty() ? new ExternalLibraryBean() : externalLibrary;
     }
 
-    public void setBeans(List<ExternalLibraryBean> beans) {
-        FileUtil.writeFile(dataPath, new Gson().toJson(beans != null ? beans : new ArrayList<>()));
+    public void setBean(ExternalLibraryBean externalLibrary) {
+        FileUtil.writeFile(dataPath, new Gson().toJson(externalLibrary != null ? externalLibrary : new ExternalLibraryBean()));
     }
 
 	public List<String> get(ResourceType type) {
@@ -53,7 +56,7 @@ public class ExternalLibraryHandler {
 
 	public List<String> get(String file) {
 		List<String> jars = new ArrayList<>();
-		for (ExternalLibraryBean bean : beans) {
+		for (LibrariesBean bean : externalLibrary.getLibraries()) {
 			String path = initialPath + File.separator + bean.name + File.separator + file;
 			if (bean.useYn.equals("Y") && FileUtil.isExistFile(path)) {
 				jars.add(path);

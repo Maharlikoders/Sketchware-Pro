@@ -37,7 +37,7 @@ import a.a.a.aB;
 import a.a.a.wq;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
-import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
+import mod.elfilibustero.sketch.beans.LibrariesBean;
 import mod.elfilibustero.sketch.lib.utils.NewFileUtil;
 import mod.hey.studios.util.Helper;
 
@@ -51,7 +51,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
     private String initialPath;
     private List<String> files = new ArrayList<>();
 
-    private ExternalLibraryBean bean;
+    private LibrariesBean bean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

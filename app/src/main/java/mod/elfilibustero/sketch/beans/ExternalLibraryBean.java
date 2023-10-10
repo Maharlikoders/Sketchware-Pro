@@ -9,6 +9,7 @@ import com.google.gson.annotations.Expose;
 import com.sketchware.pro.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExternalLibraryBean implements Parcelable {
 
@@ -24,36 +25,27 @@ public class ExternalLibraryBean implements Parcelable {
         }
     };
 
-    public static final String LIB_USE_N = "N";
-    public static final String LIB_USE_Y = "Y";
-
     @Expose
-    public String name;
+    public List<DependencyBean> dependencies;
     @Expose
-    public String dependency;
-    @Expose
-    public String useYn;
+    public List<LibrariesBean> libraries;
 
     public ExternalLibraryBean() {
-        useYn = LIB_USE_N;
-        name = "";
-        dependency = "";
-    }
-
-    public ExternalLibraryBean(String newName) {
-        useYn = LIB_USE_N;
-        name = newName;
-        dependency = "";
+        dependencies = new ArrayList<>();
+        libraries = new ArrayList<>();
     }
 
     public ExternalLibraryBean(Parcel parcel) {
-        useYn = parcel.readString();
-        name = parcel.readString();
-        dependency = parcel.readString();
+        dependencies = (List<DependencyBean>) parcel.readSerializable();
+        libraries = (List<LibrariesBean>) parcel.readSerializable();
     }
 
-    public String getName() {
-        return name;
+    public List<DependencyBean> getDependencies() {
+        return dependencies;
+    }
+
+    public List<LibrariesBean> getLibraries() {
+        return libraries;
     }
 
     public static Parcelable.Creator<ExternalLibraryBean> getCreator() {
@@ -61,9 +53,8 @@ public class ExternalLibraryBean implements Parcelable {
     }
 
     public void copy(ExternalLibraryBean externalLibraryBean) {
-        useYn = externalLibraryBean.useYn;
-        name = externalLibraryBean.name;
-        dependency = externalLibraryBean.dependency;
+        dependencies = externalLibraryBean.dependencies;
+        libraries = externalLibraryBean.libraries;
     }
 
     @Override
@@ -71,18 +62,13 @@ public class ExternalLibraryBean implements Parcelable {
         return 0;
     }
 
-    public boolean isEnabled() {
-        return useYn != null && !useYn.isEmpty() && useYn.equals(LIB_USE_Y);
-    }
-
     public void print() {
     }
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(useYn);
-        parcel.writeString(name);
-        parcel.writeString(dependency);
+        parcel.writeSerializable(dependencies);
+        parcel.writeSerializable(libraries);
     }
 
     @Override

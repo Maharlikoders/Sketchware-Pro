@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.besome.sketch.design.BuildingDialog;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,15 +34,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import a.a.a.wq;
+import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.DependencyBean;
 import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
+import mod.elfilibustero.sketch.beans.LibrariesBean;
 import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.elfilibustero.sketch.lib.utils.NewFileUtil;
 import mod.hey.studios.util.Helper;
+import mod.jbk.build.BuiltInLibraries;
+import mod.pranav.dependency.resolver.DependencyResolver;
 
 public class ManageExternalLibraryActivity extends AppCompatActivity {
 
@@ -50,18 +58,15 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private String initialPath;
 
     private LibraryAdapter adapter;
-    private List<ExternalLibraryBean> beans = new ArrayList<>();
-    private List<ExternalLibraryBean> temps = new ArrayList<>();
+
+    private ExternalLibraryBean externalLibrary;
+    private List<LibrariesBean> beans = new ArrayList<>();
+    private List<LibrariesBean> temps = new ArrayList<>();
+    private List<DependencyBean> dependencies = new ArrayList<>();
 
     private ExternalLibraryHandler handler;
 
     private final ActivityResultLauncher<Intent> openLibraryManager = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() == RESULT_OK) {
-            loadLibraries();
-        }
-    });
-
-    private final ActivityResultLauncher<Intent> downloadLibrary = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK) {
             loadLibraries();
         }
@@ -89,6 +94,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
 
         handler = new ExternalLibraryHandler(sc_id);
+        externalLibrary = handler.externalLibrary;
         initialPath = handler.initialPath;
         FileUtil.makeDir(initialPath);
 
@@ -101,7 +107,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
             openLibraryManager.launch(intent);
         });
         loadLibraries();
-        binding.fab.setOnClickListener(v -> downloadLibrary());
+        binding.fab.setOnClickListener(v -> addLibrary());
     }
 
     @Override
@@ -111,26 +117,19 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.manage_elibrary_menu, menu);
+        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == 0) {
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
+        if (itemId == R.id.menu_refresh) {
+            downloadLibrary();
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(menuItem);
     }
 
     @Override
@@ -141,12 +140,13 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private void loadLibraries() {
         beans.clear();
         try {
-            temps = handler.getBeans();
+            temps = handler.getLibraries();
         } catch (Exception e) {
         }
         try {
             beans.addAll(getExternalLibraries());
-            handler.setBeans(beans);
+            externalLibrary.libraries = beans;
+            handler.setBean(externalLibrary);
         } catch (IOException e) {
         }
         if (beans == null || beans.isEmpty()) {
@@ -159,13 +159,13 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private List<ExternalLibraryBean> getExternalLibraries() throws IOException {
-        List<ExternalLibraryBean> beans = new ArrayList<>();
+    private List<LibrariesBean> getExternalLibraries() throws IOException {
+        List<LibrariesBean> beans = new ArrayList<>();
         List<String> names = NewFileUtil.listDir(initialPath, NewFileUtil.TYPE_DIRECTORY);
         for (String name : names) {
-            ExternalLibraryBean bean = getExternalLibrary(name);
+            LibrariesBean bean = getExternalLibrary(name);
             if (bean == null) {
-                bean = new ExternalLibraryBean(name);
+                bean = new LibrariesBean(name);
             }
             String dependencies = getDependencies(name);
             if (FileUtil.isExistFile(dependencies)) {
@@ -180,15 +180,15 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         return initialPath + "/" + name + "/" + "dependencies";
     }
 
-    private void downloadLibrary() {
+    private void addLibrary() {
         Intent intent = new Intent(getApplicationContext(), ManageExternalAddLibraryActivity.class);
         intent.putExtra("sc_id", sc_id);
-        openLibraryManager.launch(intent);
+        startActivity(intent);
     }
 
-    private ExternalLibraryBean getExternalLibrary(String name) {
+    private LibrariesBean getExternalLibrary(String name) {
         for (int i = 0; i < temps.size(); i++) {
-            ExternalLibraryBean bean = temps.get(i);
+            LibrariesBean bean = temps.get(i);
             if (bean.name.equals(name)) {
                 return bean;
             }
@@ -198,7 +198,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
     private boolean isContainsLibrary(String name) {
         if (temps != null && !temps.isEmpty()) {
-            for (ExternalLibraryBean bean : temps) {
+            for (LibrariesBean bean : temps) {
                 if (bean.name.equals(name)) {
                     return true;
                 }
@@ -207,11 +207,105 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         return false;
     }
 
+    private void downloadLibrary() {
+        var dialog = new BuildingDialog(this);
+        dialog.setCancelable(false);
+        dialog.setIsCancelableOnBackPressed(false);
+        var resolver = new DependencyResolver(externalLibrary.getDependencies());
+        resolver.setScId(sc_id);
+        resolver.skipSubDependencies(false);
+        var handler = new Handler(Looper.getMainLooper());
+
+        class SetTextRunnable implements Runnable {
+
+            private final String message;
+
+            SetTextRunnable(String message) {
+                this.message = message;
+            }
+
+            @Override
+            public void run() {
+                dialog.setProgress(message);
+            }
+        }
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            BuiltInLibraries.maybeExtractAndroidJar(progress -> handler.post(new SetTextRunnable(progress)));
+            BuiltInLibraries.maybeExtractCoreLambdaStubsJar();
+
+            resolver.resolveDependency(new DependencyResolver.DependencyResolverCallback() {
+                @Override
+                public void invalidPackaging(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Invalid packaging for dependency " + dep));
+                }
+
+                @Override
+                public void dexing(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Dexing dependency " + dep));
+                }
+
+                @Override
+                public void dexingFailed(@NonNull String dependency, @NonNull Exception e) {
+                    handler.post(() -> {
+                        SketchwareUtil.showAnErrorOccurredDialog(ManageExternalLibraryActivity.this,
+                            "Dexing dependency '" + dependency + "' failed: " + Log.getStackTraceString(e));
+                    });
+                }
+
+                @Override
+                public void log(@NonNull String msg) {
+                    handler.post(new SetTextRunnable(msg));
+                }
+
+                @Override
+                public void downloading(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Downloading dependency " + dep));
+                }
+
+                @Override
+                public void startResolving(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Resolving dependency " + dep));
+                }
+
+                @Override
+                public void onTaskCompleted(@NonNull List<String> dependencies) {
+                    handler.post(() -> {
+                        dialog.dismiss();
+                        loadLibraries();
+                    });
+                }
+
+                @Override
+                public void onDependencyNotFound(@NonNull String dep) {
+                    handler.post(() -> {
+                        SketchwareUtil.toastError("Dependency " + dep + " not found");
+                        dialog.dismiss();
+                    });
+                }
+
+                @Override
+                public void onDependencyResolveFailed(@NonNull Exception e) {
+                    handler.post(() -> {
+                        SketchwareUtil.toastError(e.getMessage());
+                        dialog.dismiss();
+                    });
+                }
+
+                @Override
+                public void onDependencyResolved(@NonNull String dep) {
+                    handler.post(new SetTextRunnable("Dependency " + dep + " resolved"));
+                }
+            });
+        });
+        dialog.show();
+    }
+
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
-        private List<ExternalLibraryBean> files;
+        private List<LibrariesBean> files;
         private OnItemClickListener itemClickListener;
 
-        public LibraryAdapter(List<ExternalLibraryBean> libraries) {
+        public LibraryAdapter(List<LibrariesBean> libraries) {
             files = libraries;
         }
 
@@ -221,7 +315,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         public interface OnItemClickListener {
 
-            void onItemClick(ExternalLibraryBean bean);
+            void onItemClick(LibrariesBean bean);
         }
 
         @NonNull
@@ -269,7 +363,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                ExternalLibraryBean bean = files.get(getAdapterPosition());
+                LibrariesBean bean = files.get(getAdapterPosition());
                 if (itemClickListener != null) {
                     itemClickListener.onItemClick(bean);
                 }

@@ -87,35 +87,19 @@ public class PullRemoteUpdates {
                 	}
                 }
                 if (hasUpdates) {
+                    PullCommand pull = git.pull();
+                    pull.setRemote("origin");
+                    pull.setRemoteBranchName(bean.branch);
+                    pull.setProgressMonitor(monitor);
+                    pull.setCredentialsProvider(credentials);
+                    pull.call();
                     ThreadUtils.runOnUiThread(() -> {
+                        success.onSuccess(true);
                         dialog.dismiss();
-
-                        var pullDialog = new aB((Activity) context);
-                        pullDialog.b("Pull");
-                        pullDialog.a("Do you want to pull changes in remote repository?");
-                        pullDialog.b("Yes", v -> {
-                            try {
-                                PullCommand pull = git.pull();
-                                pull.setRemote("origin");
-                                pull.setRemoteBranchName(bean.branch);
-                                pull.setProgressMonitor(monitor);
-                                pull.setCredentialsProvider(credentials);
-                                pull.call();
-                                success.onSuccess(true);
-                            } catch (GitAPIException e) {
-                                success.onSuccess(false);
-                            }
-                            pullDialog.dismiss();
-                        });
-                        pullDialog.a("No", v -> {
-                            success.onSuccess(false);
-                            pullDialog.dismiss();
-                        });
-                        pullDialog.show();
                     });
                 } else {
-                    success.onSuccess(false);
                 	ThreadUtils.runOnUiThread(() -> {
+                        success.onSuccess(false);
 	                    SketchwareUtil.toast("The remote branch: " + bean.branch + " is up to date.");
 	                    dialog.dismiss();
 	                });
