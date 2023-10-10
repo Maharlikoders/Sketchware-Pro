@@ -103,22 +103,19 @@ public class GitHubUtil {
 
     public CompletableFuture<Void> build() throws IOException, Exception {
         try (Repository repository = getRepository()) {
+            try {
+                buildProjectFile(repository);
+            } catch (Exception e) {
+                SketchwareUtil.toastError(e.getMessage());
+            }
             return CompletableFuture.supplyAsync(() -> {
-                try {
-                    buildProjectFile(repository);
-                } catch (Exception e) {
-                    SketchwareUtil.toastError(e.getMessage());
-                }
-                return null;
-            })
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
                     buildDataFile(repository);
                 } catch (Exception e) {
                     SketchwareUtil.toastError(e.getMessage());
                 }
                 return null;
-            }))
+            })
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
                     buildProjectResources();
@@ -192,13 +189,11 @@ public class GitHubUtil {
             throw new RuntimeException("Failed to parse project file");
         }
 
-        SketchwareUtil.toast(jsonBean);
-        /*String encrypted = SketchFileUtil.encrypt(jsonBean);
+        String encrypted = SketchFileUtil.encrypt(jsonBean);
         if (encrypted != null && !encrypted.isEmpty()) {
         } else {
             throw new RuntimeException("Failed to build project file");
         }
-        */
     }
 
     private ProjectBean getDefaultProjectFile() {
