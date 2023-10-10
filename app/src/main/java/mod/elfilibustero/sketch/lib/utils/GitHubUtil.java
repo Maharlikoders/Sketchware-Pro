@@ -103,27 +103,38 @@ public class GitHubUtil {
 
     public CompletableFuture<Void> build() throws IOException, Exception {
         try (Repository repository = getRepository()) {
-            CompletableFuture<Void> project = CompletableFuture.supplyAsync(() -> buildProjectFile(repository));
-            CompletableFuture<Void> data = project.thenComposeAsync(() -> CompletableFuture.supplyAsync(() -> buildDataFile(repository)));
-            CompletableFuture<Void> resources = data.thenComposeAsync(() -> CompletableFuture.supplyAsync(() -> buildProjectResources()));
-            CompletableFuture<Void> blocks = resources.thenComposeAsync(() -> CompletableFuture.supplyAsync(() ->  buildCustomBlock(repository)));
-            project.exeptionally(exeption -> {
-                SketchwareUtil.toastError(e.getMessage());
+            return CompletableFuture<Void> project = CompletableFuture.supplyAsync(() -> {
+                try {
+                    buildProjectFile(repository);
+                } catch (Exception e) {
+                    SketchwareUtil.toastError(e.getMessage());
+                }
                 return null;
-            });
-            data.exeptionally(exeption -> {
-                SketchwareUtil.toastError(e.getMessage());
+            })
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                try {
+                    buildDataFile(repository);
+                } catch (Exception e) {
+                    SketchwareUtil.toastError(e.getMessage());
+                }
                 return null;
-            });
-            resources.exeptionally(exeption -> {
-                SketchwareUtil.toastError(e.getMessage());
+            }))
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                try {
+                    buildProjectResources();
+                } catch (Exception e) {
+                    SketchwareUtil.toastError(e.getMessage());
+                }
                 return null;
-            });
-            blocks.exeptionally(exeption -> {
-                SketchwareUtil.toastError(e.getMessage());
+            }))
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                try {
+                    buildCustomBlock(repository);
+                } catch (Exception e) {
+                    SketchwareUtil.toastError(e.getMessage());
+                }
                 return null;
-            });
-            return blocks.get();
+            }));
         }
     }
 
