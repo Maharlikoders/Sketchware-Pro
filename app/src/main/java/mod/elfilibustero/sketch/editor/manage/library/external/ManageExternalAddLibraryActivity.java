@@ -106,7 +106,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
             SketchwareUtil.toastError("Please enter Version Name");
             return;
         }
-        dependencies.add(new DependencyBean.Companion.from(groupId + ":" + artifactId + ":" + version));
+        dependencies.add(DependencyBean.Companion.from(groupId + ":" + artifactId + ":" + version));
         externalLibrary.setDependencies(dependencies);
         handler.setBean(externalLibrary);
         loadDependencies();
@@ -124,7 +124,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         private OnItemClickListener itemClickListener;
         private final List<DependencyBean> dependencies;
 
-        public LibraryAdapter(List<String> dependencies) {
+        public LibraryAdapter(List<DependencyBean> dependencies) {
             this.dependencies = dependencies;
         }
 
@@ -146,8 +146,8 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
 
         @Override
         public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
-            var name = dependencies.get(position);
-            holder.name.setText(name);
+            var dependency = dependencies.get(position);
+            holder.name.setText(dependency.toString());
         }
 
         @Override
