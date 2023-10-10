@@ -102,36 +102,16 @@ public class GitHubUtil {
     }
 
     public CompletableFuture<Void> build() throws IOException, Exception {
-        Executor executor = Executors.newSingleThreadExecutor();
         try (Repository repository = getRepository()) {
-            return CompletableFuture.supplyAsync(() -> {
-                try {
-                    buildProjectFile(repository);
-                } catch (Exception e) {
-                    SketchwareUtil.toastError(e.toString());
-                }
-                return null;
-            }, executor)
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
-                try {
-                    buildDataFile(repository);
-                } catch (Exception e) {
-                    SketchwareUtil.toastError(e.toString());
-                }
-                return null;
-            }, executor))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
-                buildProjectResources();
-                return null;
-            }, executor))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
-                try {
-                    buildCustomBlock(repository);
-                } catch (Exception e) {
-                    SketchwareUtil.toastError(e.toString());
-                }
-                return null;
-            }, executor));
+            CompletableFuture<Void> project = CompletableFuture.supplyAsync(() -> buildProjectFile(repository));
+            CompletableFuture<Void> data = project.thenComposeAsync(() -> CompletableFuture.supplyAsync(() -> buildDataFile(repository)));
+            CompletableFuture<Void> resources = data.thenComposeAsync(() -> CompletableFuture.supplyAsync(() -> buildProjectResources()));
+            CompletableFuture<Void> blocks = resources.thenComposeAsync(() -> CompletableFuture.supplyAsync(() ->  buildCustomBlock(repository)));
+            project.exeptionally(exeption -> SketchwareUtil.toastError(e.getMessage()));
+            data.exeptionally(exeption -> SketchwareUtil.toastError(e.getMessage()));
+            resources.exeptionally(exeption -> SketchwareUtil.toastError(e.getMessage()));
+            blocks.exeptionally(exeption -> SketchwareUtil.toastError(e.getMessage()));
+            return blocks.get();
         }
     }
 
@@ -297,80 +277,71 @@ public class GitHubUtil {
         String data = wq.b(sc_id);
         String errorMessage = "%s data not found";
         FileUtil.makeDir(data + "/");
-        try {
-            String file = FileUtil.readFile(getFile(getGitHubProject("src")));
-            //if (!isFileExists(repository, getFile("src"))) {
-            //    throw new FileNotFoundException(String.format(errorMessage, "File"));
-            //}
-            if (isFileExists(repository, getFile("src"))) {
-                if (!SketchFileUtil.encrypt(file, getFile(data))) {
-                    throw new RuntimeException("Failed to build file data");
-                }
-            } else if (!SketchFileUtil.encrypt(getDefaultFileData(), getFile(data))) {
+        String file = FileUtil.readFile(getFile(getGitHubProject("src")));
+        //if (!isFileExists(repository, getFile("src"))) {
+        //    throw new FileNotFoundException(String.format(errorMessage, "File"));
+        //}
+        if (isFileExists(repository, getFile("src"))) {
+            if (!SketchFileUtil.encrypt(file, getFile(data))) {
                 throw new RuntimeException("Failed to build file data");
             }
-            
+        } else if (!SketchFileUtil.encrypt(getDefaultFileData(), getFile(data))) {
+            throw new RuntimeException("Failed to build file data");
+        }
 
-            String library = FileUtil.readFile(getLibrary(getGitHubProject("src")));
-            //if (!isFileExists(repository, getLibrary("src"))) {
-            //   throw new FileNotFoundException(String.format(errorMessage, "Library"));
-            //}
-
-            if (isFileExists(repository, getLibrary("src"))) {
-                if (!SketchFileUtil.encrypt(library, getLibrary(data))) {
-                    throw new RuntimeException("Failed to build library data");
-                }
-            } else if (!SketchFileUtil.encrypt(getDefaultLibraryData(), getLibrary(data))) {
+        String library = FileUtil.readFile(getLibrary(getGitHubProject("src")));
+        //if (!isFileExists(repository, getLibrary("src"))) {
+        //   throw new FileNotFoundException(String.format(errorMessage, "Library"));
+        //}
+        if (isFileExists(repository, getLibrary("src"))) {
+            if (!SketchFileUtil.encrypt(library, getLibrary(data))) {
                 throw new RuntimeException("Failed to build library data");
             }
+        } else if (!SketchFileUtil.encrypt(getDefaultLibraryData(), getLibrary(data))) {
+            throw new RuntimeException("Failed to build library data");
+        }
 
-            String logic = FileUtil.readFile(getLogic(getGitHubProject("src")));
-            //if (!isFileExists(repository, getLogic("src"))) {
-            //    throw new FileNotFoundException(String.format(errorMessage, "Logic"));
-            //}
-
-            if (isFileExists(repository, getLogic("src"))) {
-                if (!SketchFileUtil.encrypt(logic, getLogic(data))) {
-                    throw new RuntimeException("Failed to build logic data");
-                }
-            } else {
-                FileUtil.writeFile(getLogic(data), "");
+        String logic = FileUtil.readFile(getLogic(getGitHubProject("src")));
+        //if (!isFileExists(repository, getLogic("src"))) {
+        //    throw new FileNotFoundException(String.format(errorMessage, "Logic"));
+        //}
+        if (isFileExists(repository, getLogic("src"))) {
+            if (!SketchFileUtil.encrypt(logic, getLogic(data))) {
+                throw new RuntimeException("Failed to build logic data");
             }
+        } else {
+            FileUtil.writeFile(getLogic(data), "");
+        }
 
-            String res = FileUtil.readFile(getResource(getGitHubProject("src")));
-            //if (!isFileExists(repository, getResource("src"))) {
-            //    throw new FileNotFoundException(String.format(errorMessage, "Resource"));
-            //}
-
-            if (isFileExists(repository, getResource("src"))) {
-                if (!SketchFileUtil.encrypt(res, getResource(data))) {
-                    throw new RuntimeException("Failed to build resource data");
-                }
-            } else if (!SketchFileUtil.encrypt(getDefaultResourceData(), getResource(data))) {
+        String res = FileUtil.readFile(getResource(getGitHubProject("src")));
+        //if (!isFileExists(repository, getResource("src"))) {
+        //    throw new FileNotFoundException(String.format(errorMessage, "Resource"));
+        //}
+        if (isFileExists(repository, getResource("src"))) {
+            if (!SketchFileUtil.encrypt(res, getResource(data))) {
                 throw new RuntimeException("Failed to build resource data");
             }
+        } else if (!SketchFileUtil.encrypt(getDefaultResourceData(), getResource(data))) {
+            throw new RuntimeException("Failed to build resource data");
+        }
 
-            String view = FileUtil.readFile(getView(getGitHubProject("src")));
-            //if (!isFileExists(repository, getView("src"))) {
-            //    throw new FileNotFoundException(String.format(errorMessage, "View"));
-            //}
-
-            if (isFileExists(repository, getView("src"))) {
-                if (!SketchFileUtil.encrypt(view, getView(data))) {
-                    throw new RuntimeException("Failed to build view data");
-                }
-            } else if (!SketchFileUtil.encrypt(getDefaultViewData(), getView(data))) {
+        String view = FileUtil.readFile(getView(getGitHubProject("src")));
+        //if (!isFileExists(repository, getView("src"))) {
+        //    throw new FileNotFoundException(String.format(errorMessage, "View"));
+        //}
+        if (isFileExists(repository, getView("src"))) {
+            if (!SketchFileUtil.encrypt(view, getView(data))) {
                 throw new RuntimeException("Failed to build view data");
             }
-
-            String srcDataDir = getGitHubProject("src/data");
-            if (!FileUtil.isDirectory(srcDataDir)) {
-                return;
-            }
-            NewFileUtil.copyDir(srcDataDir, data);
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
+        } else if (!SketchFileUtil.encrypt(getDefaultViewData(), getView(data))) {
+            throw new RuntimeException("Failed to build view data");
         }
+
+        String srcDataDir = getGitHubProject("src/data");
+        if (!FileUtil.isDirectory(srcDataDir)) {
+            return;
+        }
+        NewFileUtil.copyDir(srcDataDir, data);
     }
 
     private void buildProjectResources() {
@@ -393,7 +364,7 @@ public class GitHubUtil {
         }
     }
 
-    private void buildCustomBlock(Repository repository) throws IOException {
+    private void buildCustomBlock(Repository repository) throws Exception {
         String srcBlockInfo = getGitHubProject("src/block/custom_blocks");
         if (isFileExists(repository, "src/block/custom_blocks")) {
             FileUtil.copyFile(srcBlockInfo, wq.b(sc_id));
@@ -402,16 +373,12 @@ public class GitHubUtil {
         String customBlockDataPath = FileUtil.getExternalStorageDir() + File.separator + wq.l + File.separator + "block" + File.separator + sc_id + File.separator + "data.json";
         if (isFileExists(repository, "src/block/blocks.json")) {
             ArrayList<HashMap<String, Object>> custom_blocks = new ArrayList<>();
-            try {
-                ArrayList<HashMap<String, Object>> blocks = new Gson().fromJson(FileUtil.readFile(srcBlocks), Helper.TYPE_MAP_LIST);
-                if (FileUtil.isExistFile(customBlockDataPath)) {
-                    custom_blocks = new Gson().fromJson(FileUtil.readFile(customBlockDataPath), Helper.TYPE_MAP_LIST);
-                }
-                custom_blocks.addAll(blocks);
-                FileUtil.writeFile(customBlockDataPath, new Gson().toJson(custom_blocks));
-            } catch (Exception e) {
-                e.printStackTrace();
+            ArrayList<HashMap<String, Object>> blocks = new Gson().fromJson(FileUtil.readFile(srcBlocks), Helper.TYPE_MAP_LIST);
+            if (FileUtil.isExistFile(customBlockDataPath)) {
+                custom_blocks = new Gson().fromJson(FileUtil.readFile(customBlockDataPath), Helper.TYPE_MAP_LIST);
             }
+            custom_blocks.addAll(blocks);
+            FileUtil.writeFile(customBlockDataPath, new Gson().toJson(custom_blocks));
         }
     }
 
