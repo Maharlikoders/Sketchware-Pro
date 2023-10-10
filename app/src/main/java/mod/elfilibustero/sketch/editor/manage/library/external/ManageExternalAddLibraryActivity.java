@@ -83,7 +83,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         binding.add.setOnClickListener(this);
         binding.add.setText("Add dependency");
         handler = new ExternalLibraryHandler(sc_id);
-        temps = handler.externalLibrary.getDependencies();
+        temp = handler.externalLibrary.getDependencies();
         adapter = new LibraryAdapter(dependencies);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
@@ -116,12 +116,12 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         }
 
         DependencyBean dependency = DependencyBean.Companion.from(groupId + ":" + artifactId + ":" + version);
-        if (dependency.contains(dependency)) {
+        if (dependencies.contains(dependency)) {
             SketchwareUtil.toastError("Dependency: " + dependency.toString() + " already exists");
             return;
         }
 
-        dependencies.add(DependencyBean.Companion.from(dependency));
+        dependencies.add(dependency);
         externalLibrary.setDependencies(dependencies);
         handler.setBean(externalLibrary);
         binding.group.setText("");
