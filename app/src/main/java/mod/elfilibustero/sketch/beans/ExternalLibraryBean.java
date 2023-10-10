@@ -1,43 +1,22 @@
 package mod.elfilibustero.sketch.beans;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
-
-import com.google.gson.annotations.Expose;
-import com.sketchware.pro.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExternalLibraryBean implements Parcelable {
+public class ExternalLibraryBean {
 
-    public static final Parcelable.Creator<ExternalLibraryBean> CREATOR = new Parcelable.Creator<>() {
-        @Override
-        public ExternalLibraryBean createFromParcel(Parcel source) {
-            return new ExternalLibraryBean(source);
-        }
-
-        @Override
-        public ExternalLibraryBean[] newArray(int size) {
-            return new ExternalLibraryBean[size];
-        }
-    };
-
-    @Expose
-    public List<DependencyBean> dependencies;
-    @Expose
-    public List<LibrariesBean> libraries;
+    private List<DependencyBean> dependencies;
+    private List<LibrariesBean> libraries;
 
     public ExternalLibraryBean() {
-        dependencies = new ArrayList<>();
-        libraries = new ArrayList<>();
     }
 
-    public ExternalLibraryBean(Parcel parcel) {
-        dependencies = (List<DependencyBean>) parcel.readSerializable();
-        libraries = (List<LibrariesBean>) parcel.readSerializable();
+    public void setDependencies(List<DependencyBean> beans) {
+        dependencies = beans;
+    }
+
+    public void setLibraries(List<LibrariesBean> beans) {
+        libraries = beans;
     }
 
     public List<DependencyBean> getDependencies() {
@@ -46,36 +25,5 @@ public class ExternalLibraryBean implements Parcelable {
 
     public List<LibrariesBean> getLibraries() {
         return libraries;
-    }
-
-    public static Parcelable.Creator<ExternalLibraryBean> getCreator() {
-        return CREATOR;
-    }
-
-    public void copy(ExternalLibraryBean externalLibraryBean) {
-        dependencies = new ArrayList<>(externalLibraryBean.dependencies);
-        libraries = new ArrayList<>(externalLibraryBean.libraries);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public void print() {
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeSerializable((List<DependencyBean>)dependencies);
-        parcel.writeSerializable((List<LibrariesBean>)libraries);
-    }
-
-    @Override
-    @NonNull
-    public ExternalLibraryBean clone() {
-        ExternalLibraryBean externalLibraryBean = new ExternalLibraryBean();
-        externalLibraryBean.copy(this);
-        return externalLibraryBean;
     }
 }

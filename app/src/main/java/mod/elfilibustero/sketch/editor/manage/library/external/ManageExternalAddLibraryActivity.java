@@ -11,12 +11,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.appbar.MaterialToolbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sketchware.pro.R;
 import com.sketchware.pro.databinding.ManageExternalAddLibraryBinding;
 
 import mod.SketchwareUtil;
+import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.hey.studios.util.Helper;
@@ -25,6 +27,10 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
 
     private ManageExternalAddLibraryBinding binding;
     private String sc_id;
+    private ExternalLibraryHandler handler;
+    private ExternalLibraryBean externalLibrary;
+    private List<DependencyBean> dependencies = new ArrayList<>();
+    private LibraryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,13 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
         binding.add.setOnClickListener(this);
         binding.add.setText("Add dependency");
+        handler = new ExternalLibraryHandler(sc_id);
+        adapter = new LibraryAdapter(dependencies);
+        binding.recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(position -> {
+
+        });
+        loadDependencies();
     }
 
     private void addDependency() {
@@ -88,10 +101,70 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
             SketchwareUtil.toastError("Please enter Version Name");
             return;
         }
-        //downloadLibrary(groupId, artifactId, version, switchLib.isChecked());
+        dependencies.add(new DependencyBean.Companion.from(groupId + ":" + artifactId + ":" + version));
+        externalLibrary.setDependencies(dependencies);
+        handler.setBean(externalLibrary);
+        loadDependencies();
     }
 
     private void loadDependencies() {
+        externalLibrary = handler.getBean();
+        dependencies.clear();
+        dependencies.addAll(externalLibrary.getDependencies());
+        adapter.notifyDataSetChanged();
+    }
 
+    public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
+
+        private OnItemClickListener itemClickListener;
+        private final List<DependencyBean> dependencies;
+
+        public LibraryAdapter(List<String> dependencies) {
+            this.dependencies = dependencies;
+        }
+
+        public void setOnItemClickListener(OnItemClickListener listener) {
+            this.itemClickListener = listener;
+        }
+
+        public interface OnItemClickListener {
+
+            void onItemClick(DependencyBean bean);
+        }
+
+        @NonNull
+        @Override
+        public FileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.manage_external_library_item_list_item, parent, false);
+            return new FileViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull FileViewHolder holder, int position) {
+            var name = dependencies.get(position);
+            holder.name.setText(name);
+        }
+
+        @Override
+        public int getItemCount() {
+            return dependencies.size();
+        }
+
+        public class FileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            public final TextView name;
+
+            public FileViewHolder(@NonNull View itemView) {
+                super(itemView);
+                name = itemView.findViewById(R.id.name);
+                itemView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View view) {
+                if (itemClickListener != null) {
+                    itemClickListener.onItemClick(dependencies.get(getAdapterPosition()));
+                }
+            }
+        }
     }
 }

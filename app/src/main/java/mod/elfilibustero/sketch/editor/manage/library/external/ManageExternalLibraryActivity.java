@@ -127,7 +127,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         int itemId = menuItem.getItemId();
-        if (itemId == R.id.menu_refresh) {
+        if (itemId == R.id.menu_refresh_library) {
             downloadLibrary();
             return true;
         }
@@ -142,12 +142,12 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private void loadLibraries() {
         beans.clear();
         try {
-            temps = externalLibrary.libraries;
+            temps = externalLibrary.getLibraries();
         } catch (Exception e) {
         }
         try {
             beans.addAll(getExternalLibraries());
-            externalLibrary.libraries = beans;
+            externalLibrary.setLibraries(beans);
             handler.setBean(externalLibrary);
         } catch (IOException e) {
         }
