@@ -9,6 +9,8 @@ public class ExternalLibraryBean {
     private List<LibrariesBean> libraries;
 
     public ExternalLibraryBean() {
+        dependencies = new ArrayList<>();
+        libraries = new ArrayList<>();
     }
 
     public void setDependencies(List<DependencyBean> beans) {

@@ -74,6 +74,12 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         }
     });
 
+    private final ActivityResultLauncher<Intent> addLibraryManager = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == RESULT_OK) {
+            externalLibrary = handler.getBean();
+        }
+    });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +102,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
 
         handler = new ExternalLibraryHandler(sc_id);
-        externalLibrary = handler.externalLibrary;
+        externalLibrary = handler.getBean();
         initialPath = handler.initialPath;
         FileUtil.makeDir(initialPath);
 
@@ -185,7 +191,8 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     private void addLibrary() {
         Intent intent = new Intent(getApplicationContext(), ManageExternalAddLibraryActivity.class);
         intent.putExtra("sc_id", sc_id);
-        startActivity(intent);
+        intent.putExtra("dependencies", dependencies);
+        addLibraryManager.launch(intent);
     }
 
     private LibrariesBean getExternalLibrary(String name) {

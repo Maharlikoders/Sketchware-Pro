@@ -34,6 +34,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
     private String sc_id;
     private ExternalLibraryHandler handler;
     private ExternalLibraryBean externalLibrary;
+    private List<DependencyBean> temp = new ArrayList<>();
     private List<DependencyBean> dependencies = new ArrayList<>();
     private LibraryAdapter adapter;
 
@@ -52,7 +53,10 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (!temp.equals(dependencies)) {
+            setResult(RESULT_OK, new Intent());
+        }
+        finish();
     }
 
     @Override
@@ -93,22 +97,35 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         String version = binding.version.getText().toString();
 
         if (TextUtils.isEmpty(groupId)) {
+            binding.group.requestFocus();
             SketchwareUtil.toastError("Please enter Group ID");
             return;
         }
 
         if (TextUtils.isEmpty(artifactId)) {
+            binding.artifact.requestFocus();
             SketchwareUtil.toastError("Please enter Artifact ID");
             return;
         }
 
         if (TextUtils.isEmpty(version)) {
+            binding.version.requestFocus();
             SketchwareUtil.toastError("Please enter Version Name");
             return;
         }
-        dependencies.add(DependencyBean.Companion.from(groupId + ":" + artifactId + ":" + version));
+
+        DependencyBean dependency = DependencyBean.Companion.from(groupId + ":" + artifactId + ":" + version);
+        if (dependency.contains(dependency)) {
+            SketchwareUtil.toastError("Dependency: " + dependency.toString() + " already exists");
+            return;
+        }
+
+        dependencies.add(DependencyBean.Companion.from(dependency));
         externalLibrary.setDependencies(dependencies);
         handler.setBean(externalLibrary);
+        binding.group.setText("");
+        binding.artifact.setText("");
+        binding.version.setText("");
         loadDependencies();
     }
 
