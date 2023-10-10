@@ -11,6 +11,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -70,8 +71,25 @@ public class NewFileUtil {
 						default -> true;
 					};
 				});
-			subDirStream.forEach(entry -> contents.add(entry.getFileName().toString()));
-			return contents;
+			List<String> directories = new ArrayList<>();
+        List<String> files = new ArrayList<>();
+        subDirStream.forEach(entry -> {
+            if (entry.isDirectory()) {
+                directories.add(entry.getFileName().toString());
+            } else {
+                files.add(entry.getFileName().toString());
+            }
+        });
+
+        // Sort the directories and files alphabetically
+        directories.sort(Collections.naturalOrder());
+        files.sort(Collections.naturalOrder());
+
+        // Add the directories and files to the final list
+        contents.addAll(directories);
+        contents.addAll(files);
+
+        return contents;
 		}
 	}
 
