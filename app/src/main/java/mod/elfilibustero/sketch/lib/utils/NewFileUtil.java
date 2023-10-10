@@ -74,7 +74,7 @@ public class NewFileUtil {
 			List<String> directories = new ArrayList<>();
         List<String> files = new ArrayList<>();
         subDirStream.forEach(entry -> {
-            if (entry.isDirectory()) {
+            if (Files.isDirectory(entry)) {
                 directories.add(entry.getFileName().toString());
             } else {
                 files.add(entry.getFileName().toString());
@@ -82,8 +82,8 @@ public class NewFileUtil {
         });
 
         // Sort the directories and files alphabetically
-        directories.sort(Collections.naturalOrder());
-        files.sort(Collections.naturalOrder());
+			Collections.sort(directories, String.CASE_INSENSITIVE_ORDER);
+        Collections.sort(files, String.CASE_INSENSITIVE_ORDER);
 
         // Add the directories and files to the final list
         contents.addAll(directories);
