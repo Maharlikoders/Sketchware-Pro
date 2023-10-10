@@ -107,10 +107,22 @@ public class GitHubUtil {
             CompletableFuture<Void> data = project.thenComposeAsync(() -> CompletableFuture.supplyAsync(() -> buildDataFile(repository)));
             CompletableFuture<Void> resources = data.thenComposeAsync(() -> CompletableFuture.supplyAsync(() -> buildProjectResources()));
             CompletableFuture<Void> blocks = resources.thenComposeAsync(() -> CompletableFuture.supplyAsync(() ->  buildCustomBlock(repository)));
-            project.exeptionally(exeption -> SketchwareUtil.toastError(e.getMessage()));
-            data.exeptionally(exeption -> SketchwareUtil.toastError(e.getMessage()));
-            resources.exeptionally(exeption -> SketchwareUtil.toastError(e.getMessage()));
-            blocks.exeptionally(exeption -> SketchwareUtil.toastError(e.getMessage()));
+            project.exeptionally(exeption -> {
+                SketchwareUtil.toastError(e.getMessage());
+                return null;
+            });
+            data.exeptionally(exeption -> {
+                SketchwareUtil.toastError(e.getMessage());
+                return null;
+            });
+            resources.exeptionally(exeption -> {
+                SketchwareUtil.toastError(e.getMessage());
+                return null;
+            });
+            blocks.exeptionally(exeption -> {
+                SketchwareUtil.toastError(e.getMessage());
+                return null;
+            });
             return blocks.get();
         }
     }
