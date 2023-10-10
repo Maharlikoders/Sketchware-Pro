@@ -103,14 +103,9 @@ public class GitHubUtil {
 
     public CompletableFuture<Void> build() throws IOException, Exception {
         try (Repository repository = getRepository()) {
-            try {
-                buildProjectFile(repository);
-            } catch (Exception e) {
-                SketchwareUtil.toastError(e.getMessage());
-            }
             return CompletableFuture.supplyAsync(() -> {
                 try {
-                    buildDataFile(repository);
+                    buildCustomBlock(repository);
                 } catch (Exception e) {
                     SketchwareUtil.toastError(e.getMessage());
                 }
@@ -126,7 +121,15 @@ public class GitHubUtil {
             }))
             .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
-                    buildCustomBlock(repository);
+                    buildDataFile(repository);
+                } catch (Exception e) {
+                    SketchwareUtil.toastError(e.getMessage());
+                }
+                return null;
+            }))
+            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                try {
+                    buildProjectFile(repository);
                 } catch (Exception e) {
                     SketchwareUtil.toastError(e.getMessage());
                 }
