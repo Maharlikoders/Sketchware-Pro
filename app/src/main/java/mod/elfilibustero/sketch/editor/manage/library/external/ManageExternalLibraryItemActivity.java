@@ -152,7 +152,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
             SketchwareUtil.toastError("Directory not exists: " + initialPath);
         }
         Intent intent = new Intent();
-        intent.setDataAndType(Uri.fromFile(initialPath), "application/*");
+        intent.setDataAndType(Uri.fromFile(new File(initialPath)), "application/*");
         startActivity(intent);
     }
 
