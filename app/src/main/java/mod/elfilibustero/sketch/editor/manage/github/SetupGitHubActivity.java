@@ -246,7 +246,9 @@ public class SetupGitHubActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void goToGitHub() {
-        startActivity(new Intent(getApplicationContext(), ManageGitHubSettingActivity.class));
+        Intent intent = new Intent(getApplicationContext(), ManageGitHubSettingActivity.class);
+        intent.putExtra("sc_id", sc_id);
+        startActivity(intent);
         //launchUrl("https://github.com/settings");
     }
 
