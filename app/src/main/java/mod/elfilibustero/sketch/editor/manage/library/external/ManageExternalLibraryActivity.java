@@ -108,10 +108,10 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         adapter = new LibraryAdapter(beans);
         binding.recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(bean -> {
+        adapter.setOnItemClickListener(position -> {
             Intent intent = new Intent(getApplicationContext(), ManageExternalLibraryItemActivity.class);
             intent.putExtra("sc_id", sc_id);
-            intent.putExtra("library", bean);
+            intent.putExtra("position", position);
             openLibraryManager.launch(intent);
         });
         loadLibraries();
@@ -320,15 +320,40 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
     }
 
     private void selectAll() {
+        List<LibrariesBean> currentLibraries = externalLibrary.getLibraries();
+        if (currentLibraries.isEmpty()) {
+            SketchwareUtil.toast("There's nothing to select");
+            return;
+        }
+        String useValue;
+        Pair<Integer, Integer> selection = getUsedLibrary();
+        if (selection.first > selection.second) {
+            useValue = "N";
+        } else {
+            useValue = "Y";
+        }
         List<LibrariesBean> selectedLibraries = new ArrayList<>();
-        for (LibrariesBean eban : externalLibrary.getLibraries()) {
-            eban.useYn = "Y";
+        for (LibrariesBean eban : currentLibraries) {
+            eban.useYn = useValue;
             selectedLibraries.add(eban);
         }
         SketchwareUtil.toast("Select all");
         externalLibrary.setLibraries(selectedLibraries);
         handler.setBean(externalLibrary);
         loadLibraries();
+    }
+
+    private Pair<Integer, Integer> getUsedLibrary() {
+        int used = 0;
+        int unused = 0;
+        for (LibrariesBean eban : externalLibrary.getLibraries()) {
+            if (eban.useYn.equals("Y")) {
+                used++;
+            } else if (eban.useYn.equals("N")) {
+                unused++;
+            }
+        }
+        return new Pair<>(used, unused);
     }
 
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
@@ -345,7 +370,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
         public interface OnItemClickListener {
 
-            void onItemClick(LibrariesBean bean);
+            void onItemClick(int position);
         }
 
         @NonNull
@@ -393,9 +418,8 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                LibrariesBean bean = files.get(getAdapterPosition());
                 if (itemClickListener != null) {
-                    itemClickListener.onItemClick(bean);
+                    itemClickListener.onItemClick(getAdapterPosition());
                 }
             }
         }

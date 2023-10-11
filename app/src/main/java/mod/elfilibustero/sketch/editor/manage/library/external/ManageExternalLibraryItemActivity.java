@@ -2,6 +2,7 @@ package mod.elfilibustero.sketch.editor.manage.library.external;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -37,7 +38,9 @@ import a.a.a.aB;
 import a.a.a.wq;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
 import mod.elfilibustero.sketch.beans.LibrariesBean;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.elfilibustero.sketch.lib.utils.NewFileUtil;
 import mod.hey.studios.util.Helper;
 
@@ -51,7 +54,11 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
     private String initialPath;
     private List<String> files = new ArrayList<>();
 
+    private ExternalLibraryHandler handler;
+    private ExternalLibraryBean externalLibrary;
     private LibrariesBean bean;
+
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +70,6 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         } else {
             sc_id = savedInstanceState.getString("sc_id");
         }
-        bean = getIntent().getParcelableExtra("library");
         init();
     }
 
@@ -88,6 +94,11 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
     }
 
     private void init() {
+        position = getIntent().getIntExtra("position", 0);
+        handler = new ExternalLibraryHandler(sc_id);
+        externalLibrary = handler.getBean();
+        bean = externalLibrary.getLibraries().get(position);
+
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(bean.name);
@@ -102,7 +113,6 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         adapter = new LibraryAdapter(files);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
-
         });
         loadFiles();
     }
@@ -115,30 +125,10 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == 0) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+        externalLibrary.getLibraries().set(position, bean);
+        handler.setBean(externalLibrary);
+        setResult(RESULT_OK, new Intent());
+        finish();
     }
 
     private void loadFiles() {
@@ -155,6 +145,15 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
             binding.recyclerView.setVisibility(View.VISIBLE);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private void openFolder() {
+        if (!FileUtil.isExistFile(initialPath)) {
+            SketchwareUtil.toastError("Directory not exists: " + initialPath);
+        }
+        Intent intent = new Intent();
+        intent.setDataAndType(Uri.fromFile(initialPath), "application/*");
+        startActivity(intent);
     }
 
     public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.FileViewHolder> {
