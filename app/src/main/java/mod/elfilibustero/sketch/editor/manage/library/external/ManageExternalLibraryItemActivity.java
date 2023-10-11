@@ -56,6 +56,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
     private ExternalLibraryHandler handler;
     private ExternalLibraryBean externalLibrary;
+    private List<LibrariesBean> list = new ArrayList<>();
     private LibrariesBean bean;
 
     private int position;
@@ -97,7 +98,8 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         position = getIntent().getIntExtra("position", 0);
         handler = new ExternalLibraryHandler(sc_id);
         externalLibrary = handler.getBean();
-        bean = externalLibrary.getLibraries().get(position);
+        list = externalLibrary.getLibraries();
+        bean = list.get(position);
 
         MaterialToolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
@@ -108,6 +110,7 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
         binding.layoutSwitch.setOnClickListener(this);
         binding.openFile.setOnClickListener(this);
         binding.openFile.setText("Open");
+        binding.libSwitch.setChecked(bean.useYn.equals("Y"));
 
         initialPath = wq.getExternalLibrary(sc_id) + "/" + bean.name;
         adapter = new LibraryAdapter(files);
@@ -125,7 +128,8 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
 
     @Override
     public void onBackPressed() {
-        externalLibrary.getLibraries().set(position, bean);
+        list.set(position, bean);
+        externalLibrary.setLibraries(list);
         handler.setBean(externalLibrary);
         setResult(RESULT_OK, new Intent());
         finish();

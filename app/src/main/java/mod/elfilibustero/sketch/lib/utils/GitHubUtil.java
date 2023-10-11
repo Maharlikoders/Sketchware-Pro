@@ -51,14 +51,26 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import a.a.a.GB;
+import a.a.a.KB;
+import a.a.a.MA;
+import a.a.a.ProjectBuilder;
+import a.a.a.aB;
+import a.a.a.eC;
+import a.a.a.hC;
+import a.a.a.iC;
+import a.a.a.kC;
 import a.a.a.lC;
+import a.a.a.oB;
 import a.a.a.wq;
+import a.a.a.xq;
 import a.a.a.yB;
+import a.a.a.yq;
 
 import com.besome.sketch.SketchApplication;
 import com.besome.sketch.beans.BlockBean;
 
 import mod.SketchwareUtil;
+import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.GitCommitBean;
 import mod.elfilibustero.sketch.beans.GitHubBean;
@@ -71,9 +83,12 @@ import mod.hey.studios.util.Helper;
 
 public class GitHubUtil {
 
+    private final oB file_utility = new oB();
+
     private final String sc_id;
     private final String path;
     private Map<String, Object> project;
+    private yq project_metadata = null;
 
     public static final List<String> PROJECT_DATA_FILE = Arrays.asList("file", "library", "logic", "resource", "view", "github");
     public static final List<String> PROJECT_RESOURCES_FOLDER = Arrays.asList("fonts", "icons", "images", "sounds");
@@ -82,6 +97,7 @@ public class GitHubUtil {
         this.sc_id = sc_id;
         path = wq.b(sc_id) + File.separator + "github";
         project = lC.b(sc_id);
+        project_metadata = new yq(SketchApplication.getContext(), wq.d(sc_id), project);
     }
 
     public GitHubBean getBean() {
@@ -111,7 +127,7 @@ public class GitHubUtil {
                 }
                 return null;
             })
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
                     buildProjectResources();
                 } catch (Exception e) {
@@ -119,7 +135,7 @@ public class GitHubUtil {
                 }
                 return null;
             }))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
                     buildDataFile(repository);
                 } catch (Exception e) {
@@ -127,7 +143,7 @@ public class GitHubUtil {
                 }
                 return null;
             }))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
                     buildProjectFile(repository);
                 } catch (Exception e) {
@@ -160,7 +176,7 @@ public class GitHubUtil {
         String projectPath = getGitHubProject("project.json");
         String toProjectPath = wq.c(sc_id) + File.separator + "project";
         FileUtil.makeDir(wq.c(sc_id));
-        
+
         if (!isFileExists(repository, "project.json")) {
             throw new Exception("Project file does not exist");
         }
@@ -412,22 +428,22 @@ public class GitHubUtil {
                 generateProjectFile();
                 return null;
             }, executor)
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 //Project File (.sketchware/mysc/list/sc_id/project)
                 generateProjectFile();
                 return null;
             }, executor))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 //Project Data (.sketchware/data/sc_id/)
                 generateProjectData();
                 return null;
             }, executor))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 //Project Resources
                 generateProjectResources();
                 return null;
             }, executor))
-            .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 //Custom Block
                 generateCustomBlock();
                 return null;
@@ -506,7 +522,7 @@ public class GitHubUtil {
             } else {
                 FileUtil.deleteFile(toInjections);
             }
-            
+
         } catch (Exception ignored) {
         }
     }
@@ -561,6 +577,73 @@ public class GitHubUtil {
             }
         }
 
+    }
+
+    public void generateSrc() throws Exception {
+        hC fileManager = new hC(sc_id);
+        kC resourceManager = new kC(sc_id);
+        eC logicManager = new eC(sc_id);
+        iC libraryManager = new iC(sc_id);
+        fileManager.i();
+        resourceManager.s();
+        logicManager.g();
+        logicManager.e();
+        libraryManager.i();
+
+        /* Extract project type template */
+        project_metadata.a(SketchApplication.getContext(), wq.e(xq.a(sc_id) ? "600" : sc_id));
+
+        /* Start generating project files */
+        ProjectBuilder builder = new ProjectBuilder(SketchApplication.getContext(), project_metadata);
+        project_metadata.a(libraryManager, fileManager, logicManager, true);
+        builder.buildBuiltInLibraryInformation();
+        project_metadata.b(fileManager, logicManager, libraryManager, builder.getBuiltInLibraryManager());
+        if (yB.a(lC.b(sc_id), "custom_icon")) {
+            project_metadata.a(wq.e() + File.separator + sc_id + File.separator + "icon.png");
+        }
+        project_metadata.a();
+        resourceManager.b(project_metadata.resDirectoryPath + File.separator + "drawable-xhdpi");
+        resourceManager.c(project_metadata.resDirectoryPath + File.separator + "raw");
+        resourceManager.a(project_metadata.assetsPath + File.separator + "fonts");
+        project_metadata.f();
+
+        /* It makes no sense that those methods aren't static */
+        FilePathUtil util = new FilePathUtil();
+        File pathJava = new File(util.getPathJava(sc_id));
+        File pathResources = new File(util.getPathResource(sc_id));
+        File pathAssets = new File(util.getPathAssets(sc_id));
+        File pathNativeLibraries = new File(util.getPathNativelibs(sc_id));
+
+        if (pathJava.exists()) {
+            FileUtil.copyDirectory(pathJava, new File(project_metadata.javaFilesPath + File.separator + project_metadata.packageNameAsFolders));
+        }
+        if (pathResources.exists()) {
+            FileUtil.copyDirectory(pathResources, new File(project_metadata.resDirectoryPath));
+        }
+        if (pathAssets.exists()) {
+            FileUtil.copyDirectory(pathAssets, new File(project_metadata.assetsPath));
+        }
+        if (pathNativeLibraries.exists()) {
+            FileUtil.copyDirectory(pathNativeLibraries, new File(project_metadata.generatedFilesPath, "jniLibs"));
+        }
+
+        ArrayList<String> toCompress = new ArrayList<>();
+        toCompress.add(project_metadata.projectMyscPath);
+        String exportedFilename = yB.c(project, "my_ws_name") + ".zip";
+
+        String exportedSourcesZipPath = wq.s() + File.separator + "export_src" + File.separator + exportedFilename;
+        if (file_utility.e(exportedSourcesZipPath)) {
+            file_utility.c(exportedSourcesZipPath);
+        }
+
+        ArrayList<String> toExclude = new ArrayList<>();
+        if (!new File(new FilePathUtil().getPathJava(sc_id) + File.separator + "SketchApplication.java").exists()) {
+            toExclude.add("SketchApplication.java");
+        }
+        toExclude.add("DebugActivity.java");
+
+        new KB().a(exportedSourcesZipPath, toCompress, toExclude);
+        project_metadata.e();
     }
 
     public String getGitHubSrc() {

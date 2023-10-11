@@ -71,6 +71,7 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<Intent> openLibraryManager = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK) {
+            externalLibrary = handler.getBean();
             loadLibraries();
         }
     });
@@ -327,18 +328,21 @@ public class ManageExternalLibraryActivity extends AppCompatActivity {
             return;
         }
         String useValue;
+        String message;
         Pair<Integer, Integer> selection = getUsedLibrary();
         if (selection.first > selection.second) {
             useValue = "N";
+            message = "Unselect all";
         } else {
             useValue = "Y";
+            message = "Select all";
         }
         List<LibrariesBean> selectedLibraries = new ArrayList<>();
         for (LibrariesBean eban : currentLibraries) {
             eban.useYn = useValue;
             selectedLibraries.add(eban);
         }
-        SketchwareUtil.toast("Select all");
+        SketchwareUtil.toast(message);
         externalLibrary.setLibraries(selectedLibraries);
         handler.setBean(externalLibrary);
         loadLibraries();

@@ -22,6 +22,7 @@ import a.a.a.yq;
 import a.a.a.zy;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.FilePathUtil;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.jbk.build.BuiltInLibraries;
 import mod.jbk.util.LogUtil;
 
@@ -192,7 +193,7 @@ public class AppBundleCompiler {
 
             /* Start with enabled Local libraries' JARs */
             var jars = new ManageLocalLibrary(builder.yq.sc_id).getLocalLibraryJars();
-
+            jars.addAll(new ExternalLibraryHandler(builder.yq.sc_id).get(ExternalLibraryHandler.ResourceType.JAR));
             /* Add built-in libraries' JARs */
             for (var library : builder.builtInLibraryManager.getLibraries()) {
                 jars.add(BuiltInLibraries.getLibraryClassesJarPath(library.getName()));

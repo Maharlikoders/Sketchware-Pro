@@ -246,6 +246,9 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.github.ManageGitHubSettingActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
             android:name="mod.elfilibustero.sketch.editor.manage.github.SetupGitHubActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name="mod.elfilibustero.sketch.editor.manage.library.ManageLibrariesActivity"
