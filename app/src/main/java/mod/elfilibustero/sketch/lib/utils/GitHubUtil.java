@@ -499,7 +499,9 @@ public class GitHubUtil {
             for (String exclusion : PROJECT_RESOURCES_FOLDER) {
                 exclusions.add(exclusion);
             }
-            NewFileUtil.copyFiles(data, getGitHubProject("src/data"), exclusions);
+            String toData = getGitHubProject("src/data");
+            FileUtil.makeDir(toData);
+            NewFileUtil.copyFiles(data, toData, exclusions);
 
             String files = data + File.separator + "files";
             String toFiles = getGitHubProject("src/data/files");
