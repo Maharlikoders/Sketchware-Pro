@@ -87,7 +87,7 @@ public class GitHubUtil {
 
     private final String sc_id;
     private final String path;
-    private Map<String, Object> project;
+    private HashMap<String, Object> project;
     private yq project_metadata = null;
 
     public static final List<String> PROJECT_DATA_FILE = Arrays.asList("file", "library", "logic", "resource", "view", "github");
