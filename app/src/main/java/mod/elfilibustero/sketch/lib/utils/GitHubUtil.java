@@ -495,36 +495,23 @@ public class GitHubUtil {
             writeFile(getResource(data), getResource(getGitHubProject("src")));
             writeFile(getView(data), getView(getGitHubProject("src")));
 
-            Set<String> exclusions = new HashSet<>();
-            for (String exclusion : PROJECT_RESOURCES_FOLDER) {
-                exclusions.add(exclusion);
-            }
             String toData = getGitHubProject("src/data");
-            FileUtil.makeDir(toData);
-            NewFileUtil.copyFiles(data, toData, exclusions);
+            NewFileUtil.copyDir(files, toData);
+            if (new File(data).exists()) {
+                if (isFileSizeChanged(data, toData)) {
+                    FileUtil.deleteFile(toData);
+                    NewFileUtil.copyDir(data, toData);
+                }
 
-            String files = data + File.separator + "files";
-            String toFiles = getGitHubProject("src/data/files");
-            if (new File(files).exists()) {
-                if (isFileSizeChanged(files, toFiles)) {
-                    FileUtil.deleteFile(toFiles);
-                    NewFileUtil.copyDir(files, toFiles);
+                for (String exclusion : PROJECT_DATA_FILE) {
+                    String dataFile = toData + File.separator + exclusion;
+                    if (FileUtil.isExistFile(dataFile)) {
+                        FileUtil.deleteFile(dataFile);
+                    }
                 }
             } else {
-                FileUtil.deleteFile(toFiles);
+                FileUtil.deleteFile(toData);
             }
-
-            String injections = data + File.separator + "injection";
-            String toInjections = getGitHubProject("src/data/injection");
-            if (new File(injections).exists()) {
-                if (isFileSizeChanged(injections, toInjections)) {
-                    FileUtil.deleteFile(toInjections);
-                    NewFileUtil.copyDir(injections, toInjections);
-                }
-            } else {
-                FileUtil.deleteFile(toInjections);
-            }
-
         } catch (Exception ignored) {
         }
     }
