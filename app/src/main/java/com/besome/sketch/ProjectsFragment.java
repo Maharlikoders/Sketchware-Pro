@@ -48,6 +48,7 @@ import a.a.a.lC;
 import a.a.a.wB;
 import mod.SketchwareUtil;
 import mod.elfilibustero.sketch.beans.GitHubBean;
+import mod.elfilibustero.sketch.editor.manage.github.ManageGitHubSettingActivity;
 import mod.elfilibustero.sketch.lib.git.Clone;
 import mod.elfilibustero.sketch.lib.git.PullRemoteUpdates;
 import mod.elfilibustero.sketch.lib.ui.CreateItemView;
@@ -203,9 +204,10 @@ public class ProjectsFragment extends DA {
         intent.putExtra("sc_id", sc_id);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+        boolean isAutoFetchEnabled = new DB(requireContext(), "GITHUB_SETTINGS").a(sc_id + "_" + ManageGitHubSettingActivity.GITHUB_FETCH, false);
         GitHubUtil gitUtil = new GitHubUtil(sc_id);
         GitHubBean bean = gitUtil.getBean();
-        if (!bean.username.isEmpty() && !bean.token.isEmpty() && bean.useYn.equals("Y")) {
+        if (!bean.username.isEmpty() && !bean.token.isEmpty() && bean.useYn.equals("Y") && isAutoFetchEnabled) {
                 new PullRemoteUpdates(requireActivity(), sc_id).execute(success -> {
                     if (success) {
                         final String errorMessage;
