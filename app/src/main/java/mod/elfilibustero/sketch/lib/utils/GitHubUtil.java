@@ -497,10 +497,8 @@ public class GitHubUtil {
 
             String toData = getGitHubProject("src/data");
             if (new File(data).exists()) {
-                if (isFileSizeChanged(data, toData)) {
-                    FileUtil.deleteFile(toData);
-                    NewFileUtil.copyDir(data, toData);
-                }
+                FileUtil.deleteFile(toData);
+                NewFileUtil.copyDir(data, toData);
 
                 for (String exclusion : PROJECT_DATA_FILE) {
                     String dataFile = toData + File.separator + exclusion;

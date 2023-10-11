@@ -91,6 +91,8 @@ public class ManageExternalLibraryItemActivity extends AppCompatActivity impleme
             } else {
                 bean.useYn = "Y";
             }
+        } else if (id == R.id.open_file) {
+            openFolder();
         }
     }
 
