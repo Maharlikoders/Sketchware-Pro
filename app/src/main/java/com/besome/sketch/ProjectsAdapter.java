@@ -38,6 +38,7 @@ import a.a.a.lC;
 import a.a.a.mB;
 import a.a.a.wq;
 import a.a.a.yB;
+import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.project.ProjectSettingsDialog;
 import mod.hey.studios.project.backup.BackupRestoreManager;
 
@@ -328,6 +329,8 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
                 Predicate<HashMap<String, Object>> remover = (project -> yB.c(project, "sc_id").equals(sc_id));
                 shownProjects.removeIf(remover);
                 allProjects.removeIf(remover);
+                FileUtil.deleteFile(wq.getGitHubSrc(sc_id));
+                FileUtil.deleteFile(wq.getExternalLibrary(sc_id));
                 notifyItemRemoved(truePosition);
             });
         }).start();

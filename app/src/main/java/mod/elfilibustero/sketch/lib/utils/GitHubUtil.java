@@ -496,7 +496,6 @@ public class GitHubUtil {
             writeFile(getView(data), getView(getGitHubProject("src")));
 
             String toData = getGitHubProject("src/data");
-            NewFileUtil.copyDir(files, toData);
             if (new File(data).exists()) {
                 if (isFileSizeChanged(data, toData)) {
                     FileUtil.deleteFile(toData);
