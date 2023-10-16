@@ -10,10 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -60,6 +58,7 @@ import a.a.a.hC;
 import a.a.a.iC;
 import a.a.a.kC;
 import a.a.a.lC;
+import a.a.a.nB;
 import a.a.a.oB;
 import a.a.a.wq;
 import a.a.a.xq;
@@ -117,7 +116,7 @@ public class GitHubUtil {
         FileUtil.writeFile(path, new Gson().toJson(bean != null ? bean : new GitHubBean()));
     }
 
-    public CompletableFuture<Void> build() throws IOException, Exception {
+    public CompletableFuture<Void> build(boolean updatingExistingProject) throws IOException, Exception {
         try (Repository repository = getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
                 try {
@@ -145,7 +144,7 @@ public class GitHubUtil {
             }))
                 .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
-                    buildProjectFile(repository);
+                    buildProjectFile(repository, updatingExistingProject);
                 } catch (Exception e) {
                     ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
                 }
@@ -172,7 +171,7 @@ public class GitHubUtil {
         return false;
     }
 
-    private void buildProjectFile(Repository repository) throws Exception {
+    private void buildProjectFile(Repository repository, boolean updatingExistingProject) throws Exception {
         String projectPath = getGitHubProject("project.json");
         String toProjectPath = wq.c(sc_id) + File.separator + "project";
         FileUtil.makeDir(wq.c(sc_id));
@@ -188,30 +187,27 @@ public class GitHubUtil {
             throw new Exception("Failed to parse project file");
         }
 
-        ProjectBean bean = new ProjectBean();
-        bean.setCustomIcon(temp.isCustomIcon());
-        bean.setWorkspaceName(temp.getWorkspaceName());
-        bean.setAppName(temp.getAppName());
-        bean.setPackageName(temp.getPackageName());
-        bean.setVersionCode(temp.getVersionCode());
-        bean.setVersionName(temp.getVersionName());
-        bean.setColorPrimary(temp.getColorPrimary());
-        bean.setColorPrimaryDark(temp.getColorPrimaryDark());
-        bean.setColorAccent(temp.getColorAccent());
-        bean.setColorControlNormal(temp.getColorControlNormal());
-        bean.setColorControlHighlight(temp.getColorControlHighlight());
-        bean.setId(sc_id);
-        bean.setSketchwareVer(GB.d(SketchApplication.getContext()));
-        bean.setRegisteredDate(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
-
-        String jsonBean = new Gson().toJson(bean);
-        if (jsonBean == null || jsonBean.isEmpty()) {
-            throw new RuntimeException("Failed to parse project file");
-        }
-        if (SketchFileUtil.encrypt(jsonBean, toProjectPath)) {
-
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("sc_id", sc_id);
+        data.put("my_sc_pkg_name", temp.getPackageName());
+        data.put("my_ws_name", temp.getWorkspaceName());
+        data.put("my_app_name", temp.getAppName());
+        data.put("color_primary", temp.getColorPrimary());
+        data.put("color_primary_dark", temp.getColorPrimaryDark());
+        data.put("color_accent", temp.getColorAccent());
+        data.put("color_control_normal", temp.getColorControlNormal());
+        data.put("color_control_highlight", temp.getColorControlHighlight());
+        data.put("custom_icon", temp.isCustomIcon());
+        data.put("sc_ver_code", temp.getVersionCode());
+        data.put("sc_ver_name", temp.getVersionName());
+        data.put("sketchware_ver", GB.d(SketchApplication.getContext()));
+        if (updatingExistingProject) {
+            lC.b(sc_id, data);
         } else {
-            throw new RuntimeException("Failed to build project file");
+            data.put("my_sc_reg_dt", new nB().a("yyyyMMddHHmmss"));
+            lC.a(sc_id, data);
+            wq.a(SketchApplication.getContext(), sc_id);
+            new oB().b(wq.b(sc_id));
         }
     }
 
@@ -231,7 +227,7 @@ public class GitHubUtil {
         bean.setColorControlHighlight(0x20008dcd);
         bean.setId(sc_id);
         bean.setSketchwareVer(GB.d(SketchApplication.getContext()));
-        bean.setRegisteredDate(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+        bean.setRegisteredDate(new nB().a("yyyyMMddHHmmss"));
         return bean;
     }
 
