@@ -120,20 +120,12 @@ public class GitHubUtil {
         try (Repository repository = getRepository()) {
             return CompletableFuture.supplyAsync(() -> {
                 try {
-                    buildCustomBlock(repository);
+                    buildProjectFile(repository, updatingExistingProject);
                 } catch (Exception e) {
                     ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
                 }
                 return null;
             })
-                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
-                try {
-                    buildProjectResources();
-                } catch (Exception e) {
-                    ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
-                }
-                return null;
-            }))
                 .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
                     buildDataFile(repository);
@@ -144,7 +136,15 @@ public class GitHubUtil {
             }))
                 .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
                 try {
-                    buildProjectFile(repository, updatingExistingProject);
+                    buildProjectResources();
+                } catch (Exception e) {
+                    ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
+                }
+                return null;
+            }))
+                .thenComposeAsync(result -> CompletableFuture.supplyAsync(() -> {
+                try {
+                    buildCustomBlock(repository);
                 } catch (Exception e) {
                     ThreadUtils.runOnUiThread(() -> SketchwareUtil.toastError(e.getMessage()));
                 }
