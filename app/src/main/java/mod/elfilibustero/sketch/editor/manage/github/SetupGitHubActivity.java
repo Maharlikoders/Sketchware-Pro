@@ -218,7 +218,7 @@ public class SetupGitHubActivity extends AppCompatActivity implements View.OnCli
                             if (exception == null) {
                                 goBackToManageGitHub();
                             } else {
-                                requireActivity().runOnUiThread(() -> SketchwareUtil.toastError(exception.getMessage()));
+                                runOnUiThread(() -> SketchwareUtil.toastError(exception.getMessage()));
                             }
                         });
                         build.join();
