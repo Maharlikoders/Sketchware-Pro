@@ -188,7 +188,17 @@ public class GitHubUtil {
             throw new Exception("Failed to parse project file");
         }
 
-        ProjectBean bean = new ProjectBean();
+        ProjectBean bean;
+        if (FileUtil.isExistFile(toProjectPath) {
+            String projectFile = SketchFileUtil.decrypt(toProjectPath);
+            bean = new Gson().fromJson(projectFile, ProjectBean.class);
+            if (bean == null) {
+                bean = new ProjectBean();
+            }
+        } else {
+            bean = new ProjectBean();
+        }
+
         bean.setCustomIcon(temp.isCustomIcon());
         bean.setWorkspaceName(temp.getWorkspaceName());
         bean.setAppName(temp.getAppName());
