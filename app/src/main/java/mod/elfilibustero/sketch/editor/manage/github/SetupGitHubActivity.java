@@ -213,9 +213,13 @@ public class SetupGitHubActivity extends AppCompatActivity implements View.OnCli
                     final String errorMessage;
                     try {
                         runOnUiThread(() -> SketchwareUtil.toast("Generating project sources, please wait"));
-                        CompletableFuture<Void> build = new GitHubUtil(sc_id).build();
-                        build.thenRun(() -> {
-                            goBackToManageGitHub();
+                        CompletableFuture<Void> build = new GitHubUtil(sc_id).build(true);
+                        build.whenComplete((result, exception) -> {
+                            if (exception == null) {
+                                goBackToManageGitHub();
+                            } else {
+                                requireActivity().runOnUiThread(() -> SketchwareUtil.toastError(exception.getMessage()));
+                            }
                         });
                         build.join();
                         return;

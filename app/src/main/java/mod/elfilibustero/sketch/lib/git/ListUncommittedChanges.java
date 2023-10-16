@@ -28,7 +28,7 @@ public class ListUncommittedChanges {
 
     public List<GitCommitBean> get() {
         List<GitCommitBean> list = new ArrayList<>();
-        try (Repository repository = new GitHubUtil(sc_id).openRepository()) {
+        try (Repository repository = new GitHubUtil(sc_id).getRepository()) {
             Git git = new Git(repository);
             Status status = git.status().call();
 

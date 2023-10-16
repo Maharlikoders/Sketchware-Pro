@@ -246,7 +246,7 @@ public class GitHubUtil {
         map.put("color_control_normal", 0xFF57BEEE);
         map.put("color_control_highlight", 0x20008DCD);
         map.put("sc_id", sc_id);
-        map.put("my_sc_pkg_name", new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(System.currentTimeMillis())));
+        map.put("my_sc_pkg_name", new nB().a("yyyyMMddHHmmss"));
         map.put("sketchware_ver", GB.d(SketchApplication.getContext()));
         return map;
     }

@@ -212,7 +212,7 @@ public class ProjectsFragment extends DA {
                     if (success) {
                         final String errorMessage;
                         try {
-                            CompletableFuture<Void> build = new GitHubUtil(sc_id).build();
+                            CompletableFuture<Void> build = new GitHubUtil(sc_id).build(true);
                             build.whenComplete((result, exception) -> {
                                 if (exception == null) {
                                     requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Pulled updates from remote branch: " + bean.branch));
@@ -399,10 +399,14 @@ public class ProjectsFragment extends DA {
                     gitUtil.setBean(bean);
                     final String errorMessage;
                     try {
-                        CompletableFuture<Void> build = gitUtil.build();
-                        build.thenRun(() -> {
-                            refreshProjectsList();
-                            toDesignActivity(sc_id);
+                        CompletableFuture<Void> build = gitUtil.build(false);
+                        build.whenComplete((result, exception) -> {
+                            if (exception == null) {
+                                refreshProjectsList();
+                                toDesignActivity(sc_id);
+                            } else {
+                                requireActivity().runOnUiThread(() -> SketchwareUtil.toastError(exception.getMessage()));
+                            }
                         });
                         build.join();
                         return;
