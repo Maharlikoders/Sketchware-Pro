@@ -688,7 +688,7 @@ public class GitHubUtil {
     }
 
     public boolean hasCommit() throws GitAPIException, IOException {
-        try (Repository repository = openRepository) {
+        try (Repository repository = openRepository()) {
             try (Git git = new Git(repository)) {
                 LogCommand log = git.log();
                 Iterable<RevCommit> commits = log.all().call();
