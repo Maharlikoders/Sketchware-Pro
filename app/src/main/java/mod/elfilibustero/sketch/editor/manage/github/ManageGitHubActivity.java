@@ -70,6 +70,11 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
+    public void onResume() {
+        binding.pushToGithub.setEnabled(util.hasCommit());
+    }
+
+    @Override
     public void onBackPressed() {
         util.setBean(bean);
         super.onBackPressed();
