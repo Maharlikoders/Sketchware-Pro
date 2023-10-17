@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
+import org.eclipse.jgit.api.LogCommand;
 import org.eclipse.jgit.api.PushCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
@@ -684,6 +685,16 @@ public class GitHubUtil {
             e.printStackTrace();
         }
         return branches;
+    }
+
+    public boolean hasCommit() throws GitAPIException, IOException {
+        try (Repository repository = openRepository) {
+            try (Git git = new Git(repository)) {
+                LogCommand log = git.log();
+                Iterable<RevCommit> commits = log.all().call();
+                return commits.iterator().hasNext();
+            }
+        }
     }
 
     public Repository openRepository() throws IOException {

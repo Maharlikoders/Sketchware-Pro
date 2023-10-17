@@ -92,7 +92,9 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
                 SketchwareUtil.toast("Please enabled switch first", Toast.LENGTH_LONG);
             } else {
                 if (id == R.id.push_to_github) {
-                    showPushDialog();
+                    if (util.hasCommit()) {
+                        showPushDialog();
+                    }
                 } else if (id == R.id.commit_changes) {
                     toGitHubChangesActivity();
                 }
