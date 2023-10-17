@@ -24,9 +24,12 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 import java.text.SimpleDateFormat;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
 
 import a.a.a.aB;
 import a.a.a.lC;
@@ -71,7 +74,13 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onResume() {
-        binding.pushToGithub.setEnabled(util.hasCommit());
+        try {
+            binding.pushToGithub.setEnabled(util.hasCommit());
+        } catch (GitAPIException e) {
+            SketchwareUtil.toastError(e.getMessage());
+        } catch (IOException e) {
+            SketchwareUtil.toastError(e.getMessage());
+        }
     }
 
     @Override
@@ -97,8 +106,14 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
                 SketchwareUtil.toast("Please enabled switch first", Toast.LENGTH_LONG);
             } else {
                 if (id == R.id.push_to_github) {
-                    if (util.hasCommit()) {
-                        showPushDialog();
+                    try {
+                        if (util.hasCommit()) {
+                            showPushDialog();
+                        }
+                    } catch (GitAPIException e) {
+                        SketchwareUtil.toastError(e.getMessage());
+                    } catch (IOException e) {
+                        SketchwareUtil.toastError(e.getMessage());
                     }
                 } else if (id == R.id.commit_changes) {
                     toGitHubChangesActivity();
