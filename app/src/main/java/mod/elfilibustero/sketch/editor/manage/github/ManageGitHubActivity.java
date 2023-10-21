@@ -207,6 +207,8 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
             return future.get();
         } catch (InterruptedException ignored) {
             return false;
+        } catch (ExecutionException ignored) {
+            return false;
         }
     }
 
