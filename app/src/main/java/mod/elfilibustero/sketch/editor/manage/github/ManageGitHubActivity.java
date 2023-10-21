@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -56,6 +58,7 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
         if (result.getResultCode() == RESULT_OK) {
             initializeGitHub(result.getData().getParcelableExtra("github"));
         }
+        binding.pushToGithub.setEnabled(hasCommit());
     });
 
     @Override
@@ -70,17 +73,6 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
         }
         util = new GitHubUtil(sc_id);
         init();
-    }
-
-    @Override
-    public void onResume() {
-        try {
-            binding.pushToGithub.setEnabled(util.hasCommit());
-        } catch (GitAPIException e) {
-            SketchwareUtil.toastError(e.getMessage());
-        } catch (IOException e) {
-            SketchwareUtil.toastError(e.getMessage());
-        }
     }
 
     @Override
@@ -106,14 +98,8 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
                 SketchwareUtil.toast("Please enabled switch first", Toast.LENGTH_LONG);
             } else {
                 if (id == R.id.push_to_github) {
-                    try {
-                        if (util.hasCommit()) {
-                            showPushDialog();
-                        }
-                    } catch (GitAPIException e) {
-                        SketchwareUtil.toastError(e.getMessage());
-                    } catch (IOException e) {
-                        SketchwareUtil.toastError(e.getMessage());
+                    if (hasCommit()) {
+                        showPushDialog();
                     }
                 } else if (id == R.id.commit_changes) {
                     toGitHubChangesActivity();
@@ -203,6 +189,25 @@ public class ManageGitHubActivity extends AppCompatActivity implements View.OnCl
         intent.putExtra("sc_id", sc_id);
         intent.putExtra("github", bean);
         openGitHubActivity.launch(intent);
+    }
+
+    private boolean hasCommit() {
+        CompletableFuture<Boolean> future = CompletableFuture.supplyAsync(() -> {
+            try {
+                return util.hasCommit();
+            } catch (GitAPIException e) {
+                SketchwareUtil.toastError(e.getMessage());
+            } catch (IOException e) {
+                SketchwareUtil.toastError(e.getMessage());
+            }
+            return false;
+        });
+
+        try {
+            return future.get();
+        } catch (InterruptedException ignored) {
+            return false;
+        }
     }
 
     private void pushToGitHub(boolean force) {
