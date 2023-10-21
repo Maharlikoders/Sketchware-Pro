@@ -230,16 +230,13 @@ public class Jx {
             addImport("android.content.pm.PackageManager");
         }
 
+        blockImports();
         removeExtraImports();
         Collections.sort(imports);
         for (String anImport : imports) {
             sb.append("import ").append(anImport).append(";").append(EOL);
         }
 
-        String importsAddedByImportBlocks = LogicHandler.imports(eventManager.b());
-        if (!importsAddedByImportBlocks.isEmpty()) {
-            sb.append(importsAddedByImportBlocks).append(EOL);
-        }
         sb.append(EOL);
 
         sb.append("public class ").append(projectFileBean.getActivityName()).append(" extends ");
@@ -1068,6 +1065,15 @@ public class Jx {
             addImport(value);
         }
     }
+
+        private void blockImports() {
+        String importsAddedByImportBlocks = LogicHandler.imports(eventManager.b());
+        if (!importsAddedByImportBlocks.isEmpty()) {
+            for (String blockImport : importsAddedByImportBlocks.split("import |;")) {
+                addImport(blockImport.trim());
+            }
+        }
+        }
 
     private void addImplements() {
         ArrayList<EventBean> events = projectDataManager.g(projectFileBean.getJavaName());
