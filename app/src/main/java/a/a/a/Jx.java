@@ -117,6 +117,13 @@ public class Jx {
                         }
                         break;
 
+                    case "customImport":
+                    case "customImport2":
+                        if (!block.parameters.get(0).trim().isEmpty()) {
+                            addImport(block.parameters.get(0));
+                        }
+                        break;
+
                     case "implement":
                         if (!block.parameters.get(0).trim().isEmpty()) {
                             addImplement(block.parameters.get(0));
