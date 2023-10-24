@@ -135,6 +135,7 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                         return;
 
                     case 2:
+                        designActivity.toProjectManager();
                         return;
 
                     case 3:

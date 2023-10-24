@@ -93,6 +93,7 @@ import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.GitHubBean;
 import mod.elfilibustero.sketch.editor.manage.github.ManageGitHubActivity;
 import mod.elfilibustero.sketch.editor.manage.library.ManageLibrariesActivity;
+import mod.elfilibustero.sketch.editor.manage.project.ManageProjectSettingActivity;
 import mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity;
 import mod.elfilibustero.sketch.lib.utils.GitHubUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
@@ -728,6 +729,13 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
      */
     void toCollectionManager() {
         launchActivity(ManageCollectionActivity.class, openCollectionManager);
+    }
+
+    /**
+     * Opens {@link ManageProjectSettingActivity}.
+     */
+    void toProjectManager() {
+        launchActivity(ManageProjectSettingActivity.class, null);
     }
 
     /**
