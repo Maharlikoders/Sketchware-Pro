@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
+import com.besome.sketch.lib.ui.MiddleLineHeader;
 import com.sketchware.pro.R;
 
 import a.a.a.mB;
@@ -59,16 +60,35 @@ public class ManageProjectSettingActivity extends AppCompatActivity implements K
         contentLayout = findViewById(R.id.content);
 
         addPreferenceInput("min_sdk", util.getMinSdk());
+        addPreferenceInput("target_sdk", util.getTargetSdk());
+        MiddleLineHeader projectHeader = new MiddleLineHeader(this);
+        projectHeader.b.setText("More Settings");
+        addPreferenceInput("app_class", util.getApplicationClass());
+        addPreferenceInput("util_class", util.getUtilClass());
+        addPreferenceInput("disable_old_methods", util.getOldMethods());
+        addPreferenceInput("enable_bridgeless_themes", util.getBridgelessThemes());
     }
 
     @Override
-    public void a(String key, String value) {
+    public void a(String key, Object value) {
         switch (key) {
             case "min_sdk":
-                util.setMinSdk(value);
+                util.setMinSdk((String)value);
                 break;
             case "target_sdk":
-                util.setTargetSdk(value);
+                util.setTargetSdk((String)value);
+                break;
+            case "app_class":
+                util.setApplicationClass((String)value);
+                break;
+            case "util_class":
+                util.setUtilClass((String)value);
+                break;
+            case "disable_old_methods":
+                util.setOldMethods((String)value);
+                break;
+            case "enable_bridgeless_themes":
+                util.setBridgelessThemes((String)value);
                 break;
         }
     }

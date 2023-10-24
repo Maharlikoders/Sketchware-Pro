@@ -4,10 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.text.InputType;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -50,6 +55,16 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
             case "target_sdk":
                 icon = R.drawable.one_to_many_48;
                 break;
+            case "app_class":
+                icon = R.drawable.icons8_app_components;
+                break;
+            case "util_class":
+                icon = R.drawable.engineering_48;
+                break;
+            case "disable_old_methods":
+                icon = R.drawable.code_icon;
+            case "enable_bridgeless_themes":
+                icon = R.drawable.collect_48;
         }
         imageView.setImageResource(icon);
     }
@@ -73,6 +88,10 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
         return switch (key) {
             case "min_sdk" -> "Min SDK";
             case "target_sdk" -> "Target SDK";
+            case "app_class" -> "Application class name";
+            case "util_class" -> "Util class name";
+            case "disable_old_methods" -> "Deprecated old methods";
+            case "enable_bridgeless_themes" -> "Bridgeless Theme";
             default -> "";
         };
     }
@@ -90,9 +109,16 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
     public void onClick(View v) {
         if (!mB.a()) {
             switch (key) {
+                case "app_class":
+                case "util_class":
+                    showTextInputDialog(0, 9999);
                 case "min_sdk":
                 case "target_sdk":
                     showNumberDecimalInputDialog(0, 33);
+                    return;
+                case "disable_old_methods":
+                case "enable_bridgeless_themes":
+                    showTrueFalseDialog();
                     return;
             }
         }
@@ -187,5 +213,63 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
         });
         dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
         dialog.show();
+    }
+
+    private void showTrueFalseDialog() {
+        aB dialog = new aB((Activity) getContext());
+        dialog.b(tvName.getText().toString());
+        dialog.a(icon);
+        View view = wB.a(getContext(), R.layout.property_popup_selector_single);
+        radioGroupContent = view.findViewById(R.id.rg_content);
+
+        for (String item : sq.l) {
+            radioGroupContent.addView(getOption(item));
+        }
+
+        for (int counter = 0; counter < radioGroupContent.getChildCount(); counter++) {
+            RadioButton childAt = (RadioButton) radioGroupContent.getChildAt(counter);
+            if (childAt.getTag().toString().equals(value)) {
+                childAt.setChecked(true);
+                break;
+            }
+        }
+
+        dialog.a(view);
+        dialog.b(Helper.getResString(R.string.common_word_select), v -> {
+            int childCount = radioGroupContent.getChildCount();
+            int counter = 0;
+            while (true) {
+                if (counter >= childCount) {
+                    break;
+                }
+                RadioButton radioButton = (RadioButton) radioGroupContent.getChildAt(counter);
+                if (radioButton.isChecked()) {
+                    setValue(radioButton.getTag().toString());
+                    break;
+                }
+                counter++;
+            }
+            if (valueChangeListener != null) {
+                valueChangeListener.a(key, value);
+            }
+            dialog.dismiss();
+        });
+        dialog.a(Helper.getResString(R.string.common_word_cancel), Helper.getDialogDismissListener(dialog));
+        dialog.show();
+    }
+
+    private RadioButton getOption(String str) {
+        RadioButton radioButton = new RadioButton(getContext());
+        radioButton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f);
+        radioButton.setText(str);
+        radioButton.setTag(str);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.topMargin = (int) wB.a(getContext(), 4.0f);
+        layoutParams.bottomMargin = (int) wB.a(getContext(), 4.0f);
+        radioButton.setGravity(Gravity.CENTER | Gravity.LEFT);
+        radioButton.setLayoutParams(layoutParams);
+        return radioButton;
     }
 }
