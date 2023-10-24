@@ -218,7 +218,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
                             holder.setAnimateNextTransformation(true);
                             notifyItemChanged(holder.getLayoutPosition());
                         }
-                        case 4 -> showProjectSettingDialog(projectMap);
                     }
                 } else if (v.getId() == R.id.confirm_yes) {
                     deleteProject(holder.getLayoutPosition());
@@ -344,10 +343,6 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         intent.putExtra("advanced_open", false);
         intent.putExtra("index", index);
         projectsFragment.openProjectSettings.launch(intent);
-    }
-
-    private void showProjectSettingDialog(HashMap<String, Object> project) {
-        new ProjectSettingsDialog(activity, yB.c(project, "sc_id")).show();
     }
 
     private void backupProject(HashMap<String, Object> project) {
