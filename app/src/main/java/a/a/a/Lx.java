@@ -11,6 +11,7 @@ import java.util.List;
 
 import mod.agus.jcoderz.editor.event.ManageEvent;
 import mod.agus.jcoderz.handle.component.ConstVarComponent;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.moreblock.ReturnMoreblockManager;
 import mod.hilal.saif.components.ComponentsHandler;
@@ -144,6 +145,11 @@ public class Lx {
         if (isLibraryNotExcluded(BuiltInLibraries.FIREBASE_MESSAGING, excludedLibraries) && extraMetadata.isFCMUsed) {
             content += "implementation 'com.google.firebase:firebase-messaging:19.0.0'";
         }
+
+        for (String dependency : new ExternalLibraryHandler(metadata.sc_id).getDependencies()) {
+            content += "implementation '" + dependency + "'";
+        }
+
         return j(content + "}\r\n", false);
     }
 

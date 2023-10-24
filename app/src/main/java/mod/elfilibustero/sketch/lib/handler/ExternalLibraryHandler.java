@@ -10,6 +10,7 @@ import java.util.List;
 import a.a.a.wq;
 
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.DependencyBean;
 import mod.elfilibustero.sketch.beans.ExternalLibraryBean;
 import mod.elfilibustero.sketch.beans.LibrariesBean;
 
@@ -44,6 +45,15 @@ public class ExternalLibraryHandler {
 	        }
         }
         return externalLibrary == null ? new ExternalLibraryBean() : externalLibrary;
+    }
+
+    public List<String> getDependencies() {
+    	List<String> dependencies = new ArrayList<>();
+    	List<DependencyBean> beans = getBean().getDependencies();
+    	for (DependencyBean dependency : beans) {
+    		dependencies.add(dependency.toString());
+    	}
+    	return dependencies;
     }
 
     public void setBean(ExternalLibraryBean externalLibrary) {

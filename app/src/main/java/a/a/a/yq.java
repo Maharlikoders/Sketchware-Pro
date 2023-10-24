@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.lib.handler.BuiltInUtilClassHandler;
 import mod.elfilibustero.sketch.lib.handler.XmlResourceHandler;
+import mod.elfilibustero.sketch.lib.utils.ProjectConfigurationUtil;
 import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
@@ -163,6 +164,8 @@ public class yq {
      */
     public final ProjectSettings projectSettings;
 
+    public final ProjectConfigurationUtil projectConfigUtil;
+
     /**
      * Example content: /storage/emulated/0/.sketchware/mysc/605/app/src/main/AndroidManifest.xml
      */
@@ -229,6 +232,7 @@ public class yq {
         colorControlHighlight = yB.a(metadata, "color_control_highlight", ContextCompat.getColor(context, R.color.color_control_highlight));
         colorControlNormal = yB.a(metadata, "color_control_normal", ContextCompat.getColor(context, R.color.color_control_normal));
         projectSettings = new ProjectSettings(sc_id);
+        projectConfigUtil = new ProjectConfigurationUtil(sc_id);
 
         fileUtil = new oB(true);
         packageNameAsFolders = packageName.replaceAll("\\.", File.separator);
@@ -797,7 +801,7 @@ public class yq {
 
         srcCodeBeans.add(new SrcCodeBean("strings.xml",
                 CommandBlock.applyCommands("strings.xml", resourceHandler.getStringsXml())));
-
+        srcCodeBeans.add(new SrcCodeBean("build.gradle", Lx.getBuildGradleString(28, projectConfigUtil.getMinSdk(), projectConfigUtil.getTargetSdk(), N)));
         CommandBlock.x();
         return srcCodeBeans;
     }
