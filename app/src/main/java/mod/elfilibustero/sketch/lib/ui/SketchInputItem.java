@@ -26,6 +26,7 @@ import a.a.a._B;
 import a.a.a.aB;
 import a.a.a.jC;
 import a.a.a.mB;
+import a.a.a.sq;
 import a.a.a.uq;
 import a.a.a.wB;
 import mod.hey.studios.util.Helper;
@@ -124,7 +125,7 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
         }
     }
 
-    public void setOnValueChangeListener(Kw onPropertyValueChangeListener) {
+    public void setOnValueChangedListener(Kw onPropertyValueChangeListener) {
         valueChangeListener = onPropertyValueChangeListener;
     }
 
@@ -220,7 +221,7 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
         dialog.b(tvName.getText().toString());
         dialog.a(icon);
         View view = wB.a(getContext(), R.layout.property_popup_selector_single);
-        radioGroupContent = view.findViewById(R.id.rg_content);
+        ViewGroup radioGroupContent = view.findViewById(R.id.rg_content);
 
         for (String item : sq.l) {
             radioGroupContent.addView(getOption(item));
