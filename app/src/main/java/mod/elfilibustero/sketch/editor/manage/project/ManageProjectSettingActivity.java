@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +17,7 @@ import com.sketchware.pro.R;
 
 import a.a.a.mB;
 import a.a.a.Kw;
+import a.a.a.wB;
 
 import mod.elfilibustero.sketch.lib.ui.SketchInputItem;
 import mod.elfilibustero.sketch.lib.utils.ProjectConfigurationUtil;
@@ -63,6 +65,13 @@ public class ManageProjectSettingActivity extends AppCompatActivity implements K
         addPreferenceInput("target_sdk", util.getTargetSdk());
         MiddleLineHeader projectHeader = new MiddleLineHeader(this);
         projectHeader.b.setText("More Settings");
+        projectHeader.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.leftMargin = (int) wB.a(context, 8f);
+        layoutParams.topMargin = (int) wB.a(context, 4f);
+        layoutParams.bottomMargin = (int) wB.a(context, 4f);
+        layoutParams.rightMargin = (int) wB.a(context, 0f);
         contentLayout.addView(projectHeader);
         addPreferenceInput("app_class", util.getApplicationClass());
         addPreferenceInput("util_class", util.getUtilClass());

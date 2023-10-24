@@ -63,91 +63,95 @@ public class Lx {
                 "dependencies {\r\n" +
                 "implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n";
 
+        List<String> dependencies = new ArrayList<>();
+
         List<BuiltInLibraries.BuiltInLibrary> excludedLibraries = ExcludeBuiltInLibrariesActivity.getExcludedLibraries(metadata.sc_id);
         if (isLibraryNotExcluded(BuiltInLibraries.ANDROIDX_APPCOMPAT, excludedLibraries) && metadata.g) {
-            content += "implementation 'androidx.appcompat:appcompat:1.4.0'\r\n" +
-                    "implementation 'com.google.android.material:material:1.6.1'\r\n";
+            dependencies.add("androidx.appcompat:appcompat:1.4.0");
+            dependencies.add("com.google.android.material:material:1.6.1");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.FIREBASE_AUTH, excludedLibraries) && metadata.isFirebaseAuthUsed) {
-            content += "implementation 'com.google.firebase:firebase-auth:19.0.0'\r\n";
+            dependencies.add("com.google.firebase:firebase-auth:19.0.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.FIREBASE_DATABASE, excludedLibraries) && metadata.isFirebaseDatabaseUsed) {
-            content += "implementation 'com.google.firebase:firebase-database:19.0.0'\r\n";
+            dependencies.add("com.google.firebase:firebase-database:19.0.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.FIREBASE_STORAGE, excludedLibraries) && metadata.isFirebaseStorageUsed) {
-            content += "implementation 'com.google.firebase:firebase-storage:19.0.0'\r\n";
+            dependencies.add("com.google.firebase:firebase-storage:19.0.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.PLAY_SERVICES_ADS, excludedLibraries) && metadata.isAdMobEnabled) {
-            content += "implementation 'com.google.android.gms:play-services-ads:20.1.0'\r\n";
+            dependencies.add("com.google.android.gms:play-services-ads:20.1.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.PLAY_SERVICES_MAPS, excludedLibraries) && metadata.isMapUsed) {
-            content += "implementation 'com.google.android.gms:play-services-maps:17.0.1'\r\n";
+            dependencies.add("com.google.android.gms:play-services-maps:17.0.1");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.GLIDE, excludedLibraries) && metadata.isGlideUsed) {
-            content += "implementation 'com.github.bumptech.glide:glide:4.12.0'\r\n";
+            dependencies.add("com.github.bumptech.glide:glide:4.12.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.GSON, excludedLibraries) && metadata.isGsonUsed) {
-            content += "implementation 'com.google.code.gson:gson:2.8.7'\r\n";
+            dependencies.add("com.google.code.gson:gson:2.8.7");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.OKHTTP, excludedLibraries) && metadata.isHttp3Used) {
-            content += "implementation 'com.squareup.okhttp3:okhttp:3.9.1'\r\n";
+            dependencies.add("com.squareup.okhttp3:okhttp:3.9.1");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.FIREBASE_DYNAMIC_LINKS, excludedLibraries) && metadata.isDynamicLinkUsed) {
-            content += "implementation 'com.google.firebase:firebase-dynamic-links:19.0.0'\r\n";
+            dependencies.add("com.google.firebase:firebase-dynamic-links:19.0.0");
         }
 
         ConstVarComponent extraMetadata = metadata.x;
         if (isLibraryNotExcluded(BuiltInLibraries.CIRCLE_IMAGEVIEW, excludedLibraries) && extraMetadata.isCircleImageViewUsed) {
-            content += "implementation 'de.hdodenhof:circleimageview:3.1.0'\r\n";
+            dependencies.add("de.hdodenhof:circleimageview:3.1.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.YOUTUBE_PLAYER, excludedLibraries) && extraMetadata.isYoutubePlayerUsed) {
-            content += "implementation 'com.pierfrancescosoffritti:androidyoutubeplayer:10.0.5'\r\n";
+            dependencies.add("com.pierfrancescosoffritti:androidyoutubeplayer:10.0.5");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.CODE_VIEW, excludedLibraries) && extraMetadata.isCodeViewUsed) {
-            content += "implementation 'br.tiagohm:codeview:0.4.0'\r\n";
+            dependencies.add("br.tiagohm:codeview:0.4.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.LOTTIE, excludedLibraries) && extraMetadata.isLottieUsed) {
-            content += "implementation 'com.airbnb:lottie:3.4.0'\r\n";
+            dependencies.add("com.airbnb:lottie:3.4.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.OTPVIEW, excludedLibraries) && extraMetadata.isOTPViewUsed) {
-            content += "implementation 'affan.ahmad:otp:0.1.0'\r\n";
+            dependencies.add("affan.ahmad:otp:0.1.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.ONESIGNAL, excludedLibraries) && extraMetadata.isOneSignalUsed) {
-            content += "implementation 'com.onesignal:OneSignal:3.14.0'\r\n";
+            dependencies.add("com.onesignal:OneSignal:3.14.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.PATTERN_LOCK_VIEW, excludedLibraries) && extraMetadata.isPatternLockViewUsed) {
-            content += "implementation 'com.andrognito:patternlockview:1.0.0'\r\n";
+            dependencies.add("com.andrognito:patternlockview:1.0.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.FACEBOOK_ADS_AUDIENCE_NETWORK_SDK, excludedLibraries) && extraMetadata.isFBAdsUsed) {
-            content += "implementation 'com.facebook.android:audience-network-sdk:5.9.0'";
+            dependencies.add("com.facebook.android:audience-network-sdk:5.9.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.PLAY_SERVICES_AUTH, excludedLibraries) && extraMetadata.isFBGoogleUsed) {
-            content += "implementation 'com.google.android.gms:play-services-auth:19.0.0'";
+            dependencies.add("com.google.android.gms:play-services-auth:19.0.0");
         }
 
         if (isLibraryNotExcluded(BuiltInLibraries.FIREBASE_MESSAGING, excludedLibraries) && extraMetadata.isFCMUsed) {
-            content += "implementation 'com.google.firebase:firebase-messaging:19.0.0'";
+            dependencies.add("com.google.firebase:firebase-messaging:19.0.0");
         }
 
-        for (String dependency : new ExternalLibraryHandler(metadata.sc_id).getDependencies()) {
-            content += "implementation '" + dependency + "'";
+        dependencies.addAll(new ExternalLibraryHandler(metadata.sc_id).getDependencies());
+
+        for (String dependency : dependencies) {
+            content += "implementation '" + dependency + "'\r\n";
         }
 
         return j(content + "}\r\n", false);
