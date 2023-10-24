@@ -63,6 +63,7 @@ public class ManageProjectSettingActivity extends AppCompatActivity implements K
         addPreferenceInput("target_sdk", util.getTargetSdk());
         MiddleLineHeader projectHeader = new MiddleLineHeader(this);
         projectHeader.b.setText("More Settings");
+        contentLayout.addView(projectHeader);
         addPreferenceInput("app_class", util.getApplicationClass());
         addPreferenceInput("util_class", util.getUtilClass());
         addPreferenceInput("disable_old_methods", util.getOldMethods());
