@@ -41,7 +41,7 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
 
     public SketchInputItem(Context context, boolean z) {
         super(context);
-        initialize(context, z);
+        initialize(context);
     }
 
     private void setIcon(ImageView imageView) {
