@@ -113,6 +113,7 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
                 case "app_class":
                 case "util_class":
                     showTextInputDialog(0, 9999);
+                    return;
                 case "min_sdk":
                 case "target_sdk":
                     showNumberDecimalInputDialog(0, 33);
