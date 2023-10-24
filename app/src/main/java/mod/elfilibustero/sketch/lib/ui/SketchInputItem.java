@@ -39,7 +39,7 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
     private View propertyMenuItem;
     private Kw valueChangeListener;
 
-    public SketchInputItem(Context context, boolean z) {
+    public SketchInputItem(Context context) {
         super(context);
         initialize(context);
     }

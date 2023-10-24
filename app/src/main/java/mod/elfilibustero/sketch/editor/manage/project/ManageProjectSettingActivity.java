@@ -32,14 +32,6 @@ public class ManageProjectSettingActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (saveSettings()) {
-            setResult(RESULT_OK, new Intent());
-            finish();
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.system_settings);
