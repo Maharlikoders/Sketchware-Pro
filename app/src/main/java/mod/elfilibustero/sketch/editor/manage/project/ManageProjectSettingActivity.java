@@ -14,11 +14,12 @@ import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.sketchware.pro.R;
 
 import a.a.a.mB;
+import a.a.a.Kw;
 
 import mod.elfilibustero.sketch.lib.ui.SketchInputItem;
 import mod.elfilibustero.sketch.lib.utils.ProjectConfigurationUtil;
 
-public class ManageProjectSettingActivity extends AppCompatActivity {
+public class ManageProjectSettingActivity extends AppCompatActivity implements Kw {
 
     private LinearLayout contentLayout;
     private String sc_id;
@@ -28,6 +29,7 @@ public class ManageProjectSettingActivity extends AppCompatActivity {
         SketchInputItem inputItem = new SketchInputItem(this);
         inputItem.setKey(key);
         inputItem.setValue(value);
+        inputItem.setOnValueChangedListener(this);
         contentLayout.addView(inputItem);
     }
 
@@ -57,5 +59,17 @@ public class ManageProjectSettingActivity extends AppCompatActivity {
         contentLayout = findViewById(R.id.content);
 
         addPreferenceInput("min_sdk", util.getMinSdk());
+    }
+
+    @Override
+    public void a(String key, String value) {
+        switch (key) {
+            case "min_sdk":
+                util.setMinSdk(value);
+                break;
+            case "target_sdk":
+                util.setTargetSdk(value);
+                break;
+        }
     }
 }

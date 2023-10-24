@@ -98,7 +98,7 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
         }
     }
 
-    public void setOnPropertyValueChangeListener(Kw onPropertyValueChangeListener) {
+    public void setOnValueChangeListener(Kw onPropertyValueChangeListener) {
         valueChangeListener = onPropertyValueChangeListener;
     }
 
