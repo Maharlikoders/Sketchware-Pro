@@ -45,6 +45,9 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
     private View propertyMenuItem;
     private Kw valueChangeListener;
 
+    private static final String[] DEXER = new String[]{"Dx", "D8"};
+    private static final String[] JAVA_VERSION = new String[]{"1.7", "1.8", "1.9", "10", "11"};
+
     public SketchInputItem(Context context) {
         super(context);
         initialize(context);
@@ -66,6 +69,22 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
                 icon = R.drawable.code_icon;
             case "enable_bridgeless_themes":
                 icon = R.drawable.collect_48;
+                break;
+            case "dexer":
+                icon = R.drawable.file_96;
+                break;
+            case "classpath":
+            case "android_jar":
+                icon = R.drawable.rename_96_blue;
+                break;
+            case "enable_logcat":
+            case "no_http_legacy":
+            case "no_warn":
+                icon = R.drawable.ic_true_false_color_48dp;
+                break;
+            case "java_ver":
+                icon = R.drawable.java_96;
+                break;
         }
         imageView.setImageResource(icon);
     }
@@ -89,10 +108,17 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
         return switch (key) {
             case "min_sdk" -> "Min SDK";
             case "target_sdk" -> "Target SDK";
-            case "app_class" -> "Application class name";
-            case "util_class" -> "Util class name";
+            case "app_class" -> "Application class";
+            case "util_class" -> "Util class";
             case "disable_old_methods" -> "Deprecated old methods";
             case "enable_bridgeless_themes" -> "Bridgeless Theme";
+            case "dexer" -> "Dexer";
+            case "classpath" -> "ClassPath";
+            case "android_jar" -> "Android Jar";
+            case "enable_logcat" -> "Logcat";
+            case "no_http_legacy" -> "Http Legacy";
+            case "no_warn" -> "Compile Log Warning";
+            case "java_ver" -> "Java Version";
             default -> "";
         };
     }
@@ -112,6 +138,8 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
             switch (key) {
                 case "app_class":
                 case "util_class":
+                case "classpath":
+                case "android_jar":
                     showTextInputDialog(0, 9999);
                     return;
                 case "min_sdk":
@@ -120,6 +148,11 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
                     return;
                 case "disable_old_methods":
                 case "enable_bridgeless_themes":
+                case "enable_logcat":
+                case "no_http_legacy":
+                case "no_warn":
+                case "dexer":
+                case "java_ver":
                     showTrueFalseDialog();
                     return;
             }
@@ -224,7 +257,15 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
         View view = wB.a(getContext(), R.layout.property_popup_selector_single);
         ViewGroup radioGroupContent = view.findViewById(R.id.rg_content);
 
-        for (String item : sq.l) {
+        String[] items = sq.l;
+
+        if (key.equals("dexer")) {
+            items = DEXER;
+        } else if (key.equals("java_ver")) {
+            items = JAVA_VERSION;
+        }
+
+        for (String item : items) {
             radioGroupContent.addView(getOption(item));
         }
 

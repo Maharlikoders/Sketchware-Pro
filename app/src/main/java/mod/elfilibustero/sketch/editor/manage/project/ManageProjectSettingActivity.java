@@ -63,6 +63,8 @@ public class ManageProjectSettingActivity extends AppCompatActivity implements K
 
         addPreferenceInput("min_sdk", util.getMinSdk());
         addPreferenceInput("target_sdk", util.getTargetSdk());
+        addPreferenceInput("dexer", util.getDexer());
+        addPreferenceInput("java_ver", util.getJavaVersion());
         MiddleLineHeader projectHeader = new MiddleLineHeader(this);
         projectHeader.b.setText("More Settings");
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -78,6 +80,11 @@ public class ManageProjectSettingActivity extends AppCompatActivity implements K
         addPreferenceInput("util_class", util.getUtilClass());
         addPreferenceInput("disable_old_methods", util.getOldMethods());
         addPreferenceInput("enable_bridgeless_themes", util.getBridgelessThemes());
+        addPreferenceInput("classpath", util.getClassPath());
+        addPreferenceInput("android_jar", util.getAndroidJar());
+        addPreferenceInput("enable_logcat", util.getLogcat());
+        addPreferenceInput("no_http_legacy", util.getHttpLegacy());
+        addPreferenceInput("no_warn", util.getWarning());
     }
 
     @Override
@@ -100,6 +107,27 @@ public class ManageProjectSettingActivity extends AppCompatActivity implements K
                 break;
             case "enable_bridgeless_themes":
                 util.setBridgelessThemes((String)value);
+                break;
+            case "dexer":
+                util.setDexer((String)value);
+                break;
+            case "classpath":
+                util.setClassPath((String)value);
+                break;
+            case "enable_logcat":
+                util.setLogcat((String) value);
+                break;
+            case "no_http_legacy":
+                util.setHttpLegacy((String) value);
+                break;
+            case "android_jar":
+                util.setAndroidJar((String) value);
+                break;
+            case "no_warn":
+                util.setWarning((String) value);
+                break;
+            case "java_ver":
+                util.setJavaVersion((String) value);
                 break;
         }
     }
