@@ -17,7 +17,7 @@ public class ProjectConfigurationUtil {
 	public ProjectConfigurationUtil(String sc_id) {
 		this.sc_id = sc_id;
 		path = wq.b(sc_id) + File.separator + "project_config";
-		buildPath =  = wq.b(sc_id) + File.separator + "build_config";
+		buildPath = wq.b(sc_id) + File.separator + "build_config";
 		if (!FileUtil.isExistFile(path)) {
 			FileUtil.writeFile(path, new Gson().toJson(new ProjectConfigurationBean()));
 		}
