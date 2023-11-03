@@ -279,6 +279,9 @@ public class Gx {
                 classInfos = "View.ViewGroup.RecyclerView";
                 break;
 
+            case "ConstraintLayout":
+                classInfos = "View.ViewGroup.ConstraintLayout";
+
             case "TextToSpeech":
                 classInfos = "Component.TextToSpeech";
                 break;

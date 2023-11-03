@@ -34,6 +34,7 @@ import com.besome.sketch.editor.view.item.ItemButton;
 import com.besome.sketch.editor.view.item.ItemCalendarView;
 import com.besome.sketch.editor.view.item.ItemCardView;
 import com.besome.sketch.editor.view.item.ItemCheckBox;
+import com.besome.sketch.editor.view.item.ItemConstraintLayout;
 import com.besome.sketch.editor.view.item.ItemEditText;
 import com.besome.sketch.editor.view.item.ItemFloatingActionButton;
 import com.besome.sketch.editor.view.item.ItemHorizontalScrollView;
@@ -209,11 +210,6 @@ public class ViewPane extends RelativeLayout {
 
     public View b(ViewBean viewBean) {
         View item = switch (viewBean.type) {
-            case ViewBean.VIEW_TYPE_LAYOUT_LINEAR,
-                    ViewBeans.VIEW_TYPE_LAYOUT_COLLAPSINGTOOLBARLAYOUT,
-                    ViewBeans.VIEW_TYPE_LAYOUT_TEXTINPUTLAYOUT,
-                    ViewBeans.VIEW_TYPE_LAYOUT_SWIPEREFRESHLAYOUT,
-                    ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP -> new ItemLinearLayout(getContext());
             case ViewBeans.VIEW_TYPE_LAYOUT_CARDVIEW -> new ItemCardView(getContext());
             case ViewBean.VIEW_TYPE_LAYOUT_HSCROLLVIEW ->
                     new ItemHorizontalScrollView(getContext());
@@ -265,7 +261,13 @@ public class ViewPane extends RelativeLayout {
             case ViewBeans.VIEW_TYPE_WIDGET_OTPVIEW -> new ItemOTPView(getContext());
             case ViewBeans.VIEW_TYPE_WIDGET_CODEVIEW -> new ItemCodeView(getContext());
             case ViewBeans.VIEW_TYPE_WIDGET_RECYCLERVIEW -> new ItemRecyclerView(getContext());
-            default -> null;
+            case ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT -> new ItemConstraintLayout(getContext());
+            case ViewBean.VIEW_TYPE_LAYOUT_LINEAR,
+                    ViewBeans.VIEW_TYPE_LAYOUT_COLLAPSINGTOOLBARLAYOUT,
+                    ViewBeans.VIEW_TYPE_LAYOUT_TEXTINPUTLAYOUT,
+                    ViewBeans.VIEW_TYPE_LAYOUT_SWIPEREFRESHLAYOUT,
+                    ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP,
+            default -> new ItemLinearLayout(getContext());
         };
         item.setId(++b);
         item.setTag(viewBean.id);

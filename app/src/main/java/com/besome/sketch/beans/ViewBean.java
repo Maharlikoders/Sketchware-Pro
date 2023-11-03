@@ -60,6 +60,8 @@ public class ViewBean extends nA implements Parcelable {
     public static final int VIEW_TYPE_WIDGET_MAPVIEW = 18;
     public static final int VIEW_TYPE_COUNT = 19;
 
+    public static final int VIEW_TYPE_LAYOUT_CONSTRAINT = 49;
+
     @Expose
     public String adSize;
     @Expose
@@ -261,6 +263,9 @@ public class ViewBean extends nA implements Parcelable {
             case "ScrollView":
                 return VIEW_TYPE_LAYOUT_VSCROLLVIEW;
 
+            case "ConstraintLayout":
+                return VIEW_TYPE_LAYOUT_CONSTRAINT;
+
             default:
                 return ViewBeans.getViewTypeByTypeName(typeName);
         }
@@ -319,6 +324,9 @@ public class ViewBean extends nA implements Parcelable {
             case VIEW_TYPE_WIDGET_MAPVIEW:
                 return "MapView";
 
+            case VIEW_TYPE_LAYOUT_CONSTRAINT:
+                return "ConstraintLayout";
+
             default:
                 return ViewBeans.getViewTypeName(type);
         }
@@ -330,6 +338,7 @@ public class ViewBean extends nA implements Parcelable {
                 return R.drawable.widget_linear_horizontal;
 
             case VIEW_TYPE_LAYOUT_RELATIVE:
+            case VIEW_TYPE_LAYOUT_CONSTRAINT:
                 return R.drawable.widget_relative_layout;
 
             case VIEW_TYPE_LAYOUT_HSCROLLVIEW:
@@ -467,6 +476,10 @@ public class ViewBean extends nA implements Parcelable {
 
             case VIEW_TYPE_WIDGET_MAPVIEW:
                 name = "MapView";
+                break;
+
+            case VIEW_TYPE_LAYOUT_CONSTRAINT:
+                name = "ConstraintLayout";
                 break;
 
             default:
