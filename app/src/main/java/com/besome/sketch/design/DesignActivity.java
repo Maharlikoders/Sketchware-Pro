@@ -98,7 +98,6 @@ import mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity;
 import mod.elfilibustero.sketch.lib.utils.GitHubUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
 import mod.hey.studios.activity.managers.java.ManageJavaActivity;
-import mod.hey.studios.build.BuildSettingsDialog;
 import mod.hey.studios.compiler.kotlin.KotlinCompilerBridge;
 import mod.hey.studios.project.custom_blocks.CustomBlocksDialog;
 import mod.hey.studios.project.proguard.ManageProguardActivity;
@@ -326,43 +325,28 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             } else if (v.getId() == R.id.btn_compiler_opt) {
                 PopupMenu popupMenu = new PopupMenu(this, findViewById(R.id.btn_compiler_opt));
                 Menu menu = popupMenu.getMenu();
-
-                menu.add(Menu.NONE, 1, Menu.NONE, "Build Settings");
-                menu.add(Menu.NONE, 2, Menu.NONE, "Clean temporary files");
-                menu.add(Menu.NONE, 3, Menu.NONE, "Show last compile error");
-                menu.add(Menu.NONE, 5, Menu.NONE, "Show source code");
+                menu.add(Menu.NONE, 1, Menu.NONE, "Show last compile error");
+                menu.add(Menu.NONE, 2, Menu.NONE, "Show source code");
                 if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
-                    menu.add(Menu.NONE, 4, Menu.NONE, "Install last built APK");
+                    menu.add(Menu.NONE, 3, Menu.NONE, "Install last built APK");
                 }
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case 1:
-                            new BuildSettingsDialog(this, sc_id).show();
-                            break;
-
-                        case 2:
-                            new Thread(() -> {
-                                FileUtil.deleteFile(q.projectMyscPath);
-                                runOnUiThread(() ->
-                                        SketchwareUtil.toast("Done cleaning temporary files!"));
-                            }).start();
-                            break;
-
-                        case 3:
                             new CompileErrorSaver(sc_id).showLastErrors(this);
                             break;
 
-                        case 4:
+                        case 2:
+                            showCurrentActivitySrcCode();
+                            break;
+
+                        case 3:
                             if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
                                 installBuiltApk();
                             } else {
                                 SketchwareUtil.toast("APK doesn't exist anymore");
                             }
-                            break;
-
-                        case 5:
-                            showCurrentActivitySrcCode();
                             break;
 
                         default:
