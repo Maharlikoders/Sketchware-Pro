@@ -962,42 +962,42 @@ public class ViewPane extends RelativeLayout {
         String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
 
         if (view.getParent() instanceof ConstraintLayout parentView) {
-            if (view.getLayoutParams() instanceof ConstraintLayout.LayoutParams params) {
+            if (view.getLayoutParams() instanceof ConstraintLayout.LayoutParams layoutParams) {
                 if (!leftToLeft.isEmpty()) {
                     int value = defaultParent;
                     if (!leftToLeft.equals("parent")) {
-                        value = getChildViewId(parentView, getIdFromString(leftToLeft));
+                        value = getViewId(parentView, getIdFromString(leftToLeft));
                     }
                     layoutParams.leftToLeft = value;
                 }
                 if (!leftToRight.isEmpty()) {
                     int value = defaultParent;
                     if (!leftToRight.equals("parent")) {
-                        value = getChildViewId(parentView, getIdFromString(leftToRight));
+                        value = getViewId(parentView, getIdFromString(leftToRight));
                     }
                     layoutParams.leftToRight = value;
                 }
                 if (!rightToRight.isEmpty()) {
                     int value = defaultParent;
                     if (!rightToRight.equals("parent")) {
-                        value = getChildViewId(parentView, getIdFromString(rightToRight));
+                        value = getViewId(parentView, getIdFromString(rightToRight));
                     }
                     layoutParams.rightToRight = value;
                 }
                 if (!rightToLeft.isEmpty()) {
                     int value = defaultParent;
                     if (!rightToLeft.equals("parent")) {
-                        value = getChildViewId(parentView, getIdFromString(rightToLeft));
+                        value = getViewId(parentView, getIdFromString(rightToLeft));
                     }
                     layoutParams.rightToLeft = value;
                 }
-                view.setLayoutParams(params);
+                view.setLayoutParams(layoutParams);
             }
         }
         
     }
 
-    private int getChildViewId(View parentView, String targetTag) {
+    private int getViewId(ConstraintLayout parentView, String targetTag) {
         for (int i = 0; i < parentView.getChildCount(); i++) {
             View childView = parentView.getChildAt(i);
             if (childView.getTag() != null && childView.getTag().toString().equals(targetTag)) {
