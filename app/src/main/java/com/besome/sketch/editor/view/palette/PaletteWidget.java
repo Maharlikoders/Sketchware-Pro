@@ -323,6 +323,10 @@ public class PaletteWidget extends LinearLayout {
         IconBase iconBase;
         Context context = getContext();
         switch (name) {
+            case "ConstraintLayout":
+                iconBase = new IconConstraintLayout(context);
+                break;
+
             case "TabLayout":
                 iconBase = new IconTabLayout(context);
                 break;
