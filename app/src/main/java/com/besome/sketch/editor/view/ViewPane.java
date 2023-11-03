@@ -63,7 +63,6 @@ import a.a.a.sy;
 import a.a.a.ty;
 import a.a.a.wB;
 import a.a.a.zB;
-import dev.aldi.sayuti.editor.view.ExtraViewPane;
 import dev.aldi.sayuti.editor.view.item.ItemBadgeView;
 import dev.aldi.sayuti.editor.view.item.ItemBottomNavigationView;
 import dev.aldi.sayuti.editor.view.item.ItemCircleImageView;
@@ -309,7 +308,6 @@ public class ViewPane extends RelativeLayout {
     private void b(View view, ViewBean viewBean) {
         ImageBean imageBean;
         String str;
-        ExtraViewPane.a(view, viewBean, this, resourcesManager);
         if (viewBean.id.charAt(0) == '_') {
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -413,10 +411,10 @@ public class ViewPane extends RelativeLayout {
                 }
             }
         }
-        if (classInfo.b("EditText")) {
+        if (classInfo.a("EditText")) {
             updateEditText((EditText) view, viewBean);
         }
-        if (classInfo.b("ImageView")) {
+        if (classInfo.a("ImageView")) {
             if (resourcesManager.h(viewBean.image.resName) == ProjectResourceBean.PROJECT_RES_TYPE_RESOURCE) {
                 ((ImageView) view).setImageResource(getContext().getResources().getIdentifier(viewBean.image.resName, "drawable", getContext().getPackageName()));
             } else if (viewBean.image.resName.equals("default_image")) {
@@ -451,6 +449,9 @@ public class ViewPane extends RelativeLayout {
         }
         if (classInfo.b("CardView")) {
             updateCardView((ItemCardView) view, viewBean);
+        }
+        if (classInfo.(("CircleImageView")) {
+            updateCircleImageView((ItemCircleImageView) view, viewBean);
         }
         if (classInfo.b("SignInButton")) {
             ItemSignInButton button = (ItemSignInButton) view;
@@ -898,6 +899,40 @@ public class ViewPane extends RelativeLayout {
             }
         }
         cardView.setStrokeColor(defaultColor);
+    }
+
+    private void updateCircleImageView(ItemCircleImageView imageView, ViewBean viewBean) {
+        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+        String borderColor = handler.getAttributeValueOf("civ_border_color");
+        String backgroundColor = handler.getAttributeValueOf("civ_circle_background_color");
+        String borderWidth = handler.getAttributeValueOf("civ_border_width");
+
+        int defaultBorderColor = ProjectFile.getColor(sc_id, "color_primary");
+        if (!borderColor.isEmpty()) {
+            try {
+                defaultBorderColor = getColorFromString(borderColor, "#008DCD");
+            } catch (Exception e) {
+            }
+        }
+        imageView.setBorderColor(defaultBorderColor);
+
+        int defaultBackgroundColor = Color.WHITE;
+        if (!backgroundColor.isEmpty()) {
+            try {
+                defaultBackgroundColor = getColorFromString(backgroundColor, "#FFFFFF");
+            } catch (Exception e) {
+            }
+        }
+        imageView.setCircleBackgroundColor(defaultBackgroundColor);
+
+        int borderWidthValue = 4;
+        if (!borderWidth.isEmpty()) {
+                try {
+                bolderWidthValue = Integer.parseInt(borderWidth.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+        imageView.setBorderWidth(bolderWidthValue);
     }
 
     private int getColorFromString(String color, String defaultColor) {
