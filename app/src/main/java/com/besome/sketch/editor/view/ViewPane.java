@@ -933,11 +933,11 @@ public class ViewPane extends RelativeLayout {
         int borderWidthValue = 4;
         if (!borderWidth.isEmpty()) {
                 try {
-                bolderWidthValue = Integer.parseInt(borderWidth.replaceAll("\\D+", ""));
+                borderWidthValue = Integer.parseInt(borderWidth.replaceAll("\\D+", ""));
             } catch (Exception e) {
             }
         }
-        imageView.setBorderWidth(bolderWidthValue);
+        imageView.setBorderWidth(borderWidthValue);
     }
 
     private void updateConstraintLayout(ItemConstraintLayout view, ViewBean viewBean) {

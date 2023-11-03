@@ -21,7 +21,6 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
     private Paint paint;
 
     private Rect rect;
-    private int layoutGravity = 0;
 
     public ItemConstraintLayout(Context context) {
         super(context);
