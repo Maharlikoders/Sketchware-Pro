@@ -29,20 +29,15 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
 
     @Override
     public void a() {
-        int var1 = 0;
+        int index = 0;
 
-        int var4;
-        for (int i = 0; var1 < getChildCount(); i = var4) {
-            View child = getChildAt(var1);
-            var4 = i;
-            if (child instanceof sy) {
-                ((sy) child).getBean().index = i;
-                var4 = i + 1;
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (child instanceof sy syChild) {
+                syChild.getBean().index = index;
+                index++;
             }
-
-            ++var1;
         }
-
     }
 
     private void initialize(Context context) {
@@ -60,28 +55,19 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
         if (index > childCount) {
             super.addView(child);
         } else {
-            byte var4 = -1;
-            int var5 = 0;
+            int insertIndex = index;
 
-            int var6;
-            while (true) {
-                var6 = var4;
-                if (var5 >= childCount) {
+            for (int i = 0; i < childCount; i++) {
+                if (getChildAt(i).getVisibility() == View.GONE) {
+                    insertIndex = i;
                     break;
                 }
-
-                if (getChildAt(var5).getVisibility() == View.GONE) {
-                    var6 = var5;
-                    break;
-                }
-
-                ++var5;
             }
 
-            if (var6 >= 0 && index >= var6) {
-                super.addView(child, index + 1);
+            if (insertIndex >= 0 && index >= insertIndex) {
+                super.addView(child, insertIndex + 1);
             } else {
-                super.addView(child, index);
+                super.addView(child, insertIndex);
             }
         }
     }

@@ -104,7 +104,7 @@ public class wq {
     public static String b(int type) {
         return switch (type) {
             case 0 -> "linear";
-            case 1 -> "relativelayout";
+            case 1 -> "relative";
             case 2 -> "hscroll";
             case 3 -> "button";
             case 4 -> "textview";
@@ -139,19 +139,20 @@ public class wq {
             case 33 -> "badgeview";
             case 34 -> "patternlockview";
             case 35 -> "wavesidebar";
-            case 36 -> "cardview";
-            case 37 -> "collapsingtoolbar";
-            case 38 -> "textinputlayout";
-            case 39 -> "swiperefreshlayout";
-            case 40 -> "radiogroup";
-            case 41 -> "materialbutton";
-            case 42 -> "signinbutton";
-            case 43 -> "circleimageview";
+            case 36 -> "card_view";
+            case 37 -> "collapsing_toolbar";
+            case 38 -> "text_input_layout";
+            case 39 -> "swipe_refresh";
+            case 40 -> "radio_group";
+            case 41 -> "material_button";
+            case 42 -> "signin_button";
+            case 43 -> "circle_image_view";
             case 44 -> "lottie";
-            case 45 -> "youtube";
-            case 46 -> "otpview";
-            case 47 -> "codeview";
-            case 48 -> "recyclerview";
+            case 45 -> "youtube_player_view";
+            case 46 -> "otp_view";
+            case 47 -> "code_view";
+            case 48 -> "recycler_view";
+            case 49 -> "constraint";
             default -> "widget";
         };
     }

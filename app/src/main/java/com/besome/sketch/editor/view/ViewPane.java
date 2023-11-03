@@ -435,7 +435,11 @@ public class ViewPane extends RelativeLayout {
                     ((ImageView) view).setImageResource(R.drawable.default_image);
                 }
             }
-            ((ImageView) view).setScaleType(ImageView.ScaleType.valueOf(viewBean.image.scaleType));
+            if (classInfo.b("CircleImageView")) {
+                ((ItemCircleImageView) view).setScaleType(ImageView.ScaleType.CENTER_CROP);
+            } else {
+                ((ImageView) view).setScaleType(ImageView.ScaleType.valueOf(viewBean.image.scaleType));
+            }
         }
         if (classInfo.a("CompoundButton")) {
             ((CompoundButton) view).setChecked(viewBean.checked != 0);
@@ -961,7 +965,7 @@ public class ViewPane extends RelativeLayout {
         String rightToRight = handler.getAttributeValueOf("layout_constraintRight_toRightOf");
         String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
 
-        if (view.getParent() instanceof ConstraintLayout parentView) {
+        if (view.getParent() instanceof ItemConstraintLayout parentView) {
             if (view.getLayoutParams() instanceof ConstraintLayout.LayoutParams layoutParams) {
                 if (!leftToLeft.isEmpty()) {
                     int value = defaultParent;
