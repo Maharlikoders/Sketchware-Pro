@@ -966,28 +966,28 @@ public class ViewPane extends RelativeLayout {
                 if (!leftToLeft.isEmpty()) {
                     int value = defaultParent;
                     if (!leftToLeft.equals("parent")) {
-                        value = getViewId(parentView, getIdFromString(leftToLeft, "parent"));
+                        value = getViewId(getIdFromString(leftToLeft, "parent"));
                     }
                     layoutParams.leftToLeft = value;
                 }
                 if (!leftToRight.isEmpty()) {
                     int value = defaultParent;
                     if (!leftToRight.equals("parent")) {
-                        value = getViewId(parentView, getIdFromString(leftToRight, "parent"));
+                        value = getViewId(getIdFromString(leftToRight, "parent"));
                     }
                     layoutParams.leftToRight = value;
                 }
                 if (!rightToRight.isEmpty()) {
                     int value = defaultParent;
                     if (!rightToRight.equals("parent")) {
-                        value = getViewId(parentView, getIdFromString(rightToRight, "parent"));
+                        value = getViewId(getIdFromString(rightToRight, "parent"));
                     }
                     layoutParams.rightToRight = value;
                 }
                 if (!rightToLeft.isEmpty()) {
                     int value = defaultParent;
                     if (!rightToLeft.equals("parent")) {
-                        value = getViewId(parentView, getIdFromString(rightToLeft, "parent"));
+                        value = getViewId(getIdFromString(rightToLeft, "parent"));
                     }
                     layoutParams.rightToLeft = value;
                 }
@@ -997,17 +997,12 @@ public class ViewPane extends RelativeLayout {
         
     }
 
-    private int getViewId(ConstraintLayout parentView, String targetTag) {
-        if (targetTag.equals("parent")) {
-            return ConstraintLayout.LayoutParams.PARENT_ID;
+    private int getViewId(String targetTag) {
+        View toView = rootLayout.findViewWithTag(targetTag);
+        if (toView != null) {
+            return toView.getId();
         }
-        for (int i = 0; i < parentView.getChildCount(); i++) {
-            View childView = parentView.getChildAt(i);
-            if (childView.getTag() != null && childView.getTag().toString().equals(targetTag)) {
-                return childView.getId();
-            }
-        }
-        return -1;
+        return ConstraintLayout.LayoutParams.PARENT_ID;
     }
 
     private String getIdFromString(String id, String defaultId) {
