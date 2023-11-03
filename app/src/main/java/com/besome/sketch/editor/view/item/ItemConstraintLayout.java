@@ -97,10 +97,6 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
         return isFixed;
     }
 
-    public int getLayoutGravity() {
-        return layoutGravity;
-    }
-
     public boolean getSelection() {
         return isSelected;
     }
@@ -152,11 +148,6 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
 
     public void setFixed(boolean isFixed) {
         this.isFixed = isFixed;
-    }
-
-    public void setLayoutGravity(int layoutGravity) {
-        this.layoutGravity = layoutGravity;
-        super.setGravity(layoutGravity);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package dev.aldi.sayuti.editor.view.palette;
+package com.besome.sketch.editor.view.palette;
 
 import android.content.Context;
 import android.view.ViewGroup;

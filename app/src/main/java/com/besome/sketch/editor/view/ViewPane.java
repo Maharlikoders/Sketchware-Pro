@@ -455,6 +455,9 @@ public class ViewPane extends RelativeLayout {
         if (classInfo.b("CircleImageView")) {
             updateCircleImageView((ItemCircleImageView) view, viewBean);
         }
+        if (classInfo.b("ConstraintLayout")) {
+            updateConstraintLayout((ItemConstraintLayout) view, viewBean);
+        }
         if (classInfo.b("SignInButton")) {
             ItemSignInButton button = (ItemSignInButton) view;
 
@@ -935,6 +938,10 @@ public class ViewPane extends RelativeLayout {
             }
         }
         imageView.setBorderWidth(bolderWidthValue);
+    }
+
+    private void updateConstraintLayout(ItemConstraintLayout view, ViewBean viewBean) {
+        
     }
 
     private int getColorFromString(String color, String defaultColor) {
