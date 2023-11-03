@@ -727,7 +727,7 @@ public class ViewPane extends RelativeLayout {
                 } else if (child instanceof ItemCardView) {
                     a(view, (ViewGroup) child);
                 } else if (child instanceof ItemConstraintLayout) {
-                    a(view, (ViewGroup) child);
+                    a(view, (ItemConstraintLayout) child);
                 }
 
                 var13 = var4;
@@ -758,7 +758,7 @@ public class ViewPane extends RelativeLayout {
                 } else if (childAt instanceof ItemCardView) {
                     a(viewBean, (ViewGroup) childAt);
                 } else if (childAt instanceof ItemConstraintLayout) {
-                    a(viewBean, (ViewGroup) childAt);
+                    a(viewBean, (ItemConstraintLayout) childAt);
                 }
             }
         }
