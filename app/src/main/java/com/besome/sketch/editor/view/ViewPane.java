@@ -25,6 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.besome.sketch.beans.ImageBean;
 import com.besome.sketch.beans.LayoutBean;
 import com.besome.sketch.beans.ProjectResourceBean;
@@ -59,6 +61,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import a.a.a.Gx;
+import a.a.a.jC;
 import a.a.a.kC;
 import a.a.a.sy;
 import a.a.a.ty;
@@ -391,6 +394,8 @@ public class ViewPane extends RelativeLayout {
         }
         Gx classInfo = viewBean.getClassInfo();
         updateLayout(classInfo, view, viewBean);
+        updateConstraintLayout(view, viewBean);
+
         if (classInfo.a("LinearLayout")) {
             LinearLayout linearLayout = (LinearLayout) view;
             linearLayout.setOrientation(viewBean.layout.orientation);
@@ -454,9 +459,6 @@ public class ViewPane extends RelativeLayout {
         }
         if (classInfo.b("CircleImageView")) {
             updateCircleImageView((ItemCircleImageView) view, viewBean);
-        }
-        if (classInfo.b("ConstraintLayout")) {
-            updateConstraintLayout((ItemConstraintLayout) view, viewBean);
         }
         if (classInfo.b("SignInButton")) {
             ItemSignInButton button = (ItemSignInButton) view;
@@ -526,6 +528,12 @@ public class ViewPane extends RelativeLayout {
                 viewBean.parent = view.getTag().toString();
                 viewBean.parentType = ViewBeans.VIEW_TYPE_LAYOUT_CARDVIEW;
                 viewBean.layout.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            } else if (view instanceof ItemConstraintLayout) {
+                viewBean.preIndex = viewBean.index;
+                viewBean.index = (Integer) d[2];
+                viewBean.preParent = viewBean.parent;
+                viewBean.parent = view.getTag().toString();
+                viewBean.parentType = ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT;
             }
         } else {
             viewBean.preIndex = viewBean.index;
@@ -718,6 +726,8 @@ public class ViewPane extends RelativeLayout {
                     a(view, (ViewGroup) child);
                 } else if (child instanceof ItemCardView) {
                     a(view, (ViewGroup) child);
+                } else if (child instanceof ItemConstraintLayout) {
+                    a(view, (ViewGroup) child);
                 }
 
                 var13 = var4;
@@ -746,6 +756,8 @@ public class ViewPane extends RelativeLayout {
                 } else if (childAt instanceof ItemVerticalScrollView) {
                     a(viewBean, (ViewGroup) childAt);
                 } else if (childAt instanceof ItemCardView) {
+                    a(viewBean, (ViewGroup) childAt);
+                } else if (childAt instanceof ItemConstraintLayout) {
                     a(viewBean, (ViewGroup) childAt);
                 }
             }
@@ -940,8 +952,66 @@ public class ViewPane extends RelativeLayout {
         imageView.setBorderWidth(borderWidthValue);
     }
 
-    private void updateConstraintLayout(ItemConstraintLayout view, ViewBean viewBean) {
+    private void updateConstraintLayout(View view, ViewBean viewBean) {
+        //ArrayList<ViewBean> list = jC.a(sc_id).b(projectFileBean.getXmlName(), viewBean);
+        int defaultParent = ConstraintLayout.LayoutParams.PARENT_ID;
+        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+        String leftToLeft = handler.getAttributeValueOf("layout_constraintLeft_toLeftOf");
+        String leftToRight = handler.getAttributeValueOf("layout_constraintLeft_toRightOf");
+        String rightToRight = handler.getAttributeValueOf("layout_constraintRight_toRightOf");
+        String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
+
+        if (view.getParent() instanceof ConstraintLayout parentView) {
+            if (view.getLayoutParams() instanceof ConstraintLayout.LayoutParams params) {
+                if (!leftToLeft.isEmpty()) {
+                    int value = defaultParent;
+                    if (!leftToLeft.equals("parent")) {
+                        value = getChildViewId(parentView, getIdFromString(leftToLeft));
+                    }
+                    layoutParams.leftToLeft = value;
+                }
+                if (!leftToRight.isEmpty()) {
+                    int value = defaultParent;
+                    if (!leftToRight.equals("parent")) {
+                        value = getChildViewId(parentView, getIdFromString(leftToRight));
+                    }
+                    layoutParams.leftToRight = value;
+                }
+                if (!rightToRight.isEmpty()) {
+                    int value = defaultParent;
+                    if (!rightToRight.equals("parent")) {
+                        value = getChildViewId(parentView, getIdFromString(rightToRight));
+                    }
+                    layoutParams.rightToRight = value;
+                }
+                if (!rightToLeft.isEmpty()) {
+                    int value = defaultParent;
+                    if (!rightToLeft.equals("parent")) {
+                        value = getChildViewId(parentView, getIdFromString(rightToLeft));
+                    }
+                    layoutParams.rightToLeft = value;
+                }
+                view.setLayoutParams(params);
+            }
+        }
         
+    }
+
+    private int getChildViewId(View parentView, String targetTag) {
+        for (int i = 0; i < parentView.getChildCount(); i++) {
+            View childView = parentView.getChildAt(i);
+            if (childView.getTag() != null && childView.getTag().toString().equals(targetTag)) {
+                return childView.getId();
+            }
+        }
+        return -1;
+    }
+
+    private String getIdFromString(String id, String defaultId) {
+        if (id.isEmpty() || !id.startsWith("@+id/")) {
+            return defaultId;
+        }
+        return id.replaceFirst("@+id/", "");
     }
 
     private int getColorFromString(String color, String defaultColor) {
