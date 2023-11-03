@@ -966,28 +966,28 @@ public class ViewPane extends RelativeLayout {
                 if (!leftToLeft.isEmpty()) {
                     int value = defaultParent;
                     if (!leftToLeft.equals("parent")) {
-                        value = getViewId(parentView, getIdFromString(leftToLeft));
+                        value = getViewId(parentView, getIdFromString(leftToLeft, "parent"));
                     }
                     layoutParams.leftToLeft = value;
                 }
                 if (!leftToRight.isEmpty()) {
                     int value = defaultParent;
                     if (!leftToRight.equals("parent")) {
-                        value = getViewId(parentView, getIdFromString(leftToRight));
+                        value = getViewId(parentView, getIdFromString(leftToRight, "parent"));
                     }
                     layoutParams.leftToRight = value;
                 }
                 if (!rightToRight.isEmpty()) {
                     int value = defaultParent;
                     if (!rightToRight.equals("parent")) {
-                        value = getViewId(parentView, getIdFromString(rightToRight));
+                        value = getViewId(parentView, getIdFromString(rightToRight, "parent"));
                     }
                     layoutParams.rightToRight = value;
                 }
                 if (!rightToLeft.isEmpty()) {
                     int value = defaultParent;
                     if (!rightToLeft.equals("parent")) {
-                        value = getViewId(parentView, getIdFromString(rightToLeft));
+                        value = getViewId(parentView, getIdFromString(rightToLeft, "parent"));
                     }
                     layoutParams.rightToLeft = value;
                 }
@@ -998,6 +998,9 @@ public class ViewPane extends RelativeLayout {
     }
 
     private int getViewId(ConstraintLayout parentView, String targetTag) {
+        if (targetTag.equals("parent")) {
+            return ConstraintLayout.LayoutParams.PARENT_ID;
+        }
         for (int i = 0; i < parentView.getChildCount(); i++) {
             View childView = parentView.getChildAt(i);
             if (childView.getTag() != null && childView.getTag().toString().equals(targetTag)) {
