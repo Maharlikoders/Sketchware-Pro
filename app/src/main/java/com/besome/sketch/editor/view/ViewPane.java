@@ -266,7 +266,7 @@ public class ViewPane extends RelativeLayout {
                     ViewBeans.VIEW_TYPE_LAYOUT_COLLAPSINGTOOLBARLAYOUT,
                     ViewBeans.VIEW_TYPE_LAYOUT_TEXTINPUTLAYOUT,
                     ViewBeans.VIEW_TYPE_LAYOUT_SWIPEREFRESHLAYOUT,
-                    ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP,
+                    ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP  -> new ItemLinearLayout(getContext());
             default -> new ItemLinearLayout(getContext());
         };
         item.setId(++b);
@@ -452,7 +452,7 @@ public class ViewPane extends RelativeLayout {
         if (classInfo.b("CardView")) {
             updateCardView((ItemCardView) view, viewBean);
         }
-        if (classInfo.(("CircleImageView")) {
+        if (classInfo.b("CircleImageView")) {
             updateCircleImageView((ItemCircleImageView) view, viewBean);
         }
         if (classInfo.b("SignInButton")) {
