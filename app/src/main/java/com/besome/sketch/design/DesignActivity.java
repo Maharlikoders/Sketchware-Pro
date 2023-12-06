@@ -81,7 +81,6 @@ import a.a.a.wq;
 import a.a.a.yB;
 import a.a.a.yq;
 import a.a.a.zy;
-import dev.aldi.sayuti.editor.manage.ManageCustomAttributeActivity;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;
@@ -728,14 +727,6 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     void toAndroidManifestManager() {
         launchActivity(AndroidManifestInjection.class, null,
                 new Pair<>("file_name", projectFileSelector.currentJavaFileName));
-    }
-
-    /**
-     * Opens {@link ManageCustomAttributeActivity}.
-     */
-    void toAppCompatInjectionManager() {
-        launchActivity(ManageCustomAttributeActivity.class, null,
-                new Pair<>("file_name", projectFileSelector.currentXmlFileName));
     }
 
     /**

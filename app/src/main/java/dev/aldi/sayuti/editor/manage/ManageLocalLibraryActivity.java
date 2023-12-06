@@ -60,7 +60,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         ImageView import_library_icon = findViewById(R.id.ig_toolbar_load_file);
         import_library_icon.setPadding((int) getDip(2), (int) getDip(2), (int) getDip(2), (int) getDip(2));
         import_library_icon.setImageResource(R.drawable.download_80px);
-        import_library_icon.setVisibility(View.VISIBLE);
+        import_library_icon.setVisibility(View.GONE);
         Helper.applyRippleToToolbarView(import_library_icon);
         import_library_icon.setOnClickListener(this);
     }

@@ -95,9 +95,9 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                 R.drawable.plugin_purple_96, R.string.text_title_menu_permission, R.string.text_subtitle_menu_permission
         ));
         /* Add AppCompat Injection Manager */
-        menusLayout.addView(addDrawerItem(12, false,
+        /*removed appcompat injection menusLayout.addView(addDrawerItem(12, false,
                 R.drawable.ic_property_inject, R.string.design_drawer_menu_injection, R.string.design_drawer_menu_injection_subtitle
-        ));
+        ));*/
         /* Add AndroidManifest Manager */
         menusLayout.addView(addDrawerItem(13, false,
                 R.drawable.icon8_code_am, R.string.design_drawer_menu_androidmanifest, R.string.design_drawer_menu_androidmanifest_subtitle
@@ -175,7 +175,7 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                         return;
 
                     case 12:
-                        designActivity.toAppCompatInjectionManager();
+                        //designActivity.toAppCompatInjectionManager();
                         return;
 
                     case 13:
