@@ -1502,7 +1502,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
             Set<String> toNotAdd = new Ox(new jq(), M).readAttributesToReplace(viewBean);
             String typeName = convert.isEmpty() ? ViewBean.getViewTypeName(viewBean.type) : IdGenerator.getLastPath(convert);
             if (!convert.equals("include")) {
-                if (!toNotAdd.contains("android:id")) {
+                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                     viewGroup.addView(d(typeName, viewBean.id));
                 }
             }

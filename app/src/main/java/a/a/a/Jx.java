@@ -162,7 +162,7 @@ public class Jx {
         String theImport = "";
 
         String activityName = ProjectFileBean.getActivityName(AndroidManifestInjector.getLauncherActivity(projectDataManager.a));
-        if (!activityName.equals("MainActivity") || !activityName.equals("Activity")) {
+        if (!activityName.equals("MainActivity") && !activityName.equals("Activity")) {
             theImport = "import " + packageName + "." + activityName + ";" + EOL;
         }
 
@@ -1013,7 +1013,7 @@ public class Jx {
         for (ViewBean viewBean : projectDataManager.d(projectFileBean.getXmlName())) {
             Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
             if (!viewBean.convert.equals("include")) {
-                if (!toNotAdd.contains("android:id")) {
+                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                     views.add(getViewDeclarationAndAddImports(viewBean));
                 }
             }
@@ -1022,7 +1022,7 @@ public class Jx {
             for (ViewBean viewBean : projectDataManager.d(projectFileBean.getDrawerXmlName())) {
                 Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
                 if (!viewBean.convert.equals("include")) {
-                    if (!toNotAdd.contains("android:id")) {
+                    if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                         views.add(getDrawerViewDeclarationAndAddImports(viewBean));
                     }
                 }
