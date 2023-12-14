@@ -248,8 +248,7 @@ public class Jx {
             addImport("android.Manifest");
             addImport("android.content.pm.PackageManager");
         }
-
-        blockImports();
+        
         removeExtraImports();
         Collections.sort(imports);
         for (String anImport : imports) {
