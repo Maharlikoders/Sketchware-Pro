@@ -110,15 +110,16 @@ public class SketchInputItem extends RelativeLayout implements View.OnClickListe
             case "target_sdk" -> "Target SDK";
             case "app_class" -> "Application class";
             case "util_class" -> "Util class";
-            case "disable_old_methods" -> "Deprecated old methods";
-            case "enable_bridgeless_themes" -> "Bridgeless Theme";
+            case "disable_old_methods" -> "Remove deprecated old methods";
+            case "enable_bridgeless_themes" -> "Use Bridgeless Theme";
             case "dexer" -> "Dexer";
             case "classpath" -> "ClassPath";
             case "android_jar" -> "Android Jar";
-            case "enable_logcat" -> "Logcat";
-            case "no_http_legacy" -> "Http Legacy";
-            case "no_warn" -> "Compile Log Warning";
+            case "enable_logcat" -> "Enable logcat reader";
+            case "no_http_legacy" -> "Remove http legacy";
+            case "no_warn" -> "Remove compile log warnings";
             case "java_ver" -> "Java Version";
+            case "string_fog" -> "String fog";
             default -> "";
         };
     }

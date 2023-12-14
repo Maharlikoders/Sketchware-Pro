@@ -162,7 +162,7 @@ public class Jx {
         String theImport = "";
 
         String activityName = ProjectFileBean.getActivityName(AndroidManifestInjector.getLauncherActivity(projectDataManager.a));
-        if (!activityName.equals("MainActivity")) {
+        if (!activityName.equals("MainActivity") || !activityName.equals("Activity")) {
             theImport = "import " + packageName + "." + activityName + ";" + EOL;
         }
 
@@ -199,6 +199,7 @@ public class Jx {
         addRequestCodeConstants();
         addImportsForBlocks();
         addLocalLibraryImports();
+        addEventsImport();
 
         StringBuilder sb = new StringBuilder(8192);
         sb.append("package ").append(packageName).append(";").append(EOL)
@@ -217,16 +218,27 @@ public class Jx {
         }
 
         if (buildConfig.g) {
-            addImport("androidx.fragment.app.Fragment");
-            addImport("androidx.fragment.app.FragmentManager");
-            addImport("androidx.fragment.app.DialogFragment");
+            if (isFragment) {
+                addImport("androidx.fragment.app.Fragment");
+                addImport("androidx.fragment.app.FragmentManager");
+            }
+            if (isDialogFragment) {
+                addImport("androidx.fragment.app.DialogFragment");
+                addImport("androidx.fragment.app.FragmentManager");
+            }
             if (isBottomDialogFragment) {
                 addImport("com.google.android.material.bottomsheet.BottomSheetDialogFragment");
+                addImport("androidx.fragment.app.FragmentManager");
             }
         } else {
-            addImport("android.app.Fragment");
-            addImport("android.app.FragmentManager");
-            addImport("android.app.DialogFragment");
+            if (isFragment) {
+                addImport("android.app.Fragment");
+                addImport("android.app.FragmentManager");
+            }
+            if (isDialogFragment) {
+                addImport("android.app.DialogFragment");
+                addImport("android.app.FragmentManager");
+            }
         }
         if (permissionManager.hasNewPermission() || buildConfig.a(projectFileBean.getActivityName()).a()) {
             if (buildConfig.g) {
@@ -737,9 +749,9 @@ public class Jx {
     }
 
     private void handleAppCompat() {
+        addImport("android.os.Bundle");
         if (buildConfig.g) {
             addImport("androidx.appcompat.app.AppCompatActivity");
-            addImport("androidx.annotation.*");
         } else {
             addImport("android.app.Activity");
         }
@@ -799,6 +811,7 @@ public class Jx {
                 addImports(mq.getImportsByTypeName("LinearLayout"));
             }
         }
+        /*
         addImport("android.app.*");
         addImport("android.os.*");
         addImport("android.view.*");
@@ -821,6 +834,7 @@ public class Jx {
         addImport("java.util.regex.*");
         addImport("java.text.*");
         addImport("org.json.*");
+        */
         onCreateEventCode = new Fx(projectFileBean.getActivityName(), buildConfig, "onCreate_initializeLogic", projectDataManager.a(projectFileBean.getJavaName(), "onCreate_initializeLogic")).a();
     }
 
@@ -1073,21 +1087,53 @@ public class Jx {
         }
     }
 
-        private void blockImports() {
-        String importsAddedByImportBlocks = LogicHandler.imports(eventManager.b());
-        if (!importsAddedByImportBlocks.isEmpty()) {
-            for (String blockImport : importsAddedByImportBlocks.split("import |;")) {
-                addImport(blockImport.trim());
-            }
-        }
-        }
-
     private void addImplements() {
         ArrayList<EventBean> events = projectDataManager.g(projectFileBean.getJavaName());
         for (EventBean bean : events) {
             switch (bean.eventName) {
                 case "onClick":
                     if (bean.eventType == EventBean.EVENT_TYPE_ACTIVITY) addImplement("View.OnClickListener");
+                    break;
+            }
+        }
+    }
+
+    private void addEventsImport() {
+        ArrayList<EventBean> events = projectDataManager.g(projectFileBean.getJavaName());
+        for (EventBean bean : events) {
+            switch (bean.eventName) {
+                case "onClick":
+                    addImport("android.view.View");
+                    break;
+                case "onPostCreate":
+                    addImport("android.os.Bundle");
+                    break;
+                case "onCheckedChange":
+                    addImport("android.widget.CompoundButton");
+                    break;
+                case "onItemSelected":
+                case "onItemClicked":
+                case "onItemLongClicked":
+                    addImport("android.view.View");
+                    addImport("android.widget.AdapterView");
+                    break;
+                case "onNothingSelected":
+                    addImport("android.widget.AdapterView");
+                    break;
+                case "afterTextChanged":
+                    addImport("android.text.Editable");
+                    break;
+                case "onProgressChanged":
+                case "onStartTrackingTouch":
+                case "onStopTrackingTouch":
+                    addImport("android.widget.SeekBar");
+                    break;
+                case "onDateChange":
+                    addImport("android.widget.CalendarView");
+                    break;
+                case "onPageStarted":
+                case "onPageFinished":
+                    addImport("android.widget.WebView");
                     break;
             }
         }

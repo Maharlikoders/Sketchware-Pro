@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import a.a.a.ProjectBuilder;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuildProgressReceiver;
 
@@ -14,7 +15,7 @@ public class StringfogHandler {
     private final String config_path;
 
     public StringfogHandler(String sc_id) {
-        config_path = FileUtil.getExternalStorageDir().concat("/.sketchware/data/" + sc_id + "/stringfog");
+        config_path = FileUtil.getExternalStorageDir()+ "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY +"/data/" + sc_id + "/stringfog";
 
         if (!FileUtil.isExistFile(config_path)) FileUtil.writeFile(config_path, getDefaultConfig());
     }

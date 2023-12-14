@@ -90,10 +90,6 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         menusLayout.addView(addDrawerItem(10, false,
                 R.drawable.file_48_blue, R.string.text_title_menu_assets, R.string.text_subtitle_menu_assets
         ));
-        /* Add Permission Manager */
-        menusLayout.addView(addDrawerItem(11, false,
-                R.drawable.plugin_purple_96, R.string.text_title_menu_permission, R.string.text_subtitle_menu_permission
-        ));
         /* Add AppCompat Injection Manager */
         /*removed appcompat injection menusLayout.addView(addDrawerItem(12, false,
                 R.drawable.ic_property_inject, R.string.design_drawer_menu_injection, R.string.design_drawer_menu_injection_subtitle
@@ -101,10 +97,6 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         /* Add AndroidManifest Manager */
         menusLayout.addView(addDrawerItem(13, false,
                 R.drawable.icon8_code_am, R.string.design_drawer_menu_androidmanifest, R.string.design_drawer_menu_androidmanifest_subtitle
-        ));
-        /* Add Used Custom Blocks */
-        menusLayout.addView(addDrawerItem(20, false,
-                R.drawable.block_96_blue, R.string.design_drawer_menu_customblocks, R.string.design_drawer_menu_customblocks_subtitle
         ));
         /* Add ProGuard Manager */
         menusLayout.addView(addDrawerItem(17, false,
@@ -170,14 +162,6 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                         designActivity.toAssetManager();
                         return;
 
-                    case 11:
-                        designActivity.toPermissionManager();
-                        return;
-
-                    case 12:
-                        //designActivity.toAppCompatInjectionManager();
-                        return;
-
                     case 13:
                         designActivity.toAndroidManifestManager();
                         return;
@@ -194,19 +178,18 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                         designActivity.toStringFogManager();
                         return;
 
-                    case 20:
-                        designActivity.toCustomBlocksViewer();
-                        return;
-
                     case 22:
                         designActivity.toLogReader();
                         return;
+
                     case 23:
                         designActivity.toXmlManager();
                         break;
+
                     case 24:
                         designActivity.toGitHubManager();
                         break;
+                        
                     default:
                 }
             }

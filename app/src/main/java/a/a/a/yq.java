@@ -801,9 +801,6 @@ public class yq {
 
         srcCodeBeans.add(new SrcCodeBean("strings.xml",
                 CommandBlock.applyCommands("strings.xml", resourceHandler.getStringsXml())));
-        int minSdk = Integer.parseInt(projectConfigUtil.getMinSdk());
-        int targetSdk = Integer.parseInt(projectConfigUtil.getTargetSdk());
-        srcCodeBeans.add(new SrcCodeBean("build.gradle", Lx.getBuildGradleString(28, minSdk, targetSdk, N)));
         CommandBlock.x();
         return srcCodeBeans;
     }

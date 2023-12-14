@@ -86,7 +86,6 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme;
 import mod.SketchwareUtil;
-import mod.agus.jcoderz.editor.manage.permission.ManagePermissionActivity;
 import mod.agus.jcoderz.editor.manage.resource.ManageResourceActivity;
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.elfilibustero.sketch.beans.GitHubBean;
@@ -98,7 +97,6 @@ import mod.elfilibustero.sketch.lib.utils.GitHubUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
 import mod.hey.studios.activity.managers.java.ManageJavaActivity;
 import mod.hey.studios.compiler.kotlin.KotlinCompilerBridge;
-import mod.hey.studios.project.custom_blocks.CustomBlocksDialog;
 import mod.hey.studios.project.proguard.ManageProguardActivity;
 import mod.hey.studios.project.proguard.ProguardHandler;
 import mod.hey.studios.project.stringfog.ManageStringfogActivity;
@@ -737,25 +735,11 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
-     * Shows a {@link CustomBlocksDialog}.
-     */
-    void toCustomBlocksViewer() {
-        CustomBlocksDialog.show(this, sc_id);
-    }
-
-    /**
      * Opens {@link ManageJavaActivity}.
      */
     void toJavaManager() {
         launchActivity(ManageJavaActivity.class, null,
                 new Pair<>("pkgName", q.packageName));
-    }
-
-    /**
-     * Opens {@link ManagePermissionActivity}.
-     */
-    void toPermissionManager() {
-        launchActivity(ManagePermissionActivity.class, null);
     }
 
     /**

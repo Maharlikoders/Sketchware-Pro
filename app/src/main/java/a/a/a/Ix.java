@@ -143,10 +143,7 @@ public class Ix {
      * @param applicationTag {@link XmlBuilder} object to add the {@code meta-data} tag to
      */
     private void writeGMSVersion(XmlBuilder applicationTag) {
-        XmlBuilder metadataTag = new XmlBuilder("meta-data");
-        metadataTag.addAttribute("android", "name", "com.google.android.gms.version");
-        metadataTag.addAttribute("android", "value", "@integer/google_play_services_version");
-        applicationTag.a(metadataTag);
+        writeMetaData(applicationTag, "com.google.android.gms.version", "@integer/google_play_services_version");
     }
 
     /**
@@ -171,10 +168,7 @@ public class Ix {
     }
 
     private void writeAdmobAppId(XmlBuilder applicationTag) {
-        XmlBuilder metadataTag = new XmlBuilder("meta-data");
-        metadataTag.addAttribute("android", "name", "com.google.android.gms.ads.APPLICATION_ID");
-        metadataTag.addAttribute("android", "value", c.appId);
-        applicationTag.a(metadataTag);
+        writeMetaData(applicationTag, "com.google.android.gms.ads.APPLICATION_ID", c.appId);
     }
 
     /**
