@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.besome.sketch.lib.base.CollapsibleViewHolder;
 import com.besome.sketch.lib.ui.CollapsibleButton;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sketchware.pro.databinding.ColorPickerBinding;
 import com.sketchware.pro.databinding.ManageXmlResourceBinding;
 import com.sketchware.pro.databinding.ManageXmlResourceAddBinding;
@@ -126,7 +127,7 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
 
     private void readSettings() {
         if (FileUtil.isExistFile(resourcePath)) {
-            resources = new Gson().fromJson(FileUtil.readFile(resourcePath));
+            resources = new Gson().fromJson(FileUtil.readFile(resourcePath), new TypeToken<List<Map<String, Object>>>(){});
         }
 
         var recyclerView = binding.recyclerView;
@@ -237,7 +238,7 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
                 });
                 onDoneInitializingViews();
                 root.setOnClickListener(_v -> {
-                    int position = lastSelectedItem;
+                    int position = getLayoutPosition();
                     showDialog((String) data.get(position).get("name"), (String) data.get(position).get("value"), position, true);
                 });
                 setOnClickCollapseConfig(v -> v != root);
