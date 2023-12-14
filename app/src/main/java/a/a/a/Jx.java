@@ -157,7 +157,7 @@ public class Jx {
                 newImports.add(value);
             }
         }
-        for (String value : removeImport) {
+        for (String value : removeImports) {
             if (newImports.contains(value)) {
                 newImports.remove(value);
             }
@@ -887,13 +887,28 @@ public class Jx {
             if (viewBean.type == ViewBeans.VIEW_TYPE_LAYOUT_VIEWPAGER) {
                 adapterCode = Lx.pagerAdapter(viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
             } else if (viewBean.type == ViewBeans.VIEW_TYPE_WIDGET_RECYCLERVIEW) {
-
-                adapterCode = Lx.recyclerViewAdapter(viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
+                Pair<String, String> customList = getRecyclerViewCustomList(viewBean.id);
+                adapterCode = Lx.recyclerViewAdapter(viewBean.id.equals(customList.first) ? viewBean.id : customList.first, viewBean.customView, projectDataManager.d(xmlName), adapterLogic, customList.second);
             } else {
                 adapterCode = Lx.getListAdapterCode(viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
             }
             adapterClasses.add(adapterCode);
         }
+    }
+
+    private Pair<String, String> getRecyclerViewCustomList(String id) {
+        Pair<String, String> customList = new Pair<>(id, "ArrayList<HashMap<String, Object>>");
+        for (Map.Entry<String, ArrayList<BlockBean>> blocks : jC.a(projectDataManager.a).b(projectFileBean.getJavaName()).entrySet()) {
+            for (BlockBean block : blocks.getValue()) {
+                if (block.opCode.equals("recyclerViewCustomList")) {
+                    if (!block.parameters.get(0).trim().isEmpty() && !block.parameters.get(1).trim().isEmpty()) {
+                        customList = new Pair<>(block.parameters.get(0), block.parameters.get(1));
+                    }
+                    break;
+                }
+            }
+        }
+        return customList;
     }
 
     private String getViewInitializer(ViewBean viewBean) {

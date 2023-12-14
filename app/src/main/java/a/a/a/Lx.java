@@ -3319,7 +3319,7 @@ public class Lx {
                 "}\r\n";
     }
 
-    public static String recyclerViewAdapter(String recyclerViewName, String itemLayoutName, ArrayList<ViewBean> itemViews, String onBindCustomViewLogic) {
+    public static String recyclerViewAdapter(String recyclerViewName, String itemLayoutName, ArrayList<ViewBean> itemViews, String onBindCustomViewLogic, String customList) {
         String adapterName = a(recyclerViewName);
         Iterator<ViewBean> viewIterator = itemViews.iterator();
 
@@ -3338,9 +3338,9 @@ public class Lx {
 
         String baseCode = "public class " + adapterName + " extends RecyclerView.Adapter<" + adapterName + ".ViewHolder> {\r\n" +
                 "\r\n" +
-                "ArrayList<HashMap<String, Object>> _data;\r\n" +
+                customList + " _data;\r\n" +
                 "\r\n" +
-                "public " + adapterName + "(ArrayList<HashMap<String, Object>> _arr) {\r\n" +
+                "public " + adapterName + "(" + customList + " _arr) {\r\n" +
                 "_data = _arr;\r\n" +
                 "}\r\n" +
                 "\r\n" +
