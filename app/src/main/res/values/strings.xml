@@ -1915,6 +1915,7 @@ ACTION_VIEW
  url type (http://sketchware.io)"</string>
     <string name="property_description_edittext_ime_options">"It does not work when single_line is 'false' and input_type is 'text'"</string>
     <string name="property_divider_height">dividerHeight</string>
+    <string name="property_disable_id">Remove ID</string>
     <string name="property_enabled">enabled</string>
     <string name="property_first_day_of_week">firstDayOfWeek</string>
     <string name="property_gravity">gravity</string>

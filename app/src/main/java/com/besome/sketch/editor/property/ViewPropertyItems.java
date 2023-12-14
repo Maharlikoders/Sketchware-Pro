@@ -116,6 +116,7 @@ public class ViewPropertyItems extends LinearLayout implements Kw, View.OnClickL
                     b(property, bean.layout.backgroundResource, false);
             case "property_background_color" -> a(property, bean.layout.backgroundColor);
             case "property_enabled" -> e(property, bean.enabled);
+            case "property_disable_id" -> e(property, bean.disable_id);
             case "property_rotate" -> b(property, String.valueOf(bean.image.rotate));
             case "property_alpha" -> b(property, String.valueOf(bean.alpha));
             case "property_translation_x" -> b(property, String.valueOf(bean.translationX));
@@ -714,6 +715,8 @@ public class ViewPropertyItems extends LinearLayout implements Kw, View.OnClickL
                             bean.clickable = switchSingleLineItem.getValue() ? 1 : 0;
                     case "property_checked" ->
                             bean.checked = switchSingleLineItem.getValue() ? 1 : 0;
+                    case "property_disable_id" ->
+                        bean.disable_id = switchSingleLineItem.getValue() ? 1 : 0;
                 }
             } else if (view instanceof PropertyColorItem colorItem) {
                 switch (colorItem.getKey()) {

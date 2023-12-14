@@ -82,6 +82,8 @@ public class ViewBean extends nA implements Parcelable {
     @Expose
     public int dividerHeight;
     @Expose
+    public int disable_id;
+    @Expose
     public int enabled;
     @Expose
     public int firstDayOfWeek;
@@ -135,6 +137,7 @@ public class ViewBean extends nA implements Parcelable {
     public ViewBean() {
         parent = null;
         parentType = -1;
+        disable_id = 0;
         enabled = 1;
         clickable = 1;
         spinnerMode = 1;
@@ -169,6 +172,7 @@ public class ViewBean extends nA implements Parcelable {
         parentType = parcel.readInt();
         index = parcel.readInt();
         enabled = parcel.readInt();
+        disable_id = parcel.readInt();
         clickable = parcel.readInt();
         spinnerMode = parcel.readInt();
         dividerHeight = parcel.readInt();
@@ -509,6 +513,7 @@ public class ViewBean extends nA implements Parcelable {
         parentType = other.parentType;
         index = other.index;
         enabled = other.enabled;
+        disable_id = other.disable_id;
         clickable = other.clickable;
         spinnerMode = other.spinnerMode;
         dividerHeight = other.dividerHeight;
@@ -562,7 +567,7 @@ public class ViewBean extends nA implements Parcelable {
 
     public boolean isEqual(ViewBean viewBean) {
         if (type != viewBean.type || parentType != viewBean.parentType || index != viewBean.index ||
-                enabled != viewBean.enabled || clickable != viewBean.clickable || alpha != viewBean.alpha ||
+                enabled != viewBean.enabled || disable_id != viewBean.disable_id || clickable != viewBean.clickable || alpha != viewBean.alpha ||
                 translationX != viewBean.translationX || translationY != viewBean.translationY ||
                 scaleX != viewBean.scaleX || scaleY != viewBean.scaleY || spinnerMode != viewBean.spinnerMode ||
                 dividerHeight != viewBean.dividerHeight || choiceMode != viewBean.choiceMode ||
@@ -614,6 +619,7 @@ public class ViewBean extends nA implements Parcelable {
         dest.writeInt(parentType);
         dest.writeInt(index);
         dest.writeInt(enabled);
+        dest.writeInt(disable_id);
         dest.writeInt(clickable);
         dest.writeInt(spinnerMode);
         dest.writeInt(dividerHeight);
