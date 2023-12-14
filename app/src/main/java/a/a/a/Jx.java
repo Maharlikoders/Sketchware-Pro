@@ -957,7 +957,7 @@ public class Jx {
         ArrayList<ViewBean> viewBeans = projectDataManager.d(projectFileBean.getXmlName());
         for (ViewBean viewBean : viewBeans) {
             Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
-            if (!toNotAdd.contains("android:id")) {
+            if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                 initializeMethodCode.add(getViewInitializer(viewBean));
             }
         }
@@ -965,7 +965,7 @@ public class Jx {
             ArrayList<ViewBean> drawerBeans = projectDataManager.d(projectFileBean.getDrawerXmlName());
             for (ViewBean viewBean : drawerBeans) {
                 Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
-                if (!toNotAdd.contains("android:id")) {
+                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                     initializeMethodCode.add(getDrawerViewInitializer(viewBean));
                 }
             }

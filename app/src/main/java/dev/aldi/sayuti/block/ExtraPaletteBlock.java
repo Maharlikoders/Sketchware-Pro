@@ -384,6 +384,7 @@ public class ExtraPaletteBlock {
                 logicEditor.a("Enter the path without import & semicolon", 0xff555555);
                 logicEditor.a(" ", "customImport");
                 logicEditor.a(" ", "customImport2");
+                logicEditor.a(" ", "removeImport");
             }
             return;
         }

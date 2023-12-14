@@ -309,6 +309,15 @@ public class BlocksHandler {
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
+        hashMap.put("name", "removeImport");
+        hashMap.put("type", " ");
+        hashMap.put("code", "import %s;");
+        hashMap.put("color", "#EE7D15");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "remove import %s.import");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
         hashMap.put("name", "customToast");
         hashMap.put("type", " ");
         hashMap.put("code", "SketchwareUtil.CustomToast(getApplicationContext(), %s, %s, %s, %s, %s, SketchwareUtil.%s);");

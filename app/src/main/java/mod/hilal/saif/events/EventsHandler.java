@@ -219,6 +219,7 @@ public class EventsHandler {
         switch (name) {
             case "Import":
             case "Implement":
+            case "moreCommand":
             case "onActivityResult":
             case "initializeLogic":
             case "onBackPressed":
@@ -291,6 +292,9 @@ public class EventsHandler {
             case "Implement":
                 return "add implements to activity";
 
+            case "moreCommand":
+                return "More commands blocks";
+
             case "onActivityResult":
                 return "onActivityResult";
 
@@ -354,6 +358,7 @@ public class EventsHandler {
                         param + "\r\n" +
                         "//3b5IqsVG57gNqLi7FBO2MeOW6iI7tOustUGwcA7HKXm0o7lovZ";
             case "Implement":
+            case "moreCommand":
             case "onActivityResult":
             case "initializeLogic":
                 return "";
@@ -438,6 +443,7 @@ public class EventsHandler {
         switch (name) {
             case "Import":
             case "Implement":
+            case "moreCommand":
             case "initializeLogic":
             case "onSwipeRefreshLayout":
             case " onLongClick":
@@ -494,6 +500,9 @@ public class EventsHandler {
             case "Implement":
                 return "add new implement";
 
+            case "moreCommand":
+                return "add command blocks";
+                
             case "onClick":
                 return "when " + name + " clicked %m.view.view"; 
 
