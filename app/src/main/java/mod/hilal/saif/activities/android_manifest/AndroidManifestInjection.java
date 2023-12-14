@@ -39,6 +39,7 @@ import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.editor.manage.manifest.ManageFirebaseMetaDataActivity;
 import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.code.SrcCodeEditor;
 import mod.hey.studios.code.SrcCodeEditorLegacy;
@@ -133,6 +134,20 @@ public class AndroidManifestInjection extends Activity {
                 inta.putExtra("sc_id", sc_id);
                 inta.putExtra("file_name", activityName);
                 inta.putExtra("type", "permission");
+                startActivity(inta);
+            });
+        }
+
+        {
+            CardView firebase_card = newCard(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0);
+            LinearLayout firebase_skin = newLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0);
+            firebase_card.addView(firebase_skin);
+            makeup(firebase_skin, R.drawable.widget_firebase, "Firebase", "Add meta-data to firebase service");
+            base.addView(firebase_card);
+            firebase_skin.setOnClickListener(_view -> {
+                Intent inta = new Intent();
+                inta.setClass(getApplicationContext(), ManageFirebaseMetaDataActivity.class);
+                inta.putExtra("sc_id", sc_id);
                 startActivity(inta);
             });
         }

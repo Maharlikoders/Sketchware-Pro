@@ -4,18 +4,21 @@ import android.util.Pair;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import com.besome.sketch.beans.ViewBean;
 
+import mod.elfilibustero.sketch.beans.InjectAttributeBean;
 import mod.jbk.util.LogUtil;
 
 public class InjectAttributeHandler {
+
+    public static final Pattern ATTRIBUTE_PATTERN = Pattern.compile("([a-zA-Z_:][a-zA-Z\\d_\\.-]*)\\s*\"([^\"]*)\"");
 
 	private ViewBean viewBean;
 
@@ -31,6 +34,22 @@ public class InjectAttributeHandler {
 		}
 		return "";
 	}
+
+    public List<InjectAttributeBean> getInjectAttributes() {
+        List<InjectAttributeBean> attributes = new ArrayList<>();
+        Matcher matcher = ATTRIBUTE_PATTERN.matcher(viewBean.inject);
+
+        while(matcher.find()) {
+            String attribute = matcher.group(1);
+            String value = matcher.group(2);
+            String[] attributeParts = attribute.split(":");
+            String res = attributeParts.length > 1 ? attributeParts[0] : "";
+            String attr = attributeParts.length > 1 ? attributeParts[1] : attribute;
+
+            attributes.add(new InjectAttributeBean(res, attr, value));
+        }
+        return attributes;
+    }
 
 	public Set<Pair<String, String>> getAttributes() {
         Set<Pair<String, String>> attributePairs = new HashSet<>();

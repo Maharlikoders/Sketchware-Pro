@@ -18,6 +18,8 @@ import com.google.android.material.appbar.MaterialToolbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import a.a.a.aB;
+
 import com.sketchware.pro.R;
 import com.sketchware.pro.databinding.ManageExternalAddLibraryBinding;
 
@@ -87,7 +89,21 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         adapter = new LibraryAdapter(dependencies);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
-
+            aB dialog = new aB(ManageExternalLibraryActivity.this);
+            dialog.a(R.drawable.delete_96);
+            dialog.b("Delete");
+            dialog.a("Do you want to delete this?");
+            dialog.b("Yes", v -> {
+                dependencies.remove(position);
+                externalLibrary.setDependencies(dependencies);
+                handler.setBean(externalLibrary);
+                loadDependencies();
+                dialog.dismiss();
+            });
+            dialog.a("No", v -> {
+                dialog.dismiss();
+            });
+            dialog.show();
         });
         loadDependencies();
     }
