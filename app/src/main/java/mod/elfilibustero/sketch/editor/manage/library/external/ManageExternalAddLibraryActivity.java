@@ -89,7 +89,7 @@ public class ManageExternalAddLibraryActivity extends AppCompatActivity implemen
         adapter = new LibraryAdapter(dependencies);
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(position -> {
-            aB dialog = new aB(ManageExternalLibraryActivity.this);
+            aB dialog = new aB(ManageExternalAddLibraryActivity.this);
             dialog.a(R.drawable.delete_96);
             dialog.b("Delete");
             dialog.a("Do you want to delete this?");

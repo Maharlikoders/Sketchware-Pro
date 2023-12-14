@@ -17,6 +17,7 @@ import mod.hey.studios.util.Helper;
 public class CollapsibleXmlLayout extends CollapsibleLayout<CollapsibleButton> {
 
     private CollapsibleButton edit;
+    private CollapsibleButton insert;
 
     public CollapsibleXmlLayout(@NonNull Context context) {
         super(context);
@@ -29,7 +30,7 @@ public class CollapsibleXmlLayout extends CollapsibleLayout<CollapsibleButton> {
     @Override
     protected List<CollapsibleButton> initializeButtons(@NonNull Context context) {
         edit = CollapsibleButton.create(context, 0, R.drawable.ic_edit_yellow_48dp, R.string.common_word_edit);
-        CollapsibleButton insert = CollapsibleButton.create(context, 1, R.drawable.insert_64, R.string.common_word_insert);
+        insert = CollapsibleButton.create(context, 1, R.drawable.insert_64, R.string.common_word_insert);
         CollapsibleButton delete = CollapsibleButton.create(context, 2, R.drawable.delete_96, R.string.common_word_delete);
         return List.of(edit, insert, delete);
     }
@@ -51,5 +52,9 @@ public class CollapsibleXmlLayout extends CollapsibleLayout<CollapsibleButton> {
 
     public CollapsibleButton getEditButton() {
         return edit;
+    }
+
+    public CollapsibleButton getInsertButton() {
+        return insert;
     }
 }

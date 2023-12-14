@@ -11,6 +11,10 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import com.besome.sketch.beans.ViewBean;
 
 import mod.elfilibustero.sketch.beans.InjectAttributeBean;

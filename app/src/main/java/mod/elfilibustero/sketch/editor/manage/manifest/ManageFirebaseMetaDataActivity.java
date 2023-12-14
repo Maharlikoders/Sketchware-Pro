@@ -72,6 +72,7 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
         binding.toolbar.setNavigationOnClickListener(Helper.getBackPressedClickListener(this));
 
         binding.fab.setOnClickListener(_view -> {
+            showDialog("", "", null, false);
         });
     }
 
@@ -90,7 +91,7 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
         save(new Gson().toJson(resources), resourcePath);
     }
 
-    private void showDialog(String name, String value, boolean edit) {
+    private void showDialog(String _name, String _value, Integer _position, boolean edit) {
         aB dialog = new aB(this);
         dialog.a(R.drawable.delete_96);
         dialog.b(edit ? "Edit" : "Add");
@@ -107,9 +108,14 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
         dialog.b(Helper.getResString(R.string.common_word_save), v -> {
             String inputName = name.getText().toString();
             String inputValue = value.getText().toString();
-
             if (edit) {
-                
+                resources.get(_position).put("name", inputName);
+                resources.get(_position).put("value", inputValue);
+            } else {
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", inputName);
+                map.put("value", inputValue);
+                resources.add(map);
             }
             save(new Gson().toJson(resources), resourcePath);
             dialog.dismiss();
@@ -120,6 +126,7 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
 
     private void readSettings() {
         if (FileUtil.isExistFile(resourcePath)) {
+            resources = new Gson().fromJson(FileUtil.readFile(resourcePath));
         }
 
         var recyclerView = binding.recyclerView;
@@ -230,6 +237,8 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
                 });
                 onDoneInitializingViews();
                 root.setOnClickListener(_v -> {
+                    int position = lastSelectedItem;
+                    showDialog((String) data.get(position).get("name"), (String) data.get(position).get("value"), position, true);
                 });
                 setOnClickCollapseConfig(v -> v != root);
                 binding.icon.setImageResource(0);
