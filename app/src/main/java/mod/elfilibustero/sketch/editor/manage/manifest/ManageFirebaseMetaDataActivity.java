@@ -80,6 +80,7 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        readSettings();
     }
 
     private void save(String content, String path) {
@@ -242,7 +243,7 @@ public class ManageFirebaseMetaDataActivity extends AppCompatActivity {
                     showDialog((String) data.get(position).get("name"), (String) data.get(position).get("value"), position, true);
                 });
                 setOnClickCollapseConfig(v -> v != root);
-                binding.icon.setImageResource(0);
+                binding.icon.setImageResource(R.drawable.icons8_app_attrs);
             }
 
             @Override

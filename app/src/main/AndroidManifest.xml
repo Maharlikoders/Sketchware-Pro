@@ -261,6 +261,8 @@
             android:configChanges="orientation|screenSize" />
         <activity android:name="mod.elfilibustero.sketch.editor.manage.project.ManageProjectSettingActivity"
             android:configChanges="orientation|screenSize" />
+        <activity android:name="mod.elfilibustero.sketch.editor.manage.manifest.ManageFirebaseMetaDataActivity"
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name="mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity"
             android:configChanges="orientation|screenSize" />
