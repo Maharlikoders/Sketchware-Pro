@@ -282,7 +282,7 @@ public class ExtraPaletteBlock {
             }
 
             if (!view.convert.equals("include")) {
-                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
+                if (!toNotAdd.contains("android:id") && view.disable_id == 0) {
                     String typeName = view.convert.isEmpty() ? ViewBean.getViewTypeName(view.type) : IdGenerator.getLastPath(view.convert);
                     logicEditor.a(view.id, "v", typeName, "getVar").setTag(view.id);
                 }
