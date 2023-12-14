@@ -221,7 +221,7 @@ public class Ox {
                 widgetTag.addAttribute("", "layout", "@layout/" + viewBean.id);
             }
         } else {
-            if (!toNotAdd.contains("android:id")) {
+            if (!toNotAdd.contains("android:id") && viewBean.disable_id == 1) {
                 widgetTag.addAttribute("android", "id", "@+id/" + viewBean.id);
             }
             int type = viewBean.type;

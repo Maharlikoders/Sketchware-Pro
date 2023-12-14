@@ -71,6 +71,11 @@ public class PropertySwitchSingleLineItem extends LinearLayout implements View.O
 
                 case "property_clickable":
                     icon = R.drawable.natural_user_interface2_48;
+                    break;
+
+                case "property_disable_id":
+                    icon = R.drawable.break_warning_96_red;
+                    break;
             }
             if (propertyMenuItem.getVisibility() == VISIBLE) {
                 ((ImageView) findViewById(R.id.img_icon)).setImageResource(icon);

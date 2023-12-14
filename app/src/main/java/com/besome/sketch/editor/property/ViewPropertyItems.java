@@ -632,6 +632,7 @@ public class ViewPropertyItems extends LinearLayout implements Kw, View.OnClickL
         a(bean, "property_translation_y");
         a(bean, "property_scale_x");
         a(bean, "property_scale_y");
+        a(bean, "property_disable_id");
     }
 
     public void i(ViewBean bean) {
