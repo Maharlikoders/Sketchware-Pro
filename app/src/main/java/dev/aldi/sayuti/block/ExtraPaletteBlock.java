@@ -394,6 +394,23 @@ public class ExtraPaletteBlock {
             return;
         }
 
+        if (eventName.equals("moreCommand")) {
+            logicEditor.a("Extend Activity", 0xff555555);
+            logicEditor.a(" ", "extendActivityWith");
+            logicEditor.a("RecyclerView Custom List", 0xff555555);
+            logicEditor.a(" ", "recyclerViewCustomList");
+            logicEditor.a("Command Blocks", 0xff555555);
+            logicEditor.a("c", "CommandBlockJava");
+            logicEditor.a("c", "CommandBlockXML");
+            logicEditor.a("Permission Command Blocks", 0xff555555);
+            logicEditor.a(" ", "addPermission");
+            logicEditor.a(" ", "removePermission");
+            logicEditor.a("Other Command Blocks", 0xff555555);
+            logicEditor.a(" ", "addCustomVariable");
+            logicEditor.a(" ", "addInitializer");
+            return;
+        }
+
         switch (paletteId) {
             case 0:
                 logicEditor.b("Add variable", "variableAdd");
@@ -1164,18 +1181,6 @@ public class ExtraPaletteBlock {
                     logicEditor.a(" ", "customToastWithIcon");
                 }
                 moreBlocks();
-                if (ConfigActivity.isSettingEnabled(ConfigActivity.SETTING_SHOW_BUILT_IN_BLOCKS)) {
-                    logicEditor.a("Command Blocks", 0xff555555);
-                    logicEditor.a("c", "CommandBlockJava");
-                    logicEditor.a("c", "CommandBlockXML");
-                    logicEditor.a("Permission Command Blocks", 0xff555555);
-                    logicEditor.a(" ", "addPermission");
-                    logicEditor.a(" ", "removePermission");
-                    logicEditor.a("Other Command Blocks", 0xff555555);
-                    logicEditor.a(" ", "addCustomVariable");
-                    logicEditor.a(" ", "addInitializer");
-                    return;
-                }
                 return;
 
             default:

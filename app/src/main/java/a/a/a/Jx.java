@@ -77,8 +77,11 @@ public class Jx {
     private final ArrayList<String> filePickerRequestCodes = new ArrayList<>();
     private Hx eventManager;
     private ArrayList<String> imports = new ArrayList<>();
+    private ArrayList<String> removeImports = new ArrayList<>();
     private ArrayList<String> implementsList = new ArrayList<>();
     private String onCreateEventCode = "";
+
+    private String customExtend = "";
 
     public Jx(jq jqVar, ProjectFileBean projectFileBean, eC eCVar) {
         packageName = jqVar.packageName;
@@ -124,9 +127,22 @@ public class Jx {
                         }
                         break;
 
+
+                    case "removeImport":
+                        if (!block.parameters.get(0).trim().isEmpty()) {
+                            removeImport(block.parameters.get(0));
+                        }
+                        break;
+
                     case "implement":
                         if (!block.parameters.get(0).trim().isEmpty()) {
                             addImplement(block.parameters.get(0));
+                        }
+                        break;
+
+                    case "extendActivityWith":
+                        if (!block.parameters.get(0).trim().isEmpty()) {
+                            customExtend = block.parameters.get(0);
                         }
                         break;
                 }
@@ -139,6 +155,11 @@ public class Jx {
         for (String value : imports) {
             if (!newImports.contains(value) && !value.trim().isEmpty()) {
                 newImports.add(value);
+            }
+        }
+        for (String value : removeImport) {
+            if (newImports.contains(value)) {
+                newImports.remove(value);
             }
         }
         imports = newImports;
@@ -265,6 +286,8 @@ public class Jx {
                 sb.append("DialogFragment");
             } else if (isFragment) {
                 sb.append("Fragment");
+            } else if (!TextUtils.isEmpty(customExtend)) {
+                sb.append(customExtend);
             } else {
                 sb.append("AppCompatActivity");
             }
@@ -275,6 +298,8 @@ public class Jx {
                 sb.append("DialogFragment");
             } else if (isFragment) {
                 sb.append("Fragment");
+            } else if (!TextUtils.isEmpty(customExtend)) {
+                sb.append(customExtend);
             } else {
                 sb.append("Activity");
             }
@@ -726,6 +751,12 @@ public class Jx {
         }
     }
 
+    private void removeImport(String classtoRemove) {
+        if (!removeImports.contains(classtoRemove)) {
+            removeImports.add(classtoRemove);
+        }
+    }
+
     private void addImports(ArrayList<String> imports) {
         if (imports != null) {
             for (String value : imports) {
@@ -856,6 +887,7 @@ public class Jx {
             if (viewBean.type == ViewBeans.VIEW_TYPE_LAYOUT_VIEWPAGER) {
                 adapterCode = Lx.pagerAdapter(viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
             } else if (viewBean.type == ViewBeans.VIEW_TYPE_WIDGET_RECYCLERVIEW) {
+
                 adapterCode = Lx.recyclerViewAdapter(viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
             } else {
                 adapterCode = Lx.getListAdapterCode(viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);

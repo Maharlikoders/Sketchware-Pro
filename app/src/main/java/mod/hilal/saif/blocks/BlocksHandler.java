@@ -2444,6 +2444,24 @@ public class BlocksHandler {
         hashMap.put("palette", "-1");
         hashMap.put("spec", "implement %s.implement");
         arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
+        hashMap.put("name", "extendActivityWith");
+        hashMap.put("type", " ");
+        hashMap.put("code", "");
+        hashMap.put("color", "#EE7D15");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "activity extend with %s.inputOnly");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
+        hashMap.put("name", "recyclerViewCustomList");
+        hashMap.put("type", " ");
+        hashMap.put("code", "");
+        hashMap.put("color", "#EE7D15");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "%m.recyclerview custom list with %s.inputOnly");
+        arrayList.add(hashMap);
     }
 
     private static void checkDir() {
