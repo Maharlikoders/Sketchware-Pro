@@ -494,9 +494,9 @@ public class ViewPropertyItems extends LinearLayout implements Kw, View.OnClickL
     }
 
     public void f(ViewBean bean) {
+        if (getOrientation() == LinearLayout.VERTICAL) a(bean, "property_disable_id");
         if (!bean.id.equals("_fab")) {
             Gx classInfo = bean.getClassInfo();
-            if (getOrientation() == LinearLayout.VERTICAL) a(bean, "property_disable_id");
             a(bean, "property_inject");
             a(bean, "property_convert");
             if (classInfo.b("Spinner")) {
