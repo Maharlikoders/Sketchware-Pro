@@ -191,24 +191,26 @@ class DependencyResolver {
             if (Files.exists(path)) {
                 callback.log("Dependency ${artifact.toStr()} already exists, skipping...")
             }
-            Files.createDirectories(path.parent)
-            callback.downloading(artifact.toStr())
-            try {
-                artifact.downloadTo(path.toFile())
-                if (path.toFile().exists().not()) {
-                    latestDeps.remove(artifact)
-                    callback.onDependencyResolveFailed(Exception("Cannot download ${artifact.toStr()}"))
-                    return@forEach
-                }
-                dependencyClasspath.add(
-                    Paths.get(
-                        downloadPath,
-                        "${artifact.artifactId}-v${artifact.version}",
-                        "classes.jar"
+            if (Files.exists(Paths.get(downloadPath, "${artifact.artifactId}-v${artifact.version}", "classes.jar")).not()) {
+                Files.createDirectories(path.parent)
+                callback.downloading(artifact.toStr())
+                try {
+                    artifact.downloadTo(path.toFile())
+                    if (path.toFile().exists().not()) {
+                        latestDeps.remove(artifact)
+                        callback.onDependencyResolveFailed(Exception("Cannot download ${artifact.toStr()}"))
+                        return@forEach
+                    }
+                    dependencyClasspath.add(
+                        Paths.get(
+                            downloadPath,
+                            "${artifact.artifactId}-v${artifact.version}",
+                            "classes.jar"
+                        )
                     )
-                )
-            } catch (e: Exception) {
-                callback.onDependencyResolveFailed(e)
+                } catch (e: Exception) {
+                    callback.onDependencyResolveFailed(e)
+                }
             }
             if (path.toFile().exists().not()) {
                 callback.log("Cannot download ${artifact.toStr()}")

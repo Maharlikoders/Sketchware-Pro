@@ -393,25 +393,24 @@ public class ExtraPaletteBlock {
     public void setBlock(int paletteId, int paletteColor) {
         // Remove previous palette's blocks
         logicEditor.m.a();
-
+        logicEditor.paletteSelector.setVisibility(View.VISIBLE);
         if (eventName.equals("Import")) {
-            if (paletteId == 3) {
-                logicEditor.a(" ", "addSourceDirectly");
-            } else {
-                logicEditor.a("Enter the path without import & semicolon", 0xff555555);
-                logicEditor.a(" ", "customImport");
-                logicEditor.a(" ", "customImport2");
-                logicEditor.a(" ", "removeImport");
-            }
+            logicEditor.paletteSelector.setVisibility(View.GONE);
+            logicEditor.a("Enter the path without import & semicolon", 0xff555555);
+            logicEditor.a(" ", "customImport");
+            logicEditor.a(" ", "customImport2");
+            logicEditor.a(" ", "removeImport");
             return;
         }
 
         if (eventName.equals("Implement")) {
+            logicEditor.paletteSelector.setVisibility(View.GONE);
             logicEditor.a(" ", "implement");
             return;
         }
 
         if (eventName.equals("moreCommand")) {
+            logicEditor.paletteSelector.setVisibility(View.GONE);
             logicEditor.a("Extend Activity", 0xff555555);
             logicEditor.a(" ", "extendActivityWith");
             logicEditor.a("RecyclerView Custom List", 0xff555555);

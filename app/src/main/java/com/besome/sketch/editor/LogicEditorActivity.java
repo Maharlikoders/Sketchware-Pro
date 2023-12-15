@@ -132,6 +132,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
     private LogicEditorDrawer O;
     private ObjectAnimator U, V, ba, ca, fa, ga;
     private ExtraPaletteBlock extraPaletteBlock;
+    public PaletteSelector paletteSelector;
     public PaletteBlock m;
     private ViewLogicEditor n;
     public BlockPane o;
@@ -1927,8 +1928,8 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
             stringExtra = ReturnMoreblockManager.getMbName(C) + " : " + stringExtra;
         }
         d.setTitle(stringExtra);
-        PaletteSelector l = findViewById(R.id.palette_selector);
-        l.setOnBlockCategorySelectListener(this);
+        paletteSelector = findViewById(R.id.palette_selector);
+        paletteSelector.setOnBlockCategorySelectListener(this);
         m = findViewById(R.id.palette_block);
         p = findViewById(R.id.dummy);
         n = findViewById(R.id.editor);
