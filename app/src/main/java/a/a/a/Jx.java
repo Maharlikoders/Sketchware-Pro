@@ -208,6 +208,7 @@ public class Jx {
         boolean isDialogFragment = projectFileBean.fileName.contains("_dialog_fragment");
         boolean isBottomDialogFragment = projectFileBean.fileName.contains("_bottomdialog_fragment");
         boolean isFragment = projectFileBean.fileName.contains("_fragment");
+        boolean isOldMethodEnabled = true;
         
         addImplements();
         extraVariables();
@@ -221,6 +222,17 @@ public class Jx {
         addImportsForBlocks();
         addLocalLibraryImports();
         addEventsImport();
+
+        if (!isFragment && !settings.getValue(ProjectSettings.SETTING_DISABLE_OLD_METHODS, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
+                .equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE)) {
+            isOldMethodEnabled = false;
+            addImport("android.view.View");
+            addImport("android.widget.Toast");
+            addImport("java.util.ArrayList");
+            addImport("java.util.Random");
+            addImport("java.util.SparseBooleanArray");
+            addImport("java.util.TypedValue");
+        }
 
         StringBuilder sb = new StringBuilder(8192);
         sb.append("package ").append(packageName).append(";").append(EOL)
@@ -615,10 +627,11 @@ public class Jx {
                 sb.append(EOL);
             }
         }
-        if (!isFragment && !settings.getValue(ProjectSettings.SETTING_DISABLE_OLD_METHODS, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
-                .equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE)) {
+
+        if (isOldMethodEnabled) {
             sb.append(getDeprecatedMethodsCode());
         }
+        
         sb.append("}").append(EOL);
         String code = sb.toString();
 

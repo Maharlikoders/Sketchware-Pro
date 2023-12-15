@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import com.besome.sketch.beans.ComponentBean;
 import com.besome.sketch.beans.ProjectFileBean;
+import com.besome.sketch.beans.ProjectLibraryBean;
 import com.besome.sketch.beans.ViewBean;
 import com.besome.sketch.editor.LogicEditorActivity;
 
@@ -218,6 +219,16 @@ public class ExtraPaletteBlock {
                 extraBlocks.isVariableUsed(2),
                 extraBlocks.isVariableUsed(3)
         );
+
+        ProjectLibraryBean appCompat = jC.c(sc_id).c();
+        if (appCompat.useYn.equals(ProjectLibraryBean.LIB_USE_Y)) {
+            if (projectFile.hasActivityOption(ProjectFileBean.OPTION_ACTIVITY_TOOLBAR) && !projectFile.fileName.contains("_fragment")) {
+                logicEditor.a("AppCompat Block", 0xFF555555);
+                logicEditor.a("_coordinator", "v", "CoordinatorLayout", "getVar").setTag("_coordinator");
+                logicEditor.a("_app_bar", "v", "AppBarLayout", "getVar").setTag("_app_bar");
+                logicEditor.a("_toolbar", "v", "Toolbar", "getVar").setTag("_toolbar");
+            }
+        }
         blockCustomViews();
         blockDrawer();
         blockEvents();
@@ -259,9 +270,12 @@ public class ExtraPaletteBlock {
                         logicEditor.a("Custom Views", 0xff555555);
                     }
 
+                    Set<String> toNotAdd = new Ox(new jq(), projectFile).readAttributesToReplace(customView);
                     if (!customView.convert.equals("include")) {
-                        String typeName = customView.convert.isEmpty() ? ViewBean.getViewTypeName(customView.type) : IdGenerator.getLastPath(customView.convert);
-                        logicEditor.a(customView.id, "v", typeName, "getVar").setTag(customView.id);
+                        if (!toNotAdd.contains("android:id") && customView.disable_id == 0) {
+                            String typeName = customView.convert.isEmpty() ? ViewBean.getViewTypeName(customView.type) : IdGenerator.getLastPath(customView.convert);
+                            logicEditor.a(customView.id, "v", typeName, "getVar").setTag(customView.id);
+                        }
                     }
                 }
             }
@@ -301,10 +315,13 @@ public class ExtraPaletteBlock {
                         logicEditor.a("Drawer Views", 0xff555555);
                     }
 
+                    Set<String> toNotAdd = new Ox(new jq(), projectFile).readAttributesToReplace(drawerView);
                     if (!drawerView.convert.equals("include")) {
-                        String id = "_drawer_" + drawerView.id;
-                        String typeName = drawerView.convert.isEmpty() ? ViewBean.getViewTypeName(drawerView.type) : IdGenerator.getLastPath(drawerView.convert);
-                        logicEditor.a(id, "v", typeName, "getVar").setTag(id);
+                        if (!toNotAdd.contains("android:id") && drawerView.disable_id == 0) {
+                            String id = "_drawer_" + drawerView.id;
+                            String typeName = drawerView.convert.isEmpty() ? ViewBean.getViewTypeName(drawerView.type) : IdGenerator.getLastPath(drawerView.convert);
+                            logicEditor.a(id, "v", typeName, "getVar").setTag(id);
+                        }
                     }
                 }
             }
@@ -797,66 +814,11 @@ public class ExtraPaletteBlock {
                 }
             }
             {
-                boolean waveSideBarUsed = isWidgetUsed("WaveSideBar");
-                boolean badgeViewUsed = isWidgetUsed("BadgeView");
-                boolean bubbleLayoutUsed = isWidgetUsed("BubbleLayout");
-                boolean patternLockViewUsed = isWidgetUsed("PatternLockView");
-                boolean codeViewUsed = isWidgetUsed("CodeView");
                 boolean lottieAnimationViewUsed = isWidgetUsed("LottieAnimationView");
-                boolean otpViewUsed = isWidgetUsed("OTPView");
+                boolean youtubePlayerViewUsed = isWidgetUsed("YoutubePlayerView");
 
-                if (waveSideBarUsed || badgeViewUsed || bubbleLayoutUsed || patternLockViewUsed || codeViewUsed || lottieAnimationViewUsed) {
+                if (lottieAnimationViewUsed || youtubePlayerViewUsed) {
                     logicEditor.a("Library", 0xff555555);
-
-                    if (otpViewUsed) {
-                        logicEditor.a(" ", "otpViewSetFieldCount");
-                        logicEditor.a(" ", "otpViewSetOTPText");
-                        logicEditor.a("s", "otpViewGetOTPText");
-                        logicEditor.a("c", "otpViewSetOTPListener");
-                    }
-
-                    if (waveSideBarUsed) {
-                        logicEditor.a(" ", "setCustomLetter");
-                    }
-
-                    if (badgeViewUsed) {
-                        logicEditor.a("d", "getBadgeCount");
-                        logicEditor.a(" ", "setBadgeNumber");
-                        logicEditor.a(" ", "setBadgeString");
-                        logicEditor.a(" ", "setBadgeBackground");
-                        logicEditor.a(" ", "setBadgeTextColor");
-                        logicEditor.a(" ", "setBadgeTextSize");
-                    }
-
-                    if (bubbleLayoutUsed) {
-                        logicEditor.a(" ", "setBubbleColor");
-                        logicEditor.a(" ", "setBubbleStrokeColor");
-                        logicEditor.a(" ", "setBubbleStrokeWidth");
-                        logicEditor.a(" ", "setBubbleCornerRadius");
-                        logicEditor.a(" ", "setBubbleArrowHeight");
-                        logicEditor.a(" ", "setBubbleArrowWidth");
-                        logicEditor.a(" ", "setBubbleArrowPosition");
-                    }
-
-                    if (patternLockViewUsed) {
-                        logicEditor.a("s", "patternToString");
-                        logicEditor.a("s", "patternToMD5");
-                        logicEditor.a("s", "patternToSha1");
-                        logicEditor.a(" ", "patternSetDotCount");
-                        logicEditor.a(" ", "patternSetNormalStateColor");
-                        logicEditor.a(" ", "patternSetCorrectStateColor");
-                        logicEditor.a(" ", "patternSetWrongStateColor");
-                        logicEditor.a(" ", "patternSetViewMode");
-                        logicEditor.a(" ", "patternLockClear");
-                    }
-
-                    if (codeViewUsed) {
-                        logicEditor.a(" ", "codeviewSetCode");
-                        logicEditor.a(" ", "codeviewSetLanguage");
-                        logicEditor.a(" ", "codeviewSetTheme");
-                        logicEditor.a(" ", "codeviewApply");
-                    }
-
                     if (lottieAnimationViewUsed) {
                         logicEditor.a(" ", "lottieSetAnimationFromAsset");
                         logicEditor.a(" ", "lottieSetAnimationFromJson");
@@ -864,25 +826,24 @@ public class ExtraPaletteBlock {
                         logicEditor.a(" ", "lottieSetRepeatCount");
                         logicEditor.a(" ", "lottieSetSpeed");
                     }
+                    
+                    if (youtubePlayerViewUsed) {
+                        logicEditor.a(" ", "YTPVLifecycle");
+                        logicEditor.a("c", "YTPVSetListener");
+                    }
                 }
             }
             {
                 boolean signInButtonUsed = isWidgetUsed("SignInButton");
-                boolean youtubePlayerViewUsed = isWidgetUsed("YoutubePlayerView");
                 boolean adMobUsed = "Y".equals(jC.c(sc_id).b().useYn);
                 boolean mapViewUsed = isWidgetUsed("MapView");
 
-                if (signInButtonUsed || youtubePlayerViewUsed || adMobUsed || mapViewUsed) {
+                if (signInButtonUsed || adMobUsed || mapViewUsed) {
                     logicEditor.a("Google", 0xff555555);
 
                     if (signInButtonUsed) {
                         logicEditor.a(" ", "signInButtonSetColorScheme");
                         logicEditor.a(" ", "signInButtonSetSize");
-                    }
-
-                    if (youtubePlayerViewUsed) {
-                        logicEditor.a(" ", "YTPVLifecycle");
-                        logicEditor.a("c", "YTPVSetListener");
                     }
 
                     if (adMobUsed) {
