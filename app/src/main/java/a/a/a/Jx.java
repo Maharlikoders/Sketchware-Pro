@@ -208,7 +208,7 @@ public class Jx {
         boolean isDialogFragment = projectFileBean.fileName.contains("_dialog_fragment");
         boolean isBottomDialogFragment = projectFileBean.fileName.contains("_bottomdialog_fragment");
         boolean isFragment = projectFileBean.fileName.contains("_fragment");
-        boolean isOldMethodEnabled = true;
+        boolean isOldMethodEnabled = false;
         
         addImplements();
         extraVariables();
@@ -225,7 +225,7 @@ public class Jx {
 
         if (!isFragment && !settings.getValue(ProjectSettings.SETTING_DISABLE_OLD_METHODS, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
                 .equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE)) {
-            isOldMethodEnabled = false;
+            isOldMethodEnabled = true;
             addImport("android.view.View");
             addImport("android.widget.Toast");
             addImport("java.util.ArrayList");
@@ -249,28 +249,40 @@ public class Jx {
             if (buildConfig.isDebugBuild)
                 addImport("com.google.android.gms.ads.RequestConfiguration");
         }
-
+        addImport("android.os.Bundle");
         if (buildConfig.g) {
+            if (isFragment || isDialogFragment || isBottomDialogFragment) {
+                addImport("android.view.LayoutInflater");
+                addImport("android.view.View");
+                addImport("android.view.ViewGroup");
+                addImport("androidx.annotation.NonNull");
+            }
             if (isFragment) {
                 addImport("androidx.fragment.app.Fragment");
                 addImport("androidx.fragment.app.FragmentManager");
-            }
-            if (isDialogFragment) {
+            } else if (isDialogFragment) {
                 addImport("androidx.fragment.app.DialogFragment");
                 addImport("androidx.fragment.app.FragmentManager");
-            }
-            if (isBottomDialogFragment) {
+            } else if (isBottomDialogFragment) {
                 addImport("com.google.android.material.bottomsheet.BottomSheetDialogFragment");
                 addImport("androidx.fragment.app.FragmentManager");
+            } else {
+                addImport("androidx.appcompat.app.AppCompatActivity");
             }
         } else {
+            if (isFragment || isDialogFragment) {
+                addImport("android.view.LayoutInflater");
+                addImport("android.view.View");
+                addImport("android.view.ViewGroup");
+            }
             if (isFragment) {
                 addImport("android.app.Fragment");
                 addImport("android.app.FragmentManager");
-            }
-            if (isDialogFragment) {
+            } else if (isDialogFragment) {
                 addImport("android.app.DialogFragment");
                 addImport("android.app.FragmentManager");
+            } else {
+                addImport("android.app.Activity");
             }
         }
         if (permissionManager.hasNewPermission() || buildConfig.a(projectFileBean.getActivityName()).a()) {
@@ -792,12 +804,6 @@ public class Jx {
     }
 
     private void handleAppCompat() {
-        addImport("android.os.Bundle");
-        if (buildConfig.g) {
-            addImport("androidx.appcompat.app.AppCompatActivity");
-        } else {
-            addImport("android.app.Activity");
-        }
         if (buildConfig.g) {
             if (projectFileBean.hasActivityOption(ProjectFileBean.OPTION_ACTIVITY_TOOLBAR) && !projectFileBean.fileName.contains("_fragment")) {
                 addImport("android.view.View");
