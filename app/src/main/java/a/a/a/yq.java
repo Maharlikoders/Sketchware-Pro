@@ -676,6 +676,7 @@ public class yq {
             }
             return mx.toCode();
         }
+        return null;
     }
 
     /**
@@ -794,9 +795,10 @@ public class yq {
         srcCodeBeans.add(new SrcCodeBean("strings.xml",
                 CommandBlock.applyCommands("strings.xml", resourceHandler.getStringsXml())));
 
-        if (N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) {
+        String secretXmlContent = generateSecretXml(jC.c(sc_id));
+        if ((N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) && secretXmlContent != null) {
             srcCodeBeans.add(new SrcCodeBean("secrets.xml",
-                CommandBlock.applyCommands("secrets.xml", generateSecretXml(jC.c(sc_id)))));
+                CommandBlock.applyCommands("secrets.xml", secretXmlContent)));
         }
 
         if (N.u) {
