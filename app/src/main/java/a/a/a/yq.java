@@ -310,8 +310,6 @@ public class yq {
      * Generates top-level build.gradle, build.gradle for module ':app' and settings.gradle files.
      */
     public void h() {
-        fileUtil.b(projectMyscPath + File.separator + "app" + File.separator + "build.gradle",
-                Lx.getBuildGradleString(28, 21, 28, N));
         fileUtil.b(projectMyscPath + File.separator + "settings.gradle", Lx.a());
         fileUtil.b(projectMyscPath + File.separator + "build.gradle", Lx.c("3.4.2", "4.3.3"));
     }
@@ -422,7 +420,11 @@ public class yq {
             fileUtil.b(resDirectoryPath + File.separator + "values" + File.separator + fileName, fileContent);
         } else if (fileName.equals("provider_paths.xml")) {
             fileUtil.b(resDirectoryPath + File.separator + "xml" + File.separator + fileName, fileContent);
-        } else {
+        }else if (fileName.equals("secrets.xml")) {
+            fileUtil.b(resDirectoryPath + File.separator + "values" +  File.separator + fileName, fileContent);
+        } else if (fileName.equals("build.gradle")) {
+            fileUtil.b(projectMyscPath + File.separator + "app" + File.separator + fileName, fileContent);
+        }  else {
             fileUtil.b(layoutFilesPath + File.separator + fileName, fileContent);
         }
     }
@@ -636,20 +638,13 @@ public class yq {
      */
     public void b(hC projectFileManager, eC projectDataManger, iC projectLibraryManager, BuiltInLibraryManager builtInLibraryManager) {
         ArrayList<SrcCodeBean> srcCodeBeans = a(projectFileManager, projectDataManger, builtInLibraryManager);
-        if (N.u) {
-            XmlBuilder pathsTag = new XmlBuilder("paths");
-            pathsTag.addAttribute("xmlns", "android", "http://schemas.android.com/apk/res/android");
-            XmlBuilder externalPathTag = new XmlBuilder("external-path");
-            externalPathTag.addAttribute("", "name", "external_files");
-            externalPathTag.addAttribute("", "path", ".");
-            pathsTag.a(externalPathTag);
-            srcCodeBeans.add(new SrcCodeBean("provider_paths.xml",
-                    CommandBlock.applyCommands("xml/provider_paths.xml", pathsTag.toCode())));
-        }
-
         for (SrcCodeBean bean : srcCodeBeans) {
             a(bean.srcFileName, bean.source);
         }
+        h();
+    }
+
+    private String generateSecretXml(iC projectLibraryManager) {
         if (N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) {
             ProjectLibraryBean firebaseLibrary = projectLibraryManager.d();
             XmlBuilderHelper mx = new XmlBuilderHelper();
@@ -679,11 +674,8 @@ public class yq {
                 // if p3 is false, then "translatable="false" will be added
                 mx.addString("google_maps_key", projectLibraryManager.e().data, false);
             }
-            String filePath = "values/secrets.xml";
-            fileUtil.b(resDirectoryPath + File.separator + filePath,
-                    CommandBlock.applyCommands(filePath, mx.toCode()));
+            return mx.toCode();
         }
-        h();
     }
 
     /**
@@ -801,6 +793,28 @@ public class yq {
 
         srcCodeBeans.add(new SrcCodeBean("strings.xml",
                 CommandBlock.applyCommands("strings.xml", resourceHandler.getStringsXml())));
+
+        if (N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) {
+            srcCodeBeans.add(new SrcCodeBean("secrets.xml",
+                CommandBlock.applyCommands("secrets.xml", generateSecretXml(jC.c(sc_id)))));
+        }
+
+        if (N.u) {
+            XmlBuilder pathsTag = new XmlBuilder("paths");
+            pathsTag.addAttribute("xmlns", "android", "http://schemas.android.com/apk/res/android");
+            XmlBuilder externalPathTag = new XmlBuilder("external-path");
+            externalPathTag.addAttribute("", "name", "external_files");
+            externalPathTag.addAttribute("", "path", ".");
+            pathsTag.a(externalPathTag);
+            srcCodeBeans.add(new SrcCodeBean("provider_paths.xml",
+                    CommandBlock.applyCommands("xml/provider_paths.xml", pathsTag.toCode())));
+        }
+
+        int minSdk = Integer.parseInt(projectConfigUtil.getMinSdk());
+        int targetSdk = Integer.parseInt(projectConfigUtil.getTargetSdk());
+        srcCodeBeans.add(new SrcCodeBean("build.gradle", 
+                CommandBlock.applyCommands("build.gradle", Lx.getBuildGradleString(28, minSdk, targetSdk, N))));
+
         CommandBlock.x();
         return srcCodeBeans;
     }

@@ -416,12 +416,6 @@ public class ExtraPaletteBlock {
             logicEditor.a(" ", "extendActivityWith");
             logicEditor.a("RecyclerView Custom List", 0xff555555);
             logicEditor.a(" ", "recyclerViewCustomList");
-            logicEditor.a("Command Blocks", 0xff555555);
-            logicEditor.a("c", "CommandBlockJava");
-            logicEditor.a("c", "CommandBlockXML");
-            logicEditor.a("Permission Command Blocks", 0xff555555);
-            logicEditor.a(" ", "addPermission");
-            logicEditor.a(" ", "removePermission");
             logicEditor.a("Other Command Blocks", 0xff555555);
             logicEditor.a(" ", "addCustomVariable");
             logicEditor.a(" ", "addInitializer");
@@ -1142,6 +1136,12 @@ public class ExtraPaletteBlock {
                     logicEditor.a(" ", "customToastWithIcon");
                 }
                 moreBlocks();
+                logicEditor.a("Command Blocks", 0xff555555);
+                logicEditor.a("c", "CommandBlockJava");
+                logicEditor.a("c", "CommandBlockXML");
+                logicEditor.a("Permission Command Blocks", 0xff555555);
+                logicEditor.a(" ", "addPermission");
+                logicEditor.a(" ", "removePermission");
                 return;
 
             default:
