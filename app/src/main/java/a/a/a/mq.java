@@ -246,6 +246,14 @@ public class mq {
                 importList.add("android.widget.HorizontalScrollView");
                 return importList;
 
+            case "RadioButton":
+                importList.add("android.widget.RadioButton");
+                return importList;
+
+            case "RadioGroup":
+                importList.add("android.widget.RadioGroup");
+                return importList;
+
             case "TextView":
                 importList.add("android.widget.TextView");
                 return importList;
