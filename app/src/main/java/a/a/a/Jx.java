@@ -226,12 +226,13 @@ public class Jx {
         if (!isFragment && !settings.getValue(ProjectSettings.SETTING_DISABLE_OLD_METHODS, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
                 .equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE)) {
             isOldMethodEnabled = true;
+            addImport("android.util.SparseBooleanArray");
+            addImport("android.util.TypedValue");
             addImport("android.view.View");
+            addImport("android.widget.ListView");
             addImport("android.widget.Toast");
             addImport("java.util.ArrayList");
             addImport("java.util.Random");
-            addImport("java.util.SparseBooleanArray");
-            addImport("java.util.TypedValue");
         }
 
         StringBuilder sb = new StringBuilder(8192);
