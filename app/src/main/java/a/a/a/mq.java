@@ -401,6 +401,10 @@ public class mq {
                 importList.add("com.google.android.material.floatingactionbutton.FloatingActionButton");
                 return importList;
 
+            case "ExtendedFloatingActionButton":
+                importList.add("com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton");
+                return importList;
+
             case "Toolbar":
                 importList.add("androidx.appcompat.widget.Toolbar");
                 importList.add("androidx.annotation.NonNull");

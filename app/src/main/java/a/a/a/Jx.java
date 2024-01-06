@@ -259,12 +259,15 @@ public class Jx {
                 addImport("androidx.annotation.NonNull");
             }
             if (isFragment) {
+                addImport("androidx.annotation.Nullable");
                 addImport("androidx.fragment.app.Fragment");
                 addImport("androidx.fragment.app.FragmentManager");
             } else if (isDialogFragment) {
+                addImport("androidx.annotation.Nullable");
                 addImport("androidx.fragment.app.DialogFragment");
                 addImport("androidx.fragment.app.FragmentManager");
             } else if (isBottomDialogFragment) {
+                addImport("androidx.annotation.Nullable");
                 addImport("com.google.android.material.bottomsheet.BottomSheetDialogFragment");
                 addImport("androidx.fragment.app.FragmentManager");
             } else {
