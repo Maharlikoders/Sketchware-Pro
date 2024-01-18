@@ -971,28 +971,28 @@ public class ViewPane extends RelativeLayout {
                 if (!leftToLeft.equals("parent")) {
                     value = getViewId(getIdFromString(leftToLeft, "parent"));
                 }
-                parentView.setLeftToLeft(view.getId(), value);
+                parentView.setLeftToLeft(view, value);
             }
             if (!leftToRight.isEmpty()) {
                 int value = defaultParent;
                 if (!leftToRight.equals("parent")) {
                     value = getViewId(getIdFromString(leftToRight, "parent"));
                 }
-                parentView.setLeftToRight(view.getId(), value);
+                parentView.setLeftToRight(view, value);
             }
             if (!rightToRight.isEmpty()) {
                 int value = defaultParent;
                 if (!rightToRight.equals("parent")) {
                     value = getViewId(getIdFromString(rightToRight, "parent"));
                 }
-                parentView.setRightToRight(view.getId(), value);
+                parentView.setRightToRight(view, value);
             }
             if (!rightToLeft.isEmpty()) {
                 int value = defaultParent;
                 if (!rightToLeft.equals("parent")) {
                     value = getViewId(getIdFromString(rightToLeft, "parent"));
                 }
-                parentView.setRightToLeft(view.getId(), value);
+                parentView.setRightToLeft(view, value);
             }
         }
         
