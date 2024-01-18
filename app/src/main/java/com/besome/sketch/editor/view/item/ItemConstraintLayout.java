@@ -69,7 +69,7 @@ public class ItemConstraintLayout extends LinearLayout implements sy, ty {
         } else {
             int firstGoneIndex = -1;
 
-            for (int i = 0; childCount; i++) {
+            for (int i = 0; i < childCount; i++) {
                 if (getChildAt(i).getVisibility() == View.GONE) {
                     firstGoneIndex = i;
                     break;
