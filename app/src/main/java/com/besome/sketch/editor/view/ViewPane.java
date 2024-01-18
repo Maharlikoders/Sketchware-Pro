@@ -975,8 +975,7 @@ public class ViewPane extends RelativeLayout {
         String leftToRight = handler.getAttributeValueOf("layout_constraintLeft_toRightOf");
         String rightToRight = handler.getAttributeValueOf("layout_constraintRight_toRightOf");
         String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
-        ViewGroup parent = rootLayout.findViewWithTag(viewBean.parent);
-        if (parent instanceof ItemConstraintLayout parentView) {
+        if (view.getParent() instanceof ItemConstraintLayout parentView) {
             if (!leftToLeft.isEmpty()) {
                 int value = defaultParent;
                 if (!leftToLeft.equals("parent")) {
