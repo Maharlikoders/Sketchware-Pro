@@ -48,8 +48,6 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
                 index++;
             }
         }
-
-        int var1 = 0;
     }
 
     private void initialize(Context context) {
@@ -67,19 +65,28 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
         if (index > childCount) {
             super.addView(child);
         } else {
-            int insertIndex = index;
+            byte var4 = -1;
+            int var5 = 0;
 
-            for (int i = 0; i < childCount; i++) {
-                if (getChildAt(i).getVisibility() == View.GONE) {
-                    insertIndex = i;
+            int var6;
+            while (true) {
+                var6 = var4;
+                if (var5 >= childCount) {
                     break;
                 }
+
+                if (getChildAt(var5).getVisibility() == View.GONE) {
+                    var6 = var5;
+                    break;
+                }
+
+                ++var5;
             }
 
-            if (insertIndex >= 0 && index >= insertIndex) {
-                super.addView(child, insertIndex + 1);
+            if (var6 >= 0 && index >= var6) {
+                super.addView(child, index + 1);
             } else {
-                super.addView(child, insertIndex);
+                super.addView(child, index);
             }
         }
     }
