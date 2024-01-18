@@ -748,16 +748,16 @@ public class ViewPane extends RelativeLayout {
     }
 
     private void findConstraintsTargetFor(ViewBean bean, ItemConstraintLayout constraintLayout) {
-        int totalViews = constraintlayout.getChildCount();
+        int totalViews = constraintLayout.getChildCount();
         int index = 0;
 
         for (int i = 0; i < totalViews; i++) {
-            View child = constraintlayout.getChildAt(i);
+            View child = constraintLayout.getChildAt(i);
             if (child != null && child.getTag() != null &&
                 (bean == null || bean.id == null || !child.getTag().equals(bean.id)) &&
                 child.getVisibility() == View.VISIBLE) {
                 index++;
-                if (view instanceof sy editorItem) {
+                if (child instanceof sy editorItem) {
                     ViewBean childBean = editorItem.getBean();
                     updateConstraintLayout(child, childBean);
                     if (child instanceof ItemLinearLayout) {
@@ -769,7 +769,7 @@ public class ViewPane extends RelativeLayout {
                     } else if (child instanceof ItemCardView) {
                         a(childBean, (ViewGroup) child);
                     } else if (child instanceof ItemConstraintLayout) {
-                        findConstraintsTargetFor(childBean, child);
+                        findConstraintsTargetFor(childBean, (ItemConstraintLayout) child);
                     }
                 }
             }
