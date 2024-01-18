@@ -1045,8 +1045,6 @@ public class ViewPane extends RelativeLayout {
                 }
                 constraintItem.setRightToLeft(constraint, view, value);
             }
-        }
-        
     }
 
     private int getViewId(String targetTag) {
