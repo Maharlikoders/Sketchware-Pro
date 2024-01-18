@@ -733,7 +733,7 @@ public class ViewPane extends RelativeLayout {
                 } else if (child instanceof ItemCardView) {
                     a(view, (ViewGroup) child);
                 } else if (child instanceof ItemConstraintLayout) {
-                    a(view, (ViewGroup) child);
+                    findConstraintsTargetFor(view, (ItemConstraintLayout) child);
                 }
 
                 var13 = var4;
@@ -745,7 +745,42 @@ public class ViewPane extends RelativeLayout {
             var4 = var7;
             var7 = var13;
         }
+    }
 
+    private void findConstraintsTargetFor(ViewBean bean, ItemConstraintLayout constraintLayout) {
+        int totalViews = constraintlayout.getChildCount();
+        int index = 0;
+
+        for (int i = 0; i < totalViews; i++) {
+            View child = constraintlayout.getChildAt(i);
+            if (child != null && child.getTag() != null &&
+                (bean == null || bean.id == null || !child.getTag().equals(bean.id)) &&
+                child.getVisibility() == View.VISIBLE) {
+                index++;
+                if (view instanceof sy editorItem) {
+                    ViewBean childBean = editorItem.getBean();
+                    updateConstraintLayout(child, childBean);
+                    if (child instanceof ItemLinearLayout) {
+                        a(childBean, (ItemLinearLayout) child);
+                    } else if (child instanceof ItemHorizontalScrollView) {
+                        a(childBean, (ViewGroup) child);
+                    } else if (child instanceof ItemVerticalScrollView) {
+                        a(childBean, (ViewGroup) child);
+                    } else if (child instanceof ItemCardView) {
+                        a(childBean, (ViewGroup) child);
+                    } else if (child instanceof ItemConstraintLayout) {
+                        findConstraintsTargetFor(childBean, child);
+                    }
+                }
+            }
+        }
+        if (index < 1) {
+            int[] viewLocationOnScreen = new int[2];
+            constraintLayout.getLocationOnScreen(viewLocationOnScreen);
+            int xCoordinate = viewLocationOnScreen[0];
+            int yCoordinate = viewLocationOnScreen[1];
+            a(new Rect(xCoordinate, yCoordinate, ((int) (constraintLayout.getWidth() * getScaleX())) + xCoordinate, ((int) (constraintLayout.getHeight() * getScaleY())) + yCoordinate), constraintLayout, -1, b(constraintLayout));
+        }
     }
 
     private void a(ViewBean viewBean, ViewGroup viewGroup) {
@@ -764,7 +799,7 @@ public class ViewPane extends RelativeLayout {
                 } else if (childAt instanceof ItemCardView) {
                     a(viewBean, (ViewGroup) childAt);
                 } else if (childAt instanceof ItemConstraintLayout) {
-                    a(viewBean, (ViewGroup) childAt);
+                    findConstraintsTargetFor(viewBean, (ItemConstraintLayout) childAt);
                 }
             }
         }
