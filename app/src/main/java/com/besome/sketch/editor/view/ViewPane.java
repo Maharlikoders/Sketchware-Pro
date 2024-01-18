@@ -600,6 +600,8 @@ public class ViewPane extends RelativeLayout {
                 e.setLayoutParams(new LinearLayout.LayoutParams(width, height));
             } else if (viewGroup instanceof FrameLayout) {
                 e.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+            } else if (viewGroup instanceof ConstraintLayout) {
+                e.setLayoutParams(new ConstraintLayout.LayoutParams(width, height));
             } else {
                 e.setLayoutParams(new RelativeLayout.LayoutParams(width, height));
             }
@@ -828,6 +830,15 @@ public class ViewPane extends RelativeLayout {
             }
             layoutParams2.weight = viewBean.layout.weight;
             view.setLayoutParams(layoutParams2);
+        } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT) {
+            ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(width, height);
+            layoutParams.leftMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
+            layoutParams.topMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
+            layoutParams.rightMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
+            layoutParams.bottomMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
+            LayoutBean layoutBean = viewBean.layout;
+            view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
+            view.setLayoutParams(layoutParams);
         } else {
             FrameLayout.LayoutParams layoutParams3 = new FrameLayout.LayoutParams(width, height);
             layoutParams3.leftMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
