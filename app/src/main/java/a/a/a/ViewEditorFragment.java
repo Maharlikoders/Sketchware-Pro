@@ -220,7 +220,7 @@ public class ViewEditorFragment extends qA {
         viewEditor.extraWidgetLayout("", "RadioGroup");
 
         viewEditor.paletteWidget.extraTitle("AndroidX", 0);
-        //viewEditor.extraWidgetLayout("", "ConstraintLayout");
+        viewEditor.extraWidgetLayout("", "ConstraintLayout");
         viewEditor.extraWidgetLayout("", "TabLayout");
         viewEditor.extraWidgetLayout("", "BottomNavigationView");
         viewEditor.extraWidgetLayout("", "CollapsingToolbarLayout");

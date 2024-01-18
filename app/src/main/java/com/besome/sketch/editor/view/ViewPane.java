@@ -731,7 +731,7 @@ public class ViewPane extends RelativeLayout {
                 } else if (child instanceof ItemCardView) {
                     a(view, (ViewGroup) child);
                 } else if (child instanceof ItemConstraintLayout) {
-                    a(view, (ItemConstraintLayout) child);
+                    a(view, (ViewGroup) child);
                 }
 
                 var13 = var4;
@@ -762,7 +762,7 @@ public class ViewPane extends RelativeLayout {
                 } else if (childAt instanceof ItemCardView) {
                     a(viewBean, (ViewGroup) childAt);
                 } else if (childAt instanceof ItemConstraintLayout) {
-                    a(viewBean, (ItemConstraintLayout) childAt);
+                    a(viewBean, (ViewGroup) childAt);
                 }
             }
         }
@@ -966,36 +966,33 @@ public class ViewPane extends RelativeLayout {
         String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
 
         if (view.getParent() instanceof ItemConstraintLayout parentView) {
-            if (view.getLayoutParams() instanceof ConstraintLayout.LayoutParams layoutParams) {
-                if (!leftToLeft.isEmpty()) {
-                    int value = defaultParent;
-                    if (!leftToLeft.equals("parent")) {
-                        value = getViewId(getIdFromString(leftToLeft, "parent"));
-                    }
-                    layoutParams.leftToLeft = value;
+            if (!leftToLeft.isEmpty()) {
+                int value = defaultParent;
+                if (!leftToLeft.equals("parent")) {
+                    value = getViewId(getIdFromString(leftToLeft, "parent"));
                 }
-                if (!leftToRight.isEmpty()) {
-                    int value = defaultParent;
-                    if (!leftToRight.equals("parent")) {
-                        value = getViewId(getIdFromString(leftToRight, "parent"));
-                    }
-                    layoutParams.leftToRight = value;
+                parentView.setLeftToLeft(view.getId(), value);
+            }
+            if (!leftToRight.isEmpty()) {
+                int value = defaultParent;
+                if (!leftToRight.equals("parent")) {
+                    value = getViewId(getIdFromString(leftToRight, "parent"));
                 }
-                if (!rightToRight.isEmpty()) {
-                    int value = defaultParent;
-                    if (!rightToRight.equals("parent")) {
-                        value = getViewId(getIdFromString(rightToRight, "parent"));
-                    }
-                    layoutParams.rightToRight = value;
+                parentView.setLeftToRight(view.getId(), value);
+            }
+            if (!rightToRight.isEmpty()) {
+                int value = defaultParent;
+                if (!rightToRight.equals("parent")) {
+                    value = getViewId(getIdFromString(rightToRight, "parent"));
                 }
-                if (!rightToLeft.isEmpty()) {
-                    int value = defaultParent;
-                    if (!rightToLeft.equals("parent")) {
-                        value = getViewId(getIdFromString(rightToLeft, "parent"));
-                    }
-                    layoutParams.rightToLeft = value;
+                parentView.setRightToRight(view.getId(), value);
+            }
+            if (!rightToLeft.isEmpty()) {
+                int value = defaultParent;
+                if (!rightToLeft.equals("parent")) {
+                    value = getViewId(getIdFromString(rightToLeft, "parent"));
                 }
-                view.setLayoutParams(layoutParams);
+                parentView.setRightToLeft(view.getId(), value);
             }
         }
         

@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.besome.sketch.beans.ViewBean;
 
@@ -22,6 +23,15 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
 
     private Rect rect;
 
+    public static final int PARENT_ID = ConstraintSet.PARENT_ID;
+    public static final int LEFT = ConstraintSet.LEFT;
+    public static final int RIGHT = ConstraintSet.RIGHT;
+    public static final int START = ConstraintSet.START;
+    public static final int END = ConstraintSet.END;
+    public static final int TOP = ConstraintSet.TOP;
+    public static final int BOTTOM = ConstraintSet.BOTTOM;
+    public static final int BASELINE = ConstraintSet.BASELINE;
+    
     public ItemConstraintLayout(Context context) {
         super(context);
         initialize(context);
@@ -38,6 +48,8 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
                 index++;
             }
         }
+
+        int var1 = 0;
     }
 
     private void initialize(Context context) {
@@ -144,5 +156,64 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
     public void setSelection(boolean selected) {
         isSelected = selected;
         invalidate();
+    }
+
+    private void setConstraint(View target, int value, int startSide, int endSide) {
+        ConstraintSet set = new ConstraintSet();
+        set.clone(this);
+        set.connect(target.getId(), startSide, value, endSide);
+        set.applyTo(this);
+    }
+
+    public void setLeftToLeft(View target, int value) {
+        setConstraint(target, value, LEFT, LEFT);
+    }
+
+    public void setRightToRight(View target, int value) {
+        setConstraint(target, value, RIGHT, RIGHT);
+    }
+
+    public void setLeftToRight(View target, int value) {
+        setConstraint(target, value, LEFT, RIGHT);
+    }
+
+    public void setRightToLeft(View target, int value) {
+        setConstraint(target, value, RIGHT, LEFT);
+    }
+
+    public void setTopToTop(View target, int value) {
+        setConstraint(target, value, TOP, TOP);
+    }
+
+    public void setBottomToBottom(View target, int value) {
+        setConstraint(target, value, BOTTOM, BOTTOM);
+    }
+
+    public void setTopToBottom(View target, int value) {
+        setConstraint(target, value, TOP, BOTTOM);
+    }
+
+    public void setBottomToTop(View target, int value) {
+        setConstraint(target, value, BOTTOM, TOP);
+    }
+
+    public void setBaselineToBaseline(View target, int value) {
+        setConstraint(target, value, BASELINE, BASELINE);
+    }
+
+    public void setStartToStart(View target, int value) {
+        setConstraint(target, value, START, START);
+    }
+
+    public void setEndToEnd(View target, int value) {
+        setConstraint(target, value, END, END);
+    }
+
+    public void setStartToEnd(View target, int value) {
+        setConstraint(target, value, START, END);
+    }
+
+    public void setEndToStart(View target, int value) {
+        setConstraint(target, value, END, START);
     }
 }
