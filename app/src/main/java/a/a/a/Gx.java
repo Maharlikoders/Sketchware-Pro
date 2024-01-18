@@ -280,7 +280,7 @@ public class Gx {
                 break;
 
             case "ConstraintLayout":
-                classInfos = "View.ViewGroup.ConstraintLayout";
+                classInfos = "View.ViewGroup.LinearLayout.ConstraintLayout";
 
             case "TextToSpeech":
                 classInfos = "Component.TextToSpeech";
