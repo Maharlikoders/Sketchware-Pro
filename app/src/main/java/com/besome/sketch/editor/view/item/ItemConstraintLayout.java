@@ -14,7 +14,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.besome.sketch.beans.ViewBean;
 
-public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
+public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/ {
 
     private ViewBean viewBean = null;
     private boolean isSelected = false;
@@ -36,7 +36,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
         super(context);
         initialize(context);
     }
-
+    /*
     @Override
     public void a() {
         int index = 0;
@@ -49,7 +49,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
             }
         }
     }
-
+    */
     private void initialize(Context context) {
         setDrawingCacheEnabled(true);
         setMinimumWidth((int) wB.a(context, 32.0F));
@@ -58,39 +58,31 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
         paint.setStrokeWidth(wB.a(getContext(), 2.0F));
         rect = new Rect();
     }
-
+    /*
     @Override
     public void addView(View child, int index) {
         int childCount = getChildCount();
+
         if (index > childCount) {
             super.addView(child);
         } else {
-            byte var4 = -1;
-            int var5 = 0;
+            int firstGoneIndex = -1;
 
-            int var6;
-            while (true) {
-                var6 = var4;
-                if (var5 >= childCount) {
+            for (int i = 0; childCount; i++) {
+                if (getChildAt(i).getVisibility() == View.GONE) {
+                    firstGoneIndex = i;
                     break;
                 }
-
-                if (getChildAt(var5).getVisibility() == View.GONE) {
-                    var6 = var5;
-                    break;
-                }
-
-                ++var5;
             }
 
-            if (var6 >= 0 && index >= var6) {
+            if (firstGoneIndex >= 0 && index >= firstGoneIndex) {
                 super.addView(child, index + 1);
             } else {
                 super.addView(child, index);
             }
         }
     }
-
+    */
     @Override
     public ViewBean getBean() {
         return viewBean;
@@ -131,7 +123,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
     public void setBean(ViewBean viewBean) {
         this.viewBean = viewBean;
     }
-
+    /*
     @Override
     public void setChildScrollEnabled(boolean childScrollEnabled) {
         for (int i = 0; i < getChildCount(); ++i) {
@@ -149,7 +141,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
             }
         }
     }
-
+    */
     public void setFixed(boolean isFixed) {
         this.isFixed = isFixed;
     }

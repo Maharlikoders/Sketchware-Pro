@@ -394,7 +394,7 @@ public class ViewPane extends RelativeLayout {
         }
         Gx classInfo = viewBean.getClassInfo();
         updateLayout(classInfo, view, viewBean);
-        updateConstraintLayout(view, viewBean);
+        //updateConstraintLayout(view, viewBean);
 
         if (classInfo.a("LinearLayout")) {
             LinearLayout linearLayout = (LinearLayout) view;
