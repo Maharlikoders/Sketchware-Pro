@@ -836,7 +836,6 @@ public class ViewPane extends RelativeLayout {
             layoutParams.topMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
             layoutParams.rightMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
             layoutParams.bottomMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
-            LayoutBean layoutBean = viewBean.layout;
             view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
             view.setLayoutParams(layoutParams);
         } else {
