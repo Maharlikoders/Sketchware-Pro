@@ -9,12 +9,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
+import android.widget.LinearLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.besome.sketch.beans.ViewBean;
 
-public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/ {
+public class ItemConstraintLayout extends LinearLayout implements sy, ty {
 
     private ViewBean viewBean = null;
     private boolean isSelected = false;
@@ -36,7 +37,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/
         super(context);
         initialize(context);
     }
-    /*
+
     @Override
     public void a() {
         int index = 0;
@@ -49,7 +50,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/
             }
         }
     }
-    */
+
     private void initialize(Context context) {
         setDrawingCacheEnabled(true);
         setMinimumWidth((int) wB.a(context, 32.0F));
@@ -58,7 +59,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/
         paint.setStrokeWidth(wB.a(getContext(), 2.0F));
         rect = new Rect();
     }
-    /*
+
     @Override
     public void addView(View child, int index) {
         int childCount = getChildCount();
@@ -82,7 +83,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/
             }
         }
     }
-    */
+
     @Override
     public ViewBean getBean() {
         return viewBean;
@@ -123,7 +124,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/
     public void setBean(ViewBean viewBean) {
         this.viewBean = viewBean;
     }
-    /*
+
     @Override
     public void setChildScrollEnabled(boolean childScrollEnabled) {
         for (int i = 0; i < getChildCount(); ++i) {
@@ -141,7 +142,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/
             }
         }
     }
-    */
+
     public void setFixed(boolean isFixed) {
         this.isFixed = isFixed;
     }
@@ -157,62 +158,62 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy/*, ty*/
         invalidate();
     }
 
-    private void setConstraint(View target, int value, int startSide, int endSide) {
+    private void setConstraint(ConstraintLayout layout, View target, int value, int startSide, int endSide) {
         ConstraintSet set = new ConstraintSet();
-        set.clone(this);
+        set.clone(layout);
         set.connect(target.getId(), startSide, value, endSide);
-        set.applyTo(this);
+        set.applyTo(layout);
     }
 
-    public void setLeftToLeft(View target, int value) {
-        setConstraint(target, value, LEFT, LEFT);
+    public void setLeftToLeft(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, LEFT, LEFT);
     }
 
-    public void setRightToRight(View target, int value) {
-        setConstraint(target, value, RIGHT, RIGHT);
+    public void setRightToRight(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, RIGHT, RIGHT);
     }
 
-    public void setLeftToRight(View target, int value) {
-        setConstraint(target, value, LEFT, RIGHT);
+    public void setLeftToRight(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, LEFT, RIGHT);
     }
 
-    public void setRightToLeft(View target, int value) {
-        setConstraint(target, value, RIGHT, LEFT);
+    public void setRightToLeft(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, RIGHT, LEFT);
     }
 
-    public void setTopToTop(View target, int value) {
-        setConstraint(target, value, TOP, TOP);
+    public void setTopToTop(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, TOP, TOP);
     }
 
-    public void setBottomToBottom(View target, int value) {
-        setConstraint(target, value, BOTTOM, BOTTOM);
+    public void setBottomToBottom(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, BOTTOM, BOTTOM);
     }
 
-    public void setTopToBottom(View target, int value) {
-        setConstraint(target, value, TOP, BOTTOM);
+    public void setTopToBottom(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, TOP, BOTTOM);
     }
 
-    public void setBottomToTop(View target, int value) {
-        setConstraint(target, value, BOTTOM, TOP);
+    public void setBottomToTop(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, BOTTOM, TOP);
     }
 
-    public void setBaselineToBaseline(View target, int value) {
-        setConstraint(target, value, BASELINE, BASELINE);
+    public void setBaselineToBaseline(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, BASELINE, BASELINE);
     }
 
-    public void setStartToStart(View target, int value) {
-        setConstraint(target, value, START, START);
+    public void setStartToStart(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, START, START);
     }
 
-    public void setEndToEnd(View target, int value) {
-        setConstraint(target, value, END, END);
+    public void setEndToEnd(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, END, END);
     }
 
-    public void setStartToEnd(View target, int value) {
-        setConstraint(target, value, START, END);
+    public void setStartToEnd(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, START, END);
     }
 
-    public void setEndToStart(View target, int value) {
-        setConstraint(target, value, END, START);
+    public void setEndToStart(ConstraintLayout layout, View target, int value) {
+        setConstraint(layout, target, value, END, START);
     }
 }

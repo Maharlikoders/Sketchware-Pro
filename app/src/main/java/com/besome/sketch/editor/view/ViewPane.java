@@ -750,16 +750,24 @@ public class ViewPane extends RelativeLayout {
     private void findConstraintsTargetFor(ViewBean bean, ItemConstraintLayout constraintLayout) {
         int totalViews = constraintLayout.getChildCount();
         int index = 0;
+        ConstraintLayout constraint = new ConstraintLayout(getContext());
+        constraint.setLayoutParams(new ViewGroup.LayoutParams(bean.layout.width, bean.layout.height));
+
+        ViewGroup parent = (ViewGroup) constraintLayout.getParent();
+        int constraintIndex = parent.indexOfChild(constraintLayout);
+        parent.removeView(constraintLayout);
+        parent.addView(constraint, constraintIndex);
 
         for (int i = 0; i < totalViews; i++) {
             View child = constraintLayout.getChildAt(i);
             if (child != null && child.getTag() != null &&
                 (bean == null || bean.id == null || !child.getTag().equals(bean.id)) &&
                 child.getVisibility() == View.VISIBLE) {
+                constraint.addView(child);
                 index++;
                 if (child instanceof sy editorItem) {
                     ViewBean childBean = editorItem.getBean();
-                    updateConstraintLayout(child, childBean);
+                    updateConstraintLayout(constraint, constraintLayout, child, childBean);
                     if (child instanceof ItemLinearLayout) {
                         a(childBean, (ItemLinearLayout) child);
                     } else if (child instanceof ItemHorizontalScrollView) {
@@ -1001,7 +1009,7 @@ public class ViewPane extends RelativeLayout {
         imageView.setBorderWidth(borderWidthValue);
     }
 
-    private void updateConstraintLayout(View view, ViewBean viewBean) {
+    private void updateConstraintLayout(ConstraintLayout constraint, ItemConstraintLayout constraintItem, View view, ViewBean viewBean) {
         //ArrayList<ViewBean> list = jC.a(sc_id).b(projectFileBean.getXmlName(), viewBean);
         int defaultParent = ConstraintLayout.LayoutParams.PARENT_ID;
         InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
@@ -1009,34 +1017,33 @@ public class ViewPane extends RelativeLayout {
         String leftToRight = handler.getAttributeValueOf("layout_constraintLeft_toRightOf");
         String rightToRight = handler.getAttributeValueOf("layout_constraintRight_toRightOf");
         String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
-        if (view.getParent() instanceof ItemConstraintLayout parentView) {
             if (!leftToLeft.isEmpty()) {
                 int value = defaultParent;
                 if (!leftToLeft.equals("parent")) {
                     value = getViewId(getIdFromString(leftToLeft, "parent"));
                 }
-                parentView.setLeftToLeft(view, value);
+                constraintItem.setLeftToLeft(constraint, view, value);
             }
             if (!leftToRight.isEmpty()) {
                 int value = defaultParent;
                 if (!leftToRight.equals("parent")) {
                     value = getViewId(getIdFromString(leftToRight, "parent"));
                 }
-                parentView.setLeftToRight(view, value);
+                constraintItem.setLeftToRight(constraint, view, value);
             }
             if (!rightToRight.isEmpty()) {
                 int value = defaultParent;
                 if (!rightToRight.equals("parent")) {
                     value = getViewId(getIdFromString(rightToRight, "parent"));
                 }
-                parentView.setRightToRight(view, value);
+                constraintItem.setRightToRight(constraint, view, value);
             }
             if (!rightToLeft.isEmpty()) {
                 int value = defaultParent;
                 if (!rightToLeft.equals("parent")) {
                     value = getViewId(getIdFromString(rightToLeft, "parent"));
                 }
-                parentView.setRightToLeft(view, value);
+                constraintItem.setRightToLeft(constraint, view, value);
             }
         }
         
