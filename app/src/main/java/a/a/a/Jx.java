@@ -908,12 +908,12 @@ public class Jx {
             String adapterLogic = new Fx(projectFileBean.getActivityName(), buildConfig, eventName, projectDataManager.a(projectFileBean.getJavaName(), eventName)).a();
             String adapterCode;
             if (viewBean.type == ViewBeans.VIEW_TYPE_LAYOUT_VIEWPAGER) {
-                adapterCode = Lx.pagerAdapter(viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
+                adapterCode = Lx.pagerAdapter(ox, viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
             } else if (viewBean.type == ViewBeans.VIEW_TYPE_WIDGET_RECYCLERVIEW) {
                 Pair<String, String> customList = getRecyclerViewCustomList(viewBean.id);
-                adapterCode = Lx.recyclerViewAdapter(viewBean.id.equals(customList.first) ? viewBean.id : customList.first, viewBean.customView, projectDataManager.d(xmlName), adapterLogic, customList.second);
+                adapterCode = Lx.recyclerViewAdapter(ox, viewBean.id.equals(customList.first) ? viewBean.id : customList.first, viewBean.customView, projectDataManager.d(xmlName), adapterLogic, customList.second);
             } else {
-                adapterCode = Lx.getListAdapterCode(viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
+                adapterCode = Lx.getListAdapterCode(ox, viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
             }
             adapterClasses.add(adapterCode);
         }
@@ -1026,17 +1026,21 @@ public class Jx {
     private void addDrawerComponentInitializer() {
         ArrayList<ViewBean> viewBeans = projectDataManager.d(projectFileBean.getXmlName());
         for (ViewBean viewBean : viewBeans) {
-            Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
-            if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
-                initializeMethodCode.add(getViewInitializer(viewBean));
+            if (!viewBean.convert.equals("include")) {
+                Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
+                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
+                    initializeMethodCode.add(getViewInitializer(viewBean));
+                }
             }
         }
         if (projectFileBean.hasActivityOption(ProjectFileBean.OPTION_ACTIVITY_DRAWER)) {
             ArrayList<ViewBean> drawerBeans = projectDataManager.d(projectFileBean.getDrawerXmlName());
             for (ViewBean viewBean : drawerBeans) {
-                Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
-                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
-                    initializeMethodCode.add(getDrawerViewInitializer(viewBean));
+                if (!viewBean.convert.equals("include")) {
+                    Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
+                    if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
+                        initializeMethodCode.add(getDrawerViewInitializer(viewBean));
+                    }
                 }
             }
         }
@@ -1081,8 +1085,8 @@ public class Jx {
             lists.add(getListDeclarationAndAddImports(next2.first, next2.second));
         }
         for (ViewBean viewBean : projectDataManager.d(projectFileBean.getXmlName())) {
-            Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
             if (!viewBean.convert.equals("include")) {
+                Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
                 if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                     views.add(getViewDeclarationAndAddImports(viewBean));
                 }
@@ -1090,8 +1094,8 @@ public class Jx {
         }
         if (projectFileBean.hasActivityOption(ProjectFileBean.OPTION_ACTIVITY_DRAWER)) {
             for (ViewBean viewBean : projectDataManager.d(projectFileBean.getDrawerXmlName())) {
-                Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
                 if (!viewBean.convert.equals("include")) {
+                    Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
                     if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                         views.add(getDrawerViewDeclarationAndAddImports(viewBean));
                     }

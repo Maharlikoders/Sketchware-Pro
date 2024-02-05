@@ -11,7 +11,6 @@ if (analyticsEnabled) {
 
 android {
     compileSdk 33
-    buildToolsVersion "33.0.1"
 
     def gitCommitHash = "git rev-parse HEAD".execute().text.trim()
 
@@ -96,6 +95,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 }
 
@@ -140,7 +140,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:4.10.0"
     //noinspection GradleDependency
     implementation "com.squareup.okio:okio:3.1.0"
-    implementation 'com.github.Cosmic-Ide:dependencyresolver:0586efe930'
+    implementation "com.github.Cosmic-Ide:DependencyResolver:868996895a"
 
     minApi21Implementation "net.sf.proguard:proguard-base:6.0.3"
     minApi26Implementation files('libs/proguard-base-7.2.2.jar')

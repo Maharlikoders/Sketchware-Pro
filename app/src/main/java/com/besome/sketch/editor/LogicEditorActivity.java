@@ -124,25 +124,25 @@ import mod.jbk.util.BlockUtil;
 public class LogicEditorActivity extends BaseAppCompatActivity implements View.OnClickListener, Vs, View.OnTouchListener, MoreblockImporterDialog.CallBack {
 
     private final Handler Z = new Handler();
+    private final int[] v = new int[2];
+    public ProjectFileBean M;
+    public PaletteBlock m;
+    public PaletteSelector paletteSelector;
+    public BlockPane o;
+    public String B = "";
+    public String C = "";
+    public String D = "";
     private Vibrator F;
     private LinearLayout J, K;
     private FloatingActionButton L;
-    public ProjectFileBean M;
     private LogicTopMenu N;
     private LogicEditorDrawer O;
     private ObjectAnimator U, V, ba, ca, fa, ga;
     private ExtraPaletteBlock extraPaletteBlock;
-    public PaletteSelector paletteSelector;
-    public PaletteBlock m;
     private ViewLogicEditor n;
-    public BlockPane o;
     private ViewDummy p;
     private Rs w;
     private float r, q, s, t;
-    private final int[] v = new int[2];
-    public String B = "";
-    public String C = "";
-    public String D = "";
     private int A, S, e, x, y;
     private int T = -30;
     private View Y;
@@ -1500,9 +1500,9 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         for (int i = 0, viewsSize = views.size(); i < viewsSize; i++) {
             ViewBean viewBean = views.get(i);
             String convert = viewBean.convert;
-            Set<String> toNotAdd = new Ox(new jq(), M).readAttributesToReplace(viewBean);
             String typeName = convert.isEmpty() ? ViewBean.getViewTypeName(viewBean.type) : IdGenerator.getLastPath(convert);
             if (!convert.equals("include")) {
+                Set<String> toNotAdd = new Ox(new jq(), M).readAttributesToReplace(viewBean);
                 if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                     viewGroup.addView(d(typeName, viewBean.id));
                 }
