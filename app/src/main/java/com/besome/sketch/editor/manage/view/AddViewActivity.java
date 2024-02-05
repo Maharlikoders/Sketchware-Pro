@@ -17,7 +17,7 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.beans.ViewBean;
 import com.besome.sketch.lib.base.BaseDialogActivity;
 import com.besome.sketch.lib.ui.SelectableButtonBar;
-import com.sketchware.remod.databinding.ManageScreenActivityAddTempBinding;
+import com.sketchware.pro.databinding.ManageScreenActivityAddTempBinding;
 
 import java.util.ArrayList;
 

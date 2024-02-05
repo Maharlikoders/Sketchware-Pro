@@ -18,7 +18,7 @@ import com.besome.sketch.lib.base.BaseDialogActivity;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.util.ArrayList;

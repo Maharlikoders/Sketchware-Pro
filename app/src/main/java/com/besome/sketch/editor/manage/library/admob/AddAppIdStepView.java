@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.besome.sketch.beans.ProjectLibraryBean;
-import com.sketchware.remod.databinding.ManageLibraryAdmobAppIdBinding;
-import com.sketchware.remod.databinding.ManageLibrarySettingAdmobAppIdAddBinding;
-import com.sketchware.remod.R;
+import com.sketchware.pro.beans.ProjectLibraryBean;
+import com.sketchware.pro.databinding.ManageLibraryAdmobAppIdBinding;
+import com.sketchware.pro.databinding.ManageLibrarySettingAdmobAppIdAddBinding;
+import com.sketchware.pro.R;
 
 import a.a.a.aB;
 import a.a.a.bB;
