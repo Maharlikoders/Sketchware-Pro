@@ -32,8 +32,8 @@ import androidx.core.content.FileProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
-import com.sketchware.remod.BuildConfig;
-import com.sketchware.remod.R;
+import com.sketchware.pro.BuildConfig;
+import com.sketchware.pro.R;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
@@ -448,8 +448,8 @@ public class ExportProjectActivity extends BaseAppCompatActivity {
             if (BuildConfig.FLAVOR.equals(BuildConfig.FLAVOR_NAME_WITHOUT_AABS)) {
                 dialog.a(R.drawable.break_warning_96_red);
                 dialog.b("Can't generate App Bundle");
-                dialog.a("This Sketchware Pro version doesn't support building AABs as it must work on " +
-                        "Android 7.1.1 and earlier. Use Sketchware Pro " + BuildConfig.VERSION_NAME_WITHOUT_FLAVOR + "-" +
+                dialog.a("This SketchwareX Pro version doesn't support building AABs as it must work on " +
+                        "Android 7.1.1 and earlier. Use SketchwareX Pro " + BuildConfig.VERSION_NAME_WITHOUT_FLAVOR + "-" +
                         BuildConfig.FLAVOR_NAME_WITH_AABS + " instead.");
                 dialog.b(Helper.getResString(R.string.common_word_close), Helper.getDialogDismissListener(dialog));
                 dialog.show();

@@ -23,7 +23,7 @@ import com.besome.sketch.beans.ViewBean;
 import com.besome.sketch.ctrls.ViewIdSpinnerItem;
 import com.besome.sketch.editor.property.ViewPropertyItems;
 import com.besome.sketch.lib.ui.CustomHorizontalScrollView;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 

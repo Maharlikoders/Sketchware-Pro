@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.besome.sketch.help.ProgramInfoActivity;
 import com.besome.sketch.help.SystemSettingActivity;
 import com.besome.sketch.tools.NewKeyStoreActivity;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.GB;
 import a.a.a.bB;

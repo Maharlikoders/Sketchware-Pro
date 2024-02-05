@@ -100,6 +100,9 @@ public class ExtraBlockClassInfo {
             case "signinbutton" -> "SignInButton";
             case "materialButton" -> "MaterialButton";
             case "fragmentAdapter" -> "FragmentAdapter";
+            case "resString" -> "ResString";
+            case "resColor" -> "ResColor";
+            case "resStyle" -> "ResStyle";
             default -> str;
         };
     }

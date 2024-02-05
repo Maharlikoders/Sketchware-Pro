@@ -2,7 +2,7 @@ package mod.hilal.saif.events;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,14 +12,15 @@ import a.a.a.Gx;
 import a.a.a.oq;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.util.LogUtil;
 import mod.jbk.util.OldResourceIdMapper;
 
 public class EventsHandler {
 
-    public static final String CUSTOM_EVENTS_FILE_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/data/system/events.json";
-    public static final String CUSTOM_LISTENERE_FILE_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/data/system/listeners.json";
+    public static final String CUSTOM_EVENTS_FILE_PATH = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/events.json";
+    public static final String CUSTOM_LISTENERE_FILE_PATH = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/listeners.json";
     private static ArrayList<HashMap<String, Object>> cachedCustomEvents = readCustomEvents();
     private static ArrayList<HashMap<String, Object>> cachedCustomListeners = readCustomListeners();
 
@@ -34,12 +35,11 @@ public class EventsHandler {
      *
      * @return Array of Activity Events.
      * @apiNote Custom Activity Events can be added by writing to the file
-     * /Internal storage/.sketchware/data/system/events.json and specifying an empty string for "var"
+     * /Internal storage/<?sketchware workspace?>/data/system/events.json and specifying an empty string for "var"
      */
     public static String[] getActivityEvents() {
         ArrayList<String> array = new ArrayList<>();
 
-        array.add("Import");
         array.add("initializeLogic");
         array.add("onActivityResult");
         array.add("onBackPressed");
@@ -49,6 +49,7 @@ public class EventsHandler {
         array.add("onPause");
         array.add("onStop");
         array.add("onDestroy");
+        array.add("onClick");
         array.add("onSaveInstanceState");
         array.add("onRestoreInstanceState");
         array.add("onCreateOptionsMenu");
@@ -217,6 +218,8 @@ public class EventsHandler {
     public static int getIcon(String name) {
         switch (name) {
             case "Import":
+            case "Implement":
+            case "moreCommand":
             case "onActivityResult":
             case "initializeLogic":
             case "onBackPressed":
@@ -226,6 +229,7 @@ public class EventsHandler {
             case "onPause":
             case "onStop":
             case "onDestroy":
+            case "onClick":
             case "onTabLayoutNewTabAdded":
                 return R.drawable.widget_source;
 
@@ -284,6 +288,12 @@ public class EventsHandler {
         switch (name) {
             case "Import":
                 return "add custom imports";
+
+            case "Implement":
+                return "add implements to activity";
+
+            case "moreCommand":
+                return "More commands blocks";
 
             case "onActivityResult":
                 return "onActivityResult";
@@ -347,7 +357,8 @@ public class EventsHandler {
                 return "//Ul5kmZqmO867OV0QTGOpjwX7MXmgzxzQBSZTf0Y16PnDXkhLsZfvF\r\n" +
                         param + "\r\n" +
                         "//3b5IqsVG57gNqLi7FBO2MeOW6iI7tOustUGwcA7HKXm0o7lovZ";
-
+            case "Implement":
+            case "moreCommand":
             case "onActivityResult":
             case "initializeLogic":
                 return "";
@@ -431,11 +442,16 @@ public class EventsHandler {
     public static String getBlocks(String name) {
         switch (name) {
             case "Import":
+            case "Implement":
+            case "moreCommand":
             case "initializeLogic":
             case "onSwipeRefreshLayout":
             case " onLongClick":
             case "onPreExecute":
                 return "";
+
+            case "onClick":
+                return "%m.view";
 
             case "onActivityResult":
                 return "%d.requestCode %d.resultCode %m.intent";
@@ -480,6 +496,15 @@ public class EventsHandler {
         switch (event) {
             case "Import":
                 return "create new import";
+
+            case "Implement":
+                return "add new implement";
+
+            case "moreCommand":
+                return "add command blocks";
+                
+            case "onClick":
+                return "when " + name + " clicked %m.view.view"; 
 
             case "onActivityResult":
                 return "OnActivityResult %d.requestCode %d.resultCode %m.intent.data";

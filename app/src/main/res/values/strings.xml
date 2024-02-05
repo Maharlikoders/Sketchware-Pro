@@ -966,6 +966,7 @@ Please click on Settings to allow permission for Storage. Without this permissio
     <string name="common_word_import">Import</string>
     <string name="common_word_import_count">Import %s Item(s)</string>
     <string name="common_word_information">Information</string>
+    <string name="common_word_insert">Insert</string>
     <string name="common_word_locale">Locale</string>
     <string name="common_word_modify">Modify</string>
     <string name="common_word_moreblock">MoreBlock</string>
@@ -1054,26 +1055,39 @@ ex)\"*/*\", \"image/*\", \"audio/*\", \"text/*\""</string>
     <string name="design_actionbar_title_manager_image">Image Manager</string>
     <string name="design_actionbar_title_manager_sound">Sound Manager</string>
     <string name="design_actionbar_title_manager_view">View Manager</string>
+    <string name="design_actionbar_title_manager_xml">XML Manager</string>
     <string name="design_actionbar_title_show_source_code">Show Source code</string>
     <string name="design_button_properties">Properties</string>
     <string name="design_drawer_menu_bottom_title">Global</string>
     <string name="design_drawer_menu_description_collection">My saved collections</string>
     <string name="design_drawer_menu_description_font">Import different fonts</string>
+    <string name="design_drawer_menu_description_github">GitHub settings</string>
     <string name="design_drawer_menu_description_image">Import photos and icons</string>
     <string name="design_drawer_menu_description_library">Component settings</string>
+    <string name="design_drawer_menu_description_project">Configure settings</string>
     <string name="design_drawer_menu_description_sound">Import music and sound efects</string>
     <string name="design_drawer_menu_description_source_code">View Java and XML files</string>
     <string name="design_drawer_menu_description_theme">Color theme</string>
     <string name="design_drawer_menu_description_view">Manage multiple screens</string>
+    <string name="design_drawer_menu_description_xml">Manage colors, strings and styles</string>
     <string name="design_drawer_menu_title">Configuration</string>
     <string name="design_drawer_menu_title_collection">Collection</string>
     <string name="design_drawer_menu_title_font">Font</string>
+    <string name="design_drawer_menu_title_github">GitHub</string>
     <string name="design_drawer_menu_title_image">Image</string>
     <string name="design_drawer_menu_title_library">Library</string>
+    <string name="design_drawer_menu_title_libraries">Libraries</string>
+    <string name="design_drawer_menu_title_project">Project</string>
     <string name="design_drawer_menu_title_sound">Sound</string>
     <string name="design_drawer_menu_title_source_code">Show Source Code</string>
     <string name="design_drawer_menu_title_theme">Theme</string>
     <string name="design_drawer_menu_title_view">View</string>
+    <string name="design_drawer_menu_title_xml">XML</string>
+    <string name="design_github_button_goto_setting">Open GitHub Setting</string>
+    <string name="design_github_setting_step1_desc">Enter your username and token</string>
+    <string name="design_github_setting_step1_title">Setup Credentials</string>
+    <string name="design_github_setting_step2_desc">Please review the information below. If they are all correct, click on \"Save\".</string>
+    <string name="design_github_setting_step2_title">Review Information</string>
     <string name="design_file_selector_title_java">Available Java Files</string>
     <string name="design_library_admob_button_goto_console">Open AdMob Console</string>
     <string name="design_library_admob_button_goto_setting">Open AdMob Setting</string>
@@ -1176,6 +1190,15 @@ You must enter the API key to operate the map normally."</string>
     <string name="design_library_title_appcompat">AppCompat</string>
     <string name="design_library_title_appcompat_and_design">AppCompat and Design</string>
     <string name="design_library_title_select_project">Select Project</string>
+    <string name="design_xml_description_color">A color resource is specified using an RGB value and alpha channel</string>
+    <string name="design_xml_description_string">A string resource provides text strings for your application</string>
+    <string name="design_xml_description_style">A style resource defines the format and look for a UI</string>
+    <string name="design_xml_title_color">Color</string>
+    <string name="design_xml_title_color_manager">Color Manager</string>
+    <string name="design_xml_title_string">String</string>
+    <string name="design_xml_title_string_manager">String Manager</string>
+    <string name="design_xml_title_style">Style</string>
+    <string name="design_xml_title_style_manager">Style Manager</string>
     <string name="design_manager_block_detail_actionbar_title">Block Details</string>
     <string name="design_manager_block_hint_enter_block_name">Enter block name</string>
     <string name="design_manager_change_name_button">CHANGE NAME</string>
@@ -1348,6 +1371,7 @@ Do you want to continue?"</string>
     <string name="ideas_url">https://ideas.sketchware.io/</string>
     <string name="invalid_component">Invalid component</string>
     <string name="invalid_icon_id">Invalid icon ID</string>
+    <string name="invalid_name_cannot_be_empty">Name can\'t be empty</string>
     <string name="invalid_required_fields">Some required fields are empty</string>
     <string name="invalid_value_format">Invalid format</string>
     <string name="invalid_value_max_lenth">You can use maximum %d letters</string>
@@ -1453,6 +1477,9 @@ Please try again after removing the blocks with this variable"</string>
     <string name="logic_editor_title_select_variable_string">Select string variable</string>
     <string name="logic_editor_title_select_view">Select widget</string>
     <string name="logic_editor_title_select_visibility">Select visibility</string>
+    <string name="logic_editor_title_select_xml_color">Select color resource</string>
+    <string name="logic_editor_title_select_xml_string">Select string resource</string>
+    <string name="logic_editor_title_select_xml_style">Select style resource</string>
     <string name="logic_list_menu_add_to_collection">Add To Collection</string>
     <string name="logic_more_block_desc_add_variable_resource">"Variables and resources in moreblock are added automatically. Do you want to continue?
 But, components should be added manually for working correctly."</string>
@@ -1605,6 +1632,7 @@ ACTION_VIEW
  url type (http://sketchware.io)"</string>
     <string name="property_description_edittext_ime_options">"It does not work when single_line is 'false' and input_type is 'text'"</string>
     <string name="property_divider_height">dividerHeight</string>
+    <string name="property_disable_id">Remove ID</string>
     <string name="property_enabled">enabled</string>
     <string name="property_first_day_of_week">firstDayOfWeek</string>
     <string name="property_gravity">gravity</string>
@@ -2133,7 +2161,7 @@ Please try again later"</string>
     <string name="local_library_manager_skip_downloading_dependencies">Skip downloading sub-dependencies</string>
 
     <!--  about the team screen  -->
-    <string name="about_title">About Sketchware Pro</string>
+    <string name="about_title">About SketchwareX Pro</string>
     <string name="about_team_title">The team</string>
     <string name="about_specialthanks_title">Special Thanks</string>
     <string name="about_changelog_title">Changelog</string>

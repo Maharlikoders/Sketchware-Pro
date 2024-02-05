@@ -309,6 +309,15 @@ public class BlocksHandler {
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
+        hashMap.put("name", "removeImport");
+        hashMap.put("type", " ");
+        hashMap.put("code", "import %s;");
+        hashMap.put("color", "#EE7D15");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "remove import %s.import");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
         hashMap.put("name", "customToast");
         hashMap.put("type", " ");
         hashMap.put("code", "SketchwareUtil.CustomToast(getApplicationContext(), %s, %s, %s, %s, %s, SketchwareUtil.%s);");
@@ -1236,42 +1245,6 @@ public class BlocksHandler {
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
-        hashMap.put("name", "codeviewSetCode");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setCode(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.codeview setCode %s");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "codeviewSetTheme");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setTheme(Theme.%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.codeview setTheme %m.cv_theme");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "codeviewSetLanguage");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setLanguage(Language.%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.codeview setLanguage %m.cv_language");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "codeviewApply");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.apply();");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.codeview apply");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
         hashMap.put("name", "fabIcon");
         hashMap.put("type", " ");
         hashMap.put("code", "_fab.setImageResource(R.drawable.%s);");
@@ -1412,7 +1385,7 @@ public class BlocksHandler {
         hashMap.put("code", "");
         hashMap.put("color", "#4A6CD4");
         hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.recyclerview setRecyclerCustomViewData %m.listMap");
+        hashMap.put("spec", "%m.recyclerview setRecyclerCustomViewData %m.list");
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
@@ -1584,213 +1557,6 @@ public class BlocksHandler {
         hashMap.put("color", "#4A6CD4");
         hashMap.put("palette", "-1");
         hashMap.put("spec", "isChecked");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "getBadgeCount");
-        hashMap.put("type", "d");
-        hashMap.put("code", "%s.getBadgeCount();");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.badgeview getBadgeCount");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBadgeNumber");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setBadgeCount(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.badgeview setBadgeNumber %d");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBadgeString");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setBadgeCount(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.badgeview setBadgeString %s");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBadgeBackground");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setBadgeBackground(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.badgeview setBadgeBackground %m.color");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBadgeTextColor");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setTextColor(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.badgeview setBadgeTextColor %m.color");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBadgeTextSize");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setTextSize((int)%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.badgeview setBadgeTextSize %d");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setCustomLetter");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setCustomLetter(new String[]%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.sidebar setCustomLetter String[] %s.inputOnly");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBubbleColor");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setBubbleColor(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "BubbleLayout %m.view setBubbleColor %m.color");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBubbleStrokeColor");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setStrokeColor(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "BubbleLayout %m.view setStrokeColor %m.color");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBubbleStrokeWidth");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setStrokeWidth((float)%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "BubbleLayout %m.view setStrokeWidth %d");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBubbleCornerRadius");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setCornersRadius((float)%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "BubbleLayout %m.view setCornerRadius %d");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBubbleArrowHeight");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setArrowHeight((float)%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "BubbleLayout %m.view setArrowHeight %d");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBubbleArrowWidth");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setArrowWidth((float)%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "BubbleLayout %m.view setArrowWidth %d");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "setBubbleArrowPosition");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setArrowPosition((float)%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "BubbleLayout %m.view setArrowPosition %d");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternToString");
-        hashMap.put("type", "s");
-        hashMap.put("code", "PatternLockUtils.patternToString(%s, %s)");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview getPattern from %m.listStr to String ");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternToMD5");
-        hashMap.put("type", "s");
-        hashMap.put("code", "PatternLockUtils.patternToMD5(%s, %s)");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview getPattern from %m.listStr to MD5");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternToSha1");
-        hashMap.put("type", "s");
-        hashMap.put("code", "PatternLockUtils.patternToSha1(%s, %s)");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview getPattern from %m.listStr to SHA1");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternSetDotCount");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setDotCount((int)%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview setDotCount %d ");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternSetNormalStateColor");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setNormalStateColor(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview setNormalStateColor %m.color");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternSetCorrectStateColor");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setCorrectStateColor(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview setCorrectStateColor %m.color");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternSetWrongStateColor");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setWrongStateColor(%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview setWrongStateColor %m.color");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternSetViewMode");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.setViewMode(PatternLockView.PatternViewMode.%s);");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview setViewMode %m.patternviewmode");
-        arrayList.add(hashMap);
-
-        hashMap = new HashMap<>();
-        hashMap.put("name", "patternLockClear");
-        hashMap.put("type", " ");
-        hashMap.put("code", "%s.clearPattern();");
-        hashMap.put("color", "#4A6CD4");
-        hashMap.put("palette", "-1");
-        hashMap.put("spec", "%m.patternview clearPattern");
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
@@ -2311,33 +2077,33 @@ public class BlocksHandler {
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
-        hashMap.put("name", "asdBoolean");
+        hashMap.put("name", "addSourceDirectly");
         hashMap.put("type", "b");
         hashMap.put("typeName", "");
         hashMap.put("code", "%s");
         hashMap.put("color", "#5cb722");
         hashMap.put("palette", "-1");
-        hashMap.put("spec", "boolean %s.inputOnly");
+        hashMap.put("spec", "add source directly %s.inputOnly");
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
-        hashMap.put("name", "asdNumber");
+        hashMap.put("name", "addSourceDirectly");
         hashMap.put("type", "d");
         hashMap.put("typeName", "");
         hashMap.put("code", "%s");
         hashMap.put("color", "#5cb722");
         hashMap.put("palette", "-1");
-        hashMap.put("spec", "number %s.inputOnly");
+        hashMap.put("spec", "add source directly %s.inputOnly");
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
-        hashMap.put("name", "asdString");
+        hashMap.put("name", "addSourceDirectly");
         hashMap.put("type", "s");
         hashMap.put("typeName", "");
         hashMap.put("code", "%s");
         hashMap.put("color", "#5cb722");
         hashMap.put("palette", "-1");
-        hashMap.put("spec", "string %s.inputOnly");
+        hashMap.put("spec", "add source directly %s.inputOnly");
         arrayList.add(hashMap);
 
         hashMap = new HashMap<>();
@@ -2405,6 +2171,53 @@ public class BlocksHandler {
         hashMap.put("color", "#2aa4e2");
         hashMap.put("palette", "-1");
         hashMap.put("spec", "%m.videoad register fullscreen content callbacks (This Block isn't needed anymore, please remove it)");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
+        hashMap.put("name", "getResString");
+        hashMap.put("type", "s");
+        hashMap.put("typeName", "");
+        hashMap.put("code", "getString(R.string.%s)");
+        hashMap.put("color", "#5cb722");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "get string %m.resString");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
+        hashMap.put("name", "getResColor");
+        hashMap.put("type", "v");
+        hashMap.put("typeName", "int");
+        hashMap.put("code", "(Build.VERSION.SDK_INT >= 23 ? getResources().getColor(R.color.%1$s, getTheme()) : getResources().getColor(R.color.%1$s))");
+        hashMap.put("color", "#5cb722");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "get color %m.resColor");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
+        hashMap.put("name", "implement");
+        hashMap.put("type", " ");
+        hashMap.put("code", "");
+        hashMap.put("color", "#EE7D15");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "implement %s.implement");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
+        hashMap.put("name", "extendActivityWith");
+        hashMap.put("type", " ");
+        hashMap.put("code", "");
+        hashMap.put("color", "#EE7D15");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "activity extend with %s.inputOnly");
+        arrayList.add(hashMap);
+
+        hashMap = new HashMap<>();
+        hashMap.put("name", "recyclerViewCustomList");
+        hashMap.put("type", " ");
+        hashMap.put("code", "");
+        hashMap.put("color", "#EE7D15");
+        hashMap.put("palette", "-1");
+        hashMap.put("spec", "%m.recyclerview custom list with %s.inputOnly");
         arrayList.add(hashMap);
     }
 
@@ -2643,10 +2456,13 @@ public class BlocksHandler {
             logicEditorActivity.a("s", "GsonListTojsonString");
             logicEditorActivity.a(" ", "stringSplitToList");
         }
+        logicEditorActivity.a("Resources", 0xff555555);
+        logicEditorActivity.a("s", "getResString");
+        logicEditorActivity.a("", "v", "int", "getResColor");
         logicEditorActivity.a("add source directly", 0xff555555);
         logicEditorActivity.a(" ", "addSourceDirectly");
-        logicEditorActivity.a("b", "asdBoolean");
-        logicEditorActivity.a("d", "asdNumber");
-        logicEditorActivity.a("s", "asdString");
+        logicEditorActivity.a("b", "addSourceDirectly");
+        logicEditorActivity.a("d", "addSourceDirectly");
+        logicEditorActivity.a("s", "addSourceDirectly");
     }
 }

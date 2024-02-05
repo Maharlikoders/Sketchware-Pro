@@ -239,6 +239,37 @@
             android:name="mod.agus.jcoderz.editor.manage.resource.ManageResourceActivity"
             android:configChanges="orientation|screenSize" />
         <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.github.ManageGitHubActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.github.ManageGitHubChangesActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.github.ManageGitHubSettingActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.github.SetupGitHubActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name="mod.elfilibustero.sketch.editor.manage.library.ManageLibrariesActivity"
+            android:configChanges="orientation|screenSize" />
+            <activity android:name="mod.elfilibustero.sketch.editor.manage.library.external.ManageExternalAddLibraryActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name="mod.elfilibustero.sketch.editor.manage.library.external.ManageExternalLibraryActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name="mod.elfilibustero.sketch.editor.manage.library.external.ManageExternalLibraryItemActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name="mod.elfilibustero.sketch.editor.manage.project.ManageProjectSettingActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity android:name="mod.elfilibustero.sketch.editor.manage.manifest.ManageFirebaseMetaDataActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="mod.elfilibustero.sketch.editor.manage.resource.ManageXmlResourceActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
             android:name="mod.hey.studios.activity.managers.assets.ManageAssetsActivity"
             android:configChanges="orientation|screenSize" />
         <activity

@@ -16,6 +16,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.util.LogUtil;
 
@@ -39,6 +40,13 @@ public class ProjectSettings {
      * @see Application
      */
     public static final String SETTING_APPLICATION_CLASS = "app_class";
+
+    /**
+     * Setting for the final app's {@link Util} class
+     *
+     * @see Util
+     */
+    public static final String SETTING_UTIL_CLASS = "util_class";
 
     /**
      * Setting for the final app's {@code targetSdkVersion}
@@ -95,7 +103,7 @@ public class ProjectSettings {
     }
 
     public String getPath() {
-        return new File(Environment.getExternalStorageDirectory(), ".sketchware/data/" + sc_id + "/project_config").getAbsolutePath();
+        return new File(Environment.getExternalStorageDirectory(), SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/project_config").getAbsolutePath();
     }
 
     public String getValue(String key, String defaultValue) {

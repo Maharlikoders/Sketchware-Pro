@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import mod.hey.studios.util.Helper;
 

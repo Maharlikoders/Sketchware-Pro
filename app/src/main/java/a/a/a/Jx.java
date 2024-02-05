@@ -5,6 +5,7 @@ import android.util.Pair;
 
 import com.besome.sketch.beans.BlockBean;
 import com.besome.sketch.beans.ComponentBean;
+import com.besome.sketch.beans.EventBean;
 import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.beans.ViewBean;
 
@@ -76,7 +77,11 @@ public class Jx {
     private final ArrayList<String> filePickerRequestCodes = new ArrayList<>();
     private Hx eventManager;
     private ArrayList<String> imports = new ArrayList<>();
+    private ArrayList<String> removeImports = new ArrayList<>();
+    private ArrayList<String> implementsList = new ArrayList<>();
     private String onCreateEventCode = "";
+
+    private String customExtend = "";
 
     public Jx(jq jqVar, ProjectFileBean projectFileBean, eC eCVar) {
         packageName = jqVar.packageName;
@@ -114,6 +119,32 @@ public class Jx {
                             initializeMethodCode.add(block.parameters.get(0));
                         }
                         break;
+
+                    case "customImport":
+                    case "customImport2":
+                        if (!block.parameters.get(0).trim().isEmpty()) {
+                            addImport(block.parameters.get(0));
+                        }
+                        break;
+
+
+                    case "removeImport":
+                        if (!block.parameters.get(0).trim().isEmpty()) {
+                            removeImport(block.parameters.get(0));
+                        }
+                        break;
+
+                    case "implement":
+                        if (!block.parameters.get(0).trim().isEmpty()) {
+                            addImplement(block.parameters.get(0));
+                        }
+                        break;
+
+                    case "extendActivityWith":
+                        if (!block.parameters.get(0).trim().isEmpty()) {
+                            customExtend = block.parameters.get(0);
+                        }
+                        break;
                 }
             }
         }
@@ -126,7 +157,22 @@ public class Jx {
                 newImports.add(value);
             }
         }
+        for (String value : removeImports) {
+            if (newImports.contains(value)) {
+                newImports.remove(value);
+            }
+        }
         imports = newImports;
+    }
+
+    private void removeExtraImplements() {
+        ArrayList<String> newImplements = new ArrayList<>();
+        for (String value : implementsList) {
+            if (!newImplements.contains(value) && !value.trim().isEmpty()) {
+                newImplements.add(value);
+            }
+        }
+        implementsList = newImplements;
     }
 
     /**
@@ -137,7 +183,7 @@ public class Jx {
         String theImport = "";
 
         String activityName = ProjectFileBean.getActivityName(AndroidManifestInjector.getLauncherActivity(projectDataManager.a));
-        if (!activityName.equals("MainActivity")) {
+        if (!activityName.equals("MainActivity") && !activityName.equals("Activity")) {
             theImport = "import " + packageName + "." + activityName + ";" + EOL;
         }
 
@@ -162,7 +208,9 @@ public class Jx {
         boolean isDialogFragment = projectFileBean.fileName.contains("_dialog_fragment");
         boolean isBottomDialogFragment = projectFileBean.fileName.contains("_bottomdialog_fragment");
         boolean isFragment = projectFileBean.fileName.contains("_fragment");
-
+        boolean isOldMethodEnabled = false;
+        
+        addImplements();
         extraVariables();
         handleAppCompat();
         addFieldsDeclaration();
@@ -173,6 +221,19 @@ public class Jx {
         addRequestCodeConstants();
         addImportsForBlocks();
         addLocalLibraryImports();
+        addEventsImport();
+
+        if (!isFragment && !settings.getValue(ProjectSettings.SETTING_DISABLE_OLD_METHODS, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
+                .equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE)) {
+            isOldMethodEnabled = true;
+            addImport("android.util.SparseBooleanArray");
+            addImport("android.util.TypedValue");
+            addImport("android.view.View");
+            addImport("android.widget.ListView");
+            addImport("android.widget.Toast");
+            addImport("java.util.ArrayList");
+            addImport("java.util.Random");
+        }
 
         StringBuilder sb = new StringBuilder(8192);
         sb.append("package ").append(packageName).append(";").append(EOL)
@@ -189,18 +250,44 @@ public class Jx {
             if (buildConfig.isDebugBuild)
                 addImport("com.google.android.gms.ads.RequestConfiguration");
         }
-
+        addImport("android.os.Bundle");
         if (buildConfig.g) {
-            addImport("androidx.fragment.app.Fragment");
-            addImport("androidx.fragment.app.FragmentManager");
-            addImport("androidx.fragment.app.DialogFragment");
-            if (isBottomDialogFragment) {
+            if (isFragment || isDialogFragment || isBottomDialogFragment) {
+                addImport("android.view.LayoutInflater");
+                addImport("android.view.View");
+                addImport("android.view.ViewGroup");
+                addImport("androidx.annotation.NonNull");
+            }
+            if (isFragment) {
+                addImport("androidx.annotation.Nullable");
+                addImport("androidx.fragment.app.Fragment");
+                addImport("androidx.fragment.app.FragmentManager");
+            } else if (isDialogFragment) {
+                addImport("androidx.annotation.Nullable");
+                addImport("androidx.fragment.app.DialogFragment");
+                addImport("androidx.fragment.app.FragmentManager");
+            } else if (isBottomDialogFragment) {
+                addImport("androidx.annotation.Nullable");
                 addImport("com.google.android.material.bottomsheet.BottomSheetDialogFragment");
+                addImport("androidx.fragment.app.FragmentManager");
+            } else {
+                addImport("androidx.appcompat.app.AppCompatActivity");
             }
         } else {
-            addImport("android.app.Fragment");
-            addImport("android.app.FragmentManager");
-            addImport("android.app.DialogFragment");
+            if (isFragment || isDialogFragment) {
+                addImport("android.view.LayoutInflater");
+                addImport("android.view.View");
+                addImport("android.view.ViewGroup");
+            }
+            if (isFragment) {
+                addImport("android.app.Fragment");
+                addImport("android.app.FragmentManager");
+            } else if (isDialogFragment) {
+                addImport("android.app.DialogFragment");
+                addImport("android.app.FragmentManager");
+            } else {
+                addImport("android.app.Activity");
+            }
         }
         if (permissionManager.hasNewPermission() || buildConfig.a(projectFileBean.getActivityName()).a()) {
             if (buildConfig.g) {
@@ -217,10 +304,6 @@ public class Jx {
             sb.append("import ").append(anImport).append(";").append(EOL);
         }
 
-        String importsAddedByImportBlocks = LogicHandler.imports(eventManager.b());
-        if (!importsAddedByImportBlocks.isEmpty()) {
-            sb.append(importsAddedByImportBlocks).append(EOL);
-        }
         sb.append(EOL);
 
         sb.append("public class ").append(projectFileBean.getActivityName()).append(" extends ");
@@ -231,6 +314,8 @@ public class Jx {
                 sb.append("DialogFragment");
             } else if (isFragment) {
                 sb.append("Fragment");
+            } else if (!TextUtils.isEmpty(customExtend)) {
+                sb.append(customExtend);
             } else {
                 sb.append("AppCompatActivity");
             }
@@ -241,9 +326,23 @@ public class Jx {
                 sb.append("DialogFragment");
             } else if (isFragment) {
                 sb.append("Fragment");
+            } else if (!TextUtils.isEmpty(customExtend)) {
+                sb.append(customExtend);
             } else {
                 sb.append("Activity");
             }
+        }
+
+        removeExtraImplements();
+        boolean firstImplement = true;
+        for (String classToImplement : implementsList) {
+            if (firstImplement) {
+                firstImplement = false;
+                sb.append(" implements ");
+            } else {
+                sb.append(", ");
+            }
+            sb.append(classToImplement);
         }
         sb.append(" {").append(EOL);
 
@@ -544,10 +643,11 @@ public class Jx {
                 sb.append(EOL);
             }
         }
-        if (!isFragment && !settings.getValue(ProjectSettings.SETTING_DISABLE_OLD_METHODS, BuildSettings.SETTING_GENERIC_VALUE_FALSE)
-                .equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE)) {
+
+        if (isOldMethodEnabled) {
             sb.append(getDeprecatedMethodsCode());
         }
+        
         sb.append("}").append(EOL);
         String code = sb.toString();
 
@@ -573,6 +673,11 @@ public class Jx {
             code = code.replaceAll("getFragmentManager", "getSupportFragmentManager");
         }
 
+        String customUtilClassName = settings.getValue(ProjectSettings.SETTING_UTIL_CLASS, "SketchwareUtil");
+        boolean notUsingCustomUtilClass = customUtilClassName.equals("SketchwareUtil");
+        if (!notUsingCustomUtilClass) {
+            code = code.replaceAll("SketchwareUtil", customUtilClassName);
+        }
         return CommandBlock.CB(Lx.j(code, false));
     }
 
@@ -675,11 +780,23 @@ public class Jx {
         }
     }
 
+    private void removeImport(String classtoRemove) {
+        if (!removeImports.contains(classtoRemove)) {
+            removeImports.add(classtoRemove);
+        }
+    }
+
     private void addImports(ArrayList<String> imports) {
         if (imports != null) {
             for (String value : imports) {
                 addImport(value);
             }
+        }
+    }
+
+    private void addImplement(String classToImplement) {
+        if (!implementsList.contains(classToImplement)) {
+            implementsList.add(classToImplement);
         }
     }
 
@@ -692,13 +809,8 @@ public class Jx {
 
     private void handleAppCompat() {
         if (buildConfig.g) {
-            addImport("androidx.appcompat.app.AppCompatActivity");
-            addImport("androidx.annotation.*");
-        } else {
-            addImport("android.app.Activity");
-        }
-        if (buildConfig.g) {
             if (projectFileBean.hasActivityOption(ProjectFileBean.OPTION_ACTIVITY_TOOLBAR) && !projectFileBean.fileName.contains("_fragment")) {
+                addImport("android.view.View");
                 addImport("androidx.appcompat.widget.Toolbar");
                 addImport("androidx.coordinatorlayout.widget.CoordinatorLayout");
                 addImport("com.google.android.material.appbar.AppBarLayout");
@@ -753,6 +865,7 @@ public class Jx {
                 addImports(mq.getImportsByTypeName("LinearLayout"));
             }
         }
+        /*
         addImport("android.app.*");
         addImport("android.os.*");
         addImport("android.view.*");
@@ -775,6 +888,7 @@ public class Jx {
         addImport("java.util.regex.*");
         addImport("java.text.*");
         addImport("org.json.*");
+        */
         onCreateEventCode = new Fx(projectFileBean.getActivityName(), buildConfig, "onCreate_initializeLogic", projectDataManager.a(projectFileBean.getJavaName(), "onCreate_initializeLogic")).a();
     }
 
@@ -796,12 +910,28 @@ public class Jx {
             if (viewBean.type == ViewBeans.VIEW_TYPE_LAYOUT_VIEWPAGER) {
                 adapterCode = Lx.pagerAdapter(ox, viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
             } else if (viewBean.type == ViewBeans.VIEW_TYPE_WIDGET_RECYCLERVIEW) {
-                adapterCode = Lx.recyclerViewAdapter(ox, viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
+                Pair<String, String> customList = getRecyclerViewCustomList(viewBean.id);
+                adapterCode = Lx.recyclerViewAdapter(ox, viewBean.id.equals(customList.first) ? viewBean.id : customList.first, viewBean.customView, projectDataManager.d(xmlName), adapterLogic, customList.second);
             } else {
                 adapterCode = Lx.getListAdapterCode(ox, viewBean.id, viewBean.customView, projectDataManager.d(xmlName), adapterLogic);
             }
             adapterClasses.add(adapterCode);
         }
+    }
+
+    private Pair<String, String> getRecyclerViewCustomList(String id) {
+        Pair<String, String> customList = new Pair<>(id, "ArrayList<HashMap<String, Object>>");
+        for (Map.Entry<String, ArrayList<BlockBean>> blocks : jC.a(projectDataManager.a).b(projectFileBean.getJavaName()).entrySet()) {
+            for (BlockBean block : blocks.getValue()) {
+                if (block.opCode.equals("recyclerViewCustomList")) {
+                    if (!block.parameters.get(0).trim().isEmpty() && !block.parameters.get(1).trim().isEmpty()) {
+                        customList = new Pair<>(block.parameters.get(0), block.parameters.get(1));
+                    }
+                    break;
+                }
+            }
+        }
+        return customList;
     }
 
     private String getViewInitializer(ViewBean viewBean) {
@@ -898,7 +1028,7 @@ public class Jx {
         for (ViewBean viewBean : viewBeans) {
             if (!viewBean.convert.equals("include")) {
                 Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
-                if (!toNotAdd.contains("android:id")) {
+                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                     initializeMethodCode.add(getViewInitializer(viewBean));
                 }
             }
@@ -908,7 +1038,7 @@ public class Jx {
             for (ViewBean viewBean : drawerBeans) {
                 if (!viewBean.convert.equals("include")) {
                     Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
-                    if (!toNotAdd.contains("android:id")) {
+                    if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                         initializeMethodCode.add(getDrawerViewInitializer(viewBean));
                     }
                 }
@@ -957,7 +1087,7 @@ public class Jx {
         for (ViewBean viewBean : projectDataManager.d(projectFileBean.getXmlName())) {
             if (!viewBean.convert.equals("include")) {
                 Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
-                if (!toNotAdd.contains("android:id")) {
+                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                     views.add(getViewDeclarationAndAddImports(viewBean));
                 }
             }
@@ -966,7 +1096,7 @@ public class Jx {
             for (ViewBean viewBean : projectDataManager.d(projectFileBean.getDrawerXmlName())) {
                 if (!viewBean.convert.equals("include")) {
                     Set<String> toNotAdd = ox.readAttributesToReplace(viewBean);
-                    if (!toNotAdd.contains("android:id")) {
+                    if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                         views.add(getDrawerViewDeclarationAndAddImports(viewBean));
                     }
                 }
@@ -1028,6 +1158,58 @@ public class Jx {
     private void addLocalLibraryImports() {
         for (String value : mll.getImportLocalLibrary()) {
             addImport(value);
+        }
+    }
+
+    private void addImplements() {
+        ArrayList<EventBean> events = projectDataManager.g(projectFileBean.getJavaName());
+        for (EventBean bean : events) {
+            switch (bean.eventName) {
+                case "onClick":
+                    if (bean.eventType == EventBean.EVENT_TYPE_ACTIVITY) addImplement("View.OnClickListener");
+                    break;
+            }
+        }
+    }
+
+    private void addEventsImport() {
+        ArrayList<EventBean> events = projectDataManager.g(projectFileBean.getJavaName());
+        for (EventBean bean : events) {
+            switch (bean.eventName) {
+                case "onClick":
+                    addImport("android.view.View");
+                    break;
+                case "onPostCreate":
+                    addImport("android.os.Bundle");
+                    break;
+                case "onCheckedChange":
+                    addImport("android.widget.CompoundButton");
+                    break;
+                case "onItemSelected":
+                case "onItemClicked":
+                case "onItemLongClicked":
+                    addImport("android.view.View");
+                    addImport("android.widget.AdapterView");
+                    break;
+                case "onNothingSelected":
+                    addImport("android.widget.AdapterView");
+                    break;
+                case "afterTextChanged":
+                    addImport("android.text.Editable");
+                    break;
+                case "onProgressChanged":
+                case "onStartTrackingTouch":
+                case "onStopTrackingTouch":
+                    addImport("android.widget.SeekBar");
+                    break;
+                case "onDateChange":
+                    addImport("android.widget.CalendarView");
+                    break;
+                case "onPageStarted":
+                case "onPageFinished":
+                    addImport("android.widget.WebView");
+                    break;
+            }
         }
     }
 }

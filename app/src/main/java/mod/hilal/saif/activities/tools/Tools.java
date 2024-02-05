@@ -28,7 +28,7 @@ import com.besome.sketch.lib.ui.EasyDeleteEditText;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 
@@ -37,6 +37,7 @@ import dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity;
 import kellinwood.security.zipsigner.ZipSigner;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.alucard.tn.apksigner.ApkSigner;
 import mod.hey.studios.code.SrcCodeEditorLegacy;
 import mod.hey.studios.util.Helper;
@@ -243,7 +244,7 @@ public class Tools extends Activity {
         CardView openWorkingDirectory = newCard(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0.0f);
         LinearLayout openWorkingDirectoryLayout = newLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 0.0f);
         openWorkingDirectory.addView(openWorkingDirectoryLayout);
-        makeup(openWorkingDirectoryLayout, R.mipmap.ic_type_folder, "Open working directory", "Open Sketchware Pro's directory and edit files in it");
+        makeup(openWorkingDirectoryLayout, R.mipmap.ic_type_folder, "Open working directory", "Open SketchwareX Pro's directory and edit files in it");
         base.addView(openWorkingDirectory);
         openWorkingDirectoryLayout.setOnClickListener(v -> openWorkingDirectory());
 
@@ -300,14 +301,14 @@ public class Tools extends Activity {
             String input_apk_path = ed_input.getEditText().getText().toString();
             String output_apk_file_name = Uri.fromFile(new File(input_apk_path)).getLastPathSegment();
             String output_apk_path = new File(Environment.getExternalStorageDirectory(),
-                    "sketchware/signed_apk/" + output_apk_file_name).getAbsolutePath();
+                    SketchFileUtil.SKETCHWARE_DIRECTORY + "/signed_apk/" + output_apk_file_name).getAbsolutePath();
 
             if (new File(output_apk_path).exists()) {
                 aB confirmOverwrite = new aB(this);
                 confirmOverwrite.a(R.drawable.color_save_as_new_96);
                 confirmOverwrite.b("File exists");
                 confirmOverwrite.a("An APK named " + output_apk_file_name + " already exists at " +
-                        "/Internal storage/sketchware/signed_apk/. Overwrite it?");
+                        "/Internal storage/" + SketchFileUtil.SKETCHWARE_DIRECTORY + "/signed_apk/. Overwrite it?");
 
                 confirmOverwrite.a(Helper.getResString(R.string.common_word_cancel),
                         Helper.getDialogDismissListener(confirmOverwrite));
@@ -373,7 +374,7 @@ public class Tools extends Activity {
                 runOnUiThread(() -> {
                     if (callback.errorCount.get() == 0) {
                         building_dialog.dismiss();
-                        SketchwareUtil.toast("Successfully saved signed APK to: /Internal storage/sketchware/signed_apk/"
+                        SketchwareUtil.toast("Successfully saved signed APK to: /Internal storage/" + SketchFileUtil.SKETCHWARE_DIRECTORY + "/signed_apk/"
                                         + Uri.fromFile(new File(outputApkPath)).getLastPathSegment(),
                                 Toast.LENGTH_LONG);
                     } else {

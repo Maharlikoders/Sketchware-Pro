@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.mB;
 import a.a.a.wB;
@@ -49,10 +49,14 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         bottomMenusLayout.addView(addDrawerItem(1, false,
                 R.drawable.ic_bookmark_red_48dp, R.string.design_drawer_menu_title_collection, R.string.design_drawer_menu_description_collection
         ));
+        /* Add project settings item */
+        bottomMenusLayout.addView(addDrawerItem(2, false,
+                R.drawable.ic_detail_setting_48dp, R.string.design_drawer_menu_title_project, R.string.design_drawer_menu_description_project
+        ));
         /* Add built-in Library Manager (AppCompat, Firebase, AdMob, Google Maps SDK) */
         /* INCLUDES SECTION SEPARATOR */
         menusLayout.addView(addDrawerItem(3, true,
-                R.drawable.categorize_48, R.string.design_drawer_menu_title_library, R.string.design_drawer_menu_description_library
+                R.drawable.categorize_48, R.string.design_drawer_menu_title_libraries, R.string.design_drawer_menu_description_library
         ));
         /* Add View Manager */
         menusLayout.addView(addDrawerItem(4, false,
@@ -74,6 +78,10 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         menusLayout.addView(addDrawerItem(8, false,
                 R.drawable.java_96, R.string.text_title_menu_java, R.string.text_subtitle_menu_java
         ));
+        /* Add Xml Manager */
+        menusLayout.addView(addDrawerItem(23, false,
+                R.drawable.xml_96, R.string.design_drawer_menu_title_xml, R.string.design_drawer_menu_description_xml
+        ));
         /* Add Resource Manager */
         menusLayout.addView(addDrawerItem(9, false,
                 R.drawable.file_app_icon, R.string.text_title_menu_resource, R.string.text_subtitle_menu_resource
@@ -82,36 +90,24 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
         menusLayout.addView(addDrawerItem(10, false,
                 R.drawable.file_48_blue, R.string.text_title_menu_assets, R.string.text_subtitle_menu_assets
         ));
-        /* Add Permission Manager */
-        menusLayout.addView(addDrawerItem(11, false,
-                R.drawable.plugin_purple_96, R.string.text_title_menu_permission, R.string.text_subtitle_menu_permission
-        ));
         /* Add AppCompat Injection Manager */
-        menusLayout.addView(addDrawerItem(12, false,
+        /*removed appcompat injection menusLayout.addView(addDrawerItem(12, false,
                 R.drawable.ic_property_inject, R.string.design_drawer_menu_injection, R.string.design_drawer_menu_injection_subtitle
-        ));
+        ));*/
         /* Add AndroidManifest Manager */
         menusLayout.addView(addDrawerItem(13, false,
                 R.drawable.icon8_code_am, R.string.design_drawer_menu_androidmanifest, R.string.design_drawer_menu_androidmanifest_subtitle
         ));
-        /* Add Used Custom Blocks */
-        menusLayout.addView(addDrawerItem(20, false,
-                R.drawable.block_96_blue, R.string.design_drawer_menu_customblocks, R.string.design_drawer_menu_customblocks_subtitle
-        ));
-        /* Add Local library Manager */
-        menusLayout.addView(addDrawerItem(14, false,
-                R.drawable.open_box_48, R.string.text_title_menu_local_library, R.string.text_subtitle_menu_local_library
-        ));
-        /* Add Native library Manager */
-        menusLayout.addView(addDrawerItem(19, false,
-                R.drawable.cpp, R.string.design_drawer_menu_nativelibs, R.string.design_drawer_menu_nativelibs_subtitle));
         /* Add ProGuard Manager */
         menusLayout.addView(addDrawerItem(17, false,
                 R.drawable.connected_96, R.string.design_drawer_menu_proguard, R.string.design_drawer_menu_proguard_subtitle));
         /* Add StringFog Manager */
-        /* INCLUDES SECTION SEPARATOR */
-        menusLayout.addView(addDrawerItem(18, true,
+        menusLayout.addView(addDrawerItem(18, false,
                 R.drawable.color_lock_96, R.string.design_drawer_menu_stringfog, R.string.design_drawer_menu_stringfog_subtitle));
+        /* Add GitHub Manager */
+        /* INCLUDES SECTION SEPARATOR */
+        menusLayout.addView(addDrawerItem(24, true,
+                R.drawable.github, R.string.design_drawer_menu_title_github, R.string.design_drawer_menu_description_github));
         /* Add Source Code Viewer */
         menusLayout.addView(addDrawerItem(16, false,
                 R.drawable.code_icon, R.string.design_drawer_menu_title_source_code, R.string.design_drawer_menu_description_source_code));
@@ -128,6 +124,10 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                 switch ((Integer) view.getTag()) {
                     case 1:
                         designActivity.toCollectionManager();
+                        return;
+
+                    case 2:
+                        designActivity.toProjectManager();
                         return;
 
                     case 3:
@@ -162,20 +162,8 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                         designActivity.toAssetManager();
                         return;
 
-                    case 11:
-                        designActivity.toPermissionManager();
-                        return;
-
-                    case 12:
-                        designActivity.toAppCompatInjectionManager();
-                        return;
-
                     case 13:
                         designActivity.toAndroidManifestManager();
-                        return;
-
-                    case 14:
-                        designActivity.toLocalLibraryManager();
                         return;
 
                     case 16:
@@ -190,18 +178,18 @@ public class DesignDrawer extends LinearLayout implements View.OnClickListener {
                         designActivity.toStringFogManager();
                         return;
 
-                    case 19:
-                        designActivity.toNativeLibraryManager();
-                        return;
-
-                    case 20:
-                        designActivity.toCustomBlocksViewer();
-                        return;
-
                     case 22:
                         designActivity.toLogReader();
                         return;
-                    case 2:
+
+                    case 23:
+                        designActivity.toXmlManager();
+                        break;
+
+                    case 24:
+                        designActivity.toGitHubManager();
+                        break;
+                        
                     default:
                 }
             }

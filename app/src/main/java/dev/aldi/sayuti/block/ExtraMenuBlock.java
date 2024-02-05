@@ -16,6 +16,7 @@ import a.a.a.Ss;
 import a.a.a.aB;
 import a.a.a.jC;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 
 public class ExtraMenuBlock {
 
@@ -67,11 +68,11 @@ public class ExtraMenuBlock {
     }
 
     private void b(JSONObject json, aB dialog, ArrayList<String> selectableItems, String sc_id) {
-        String menus = FileUtil.getExternalStorageDir().concat("/.sketchware/data/" + sc_id + "/files/resource/menu/");
-        String layouts = FileUtil.getExternalStorageDir().concat("/.sketchware/data/" + sc_id + "/files/resource/layout/");
-        String animations = FileUtil.getExternalStorageDir().concat("/.sketchware/data/" + sc_id + "/files/resource/anim/");
-        String drawables = FileUtil.getExternalStorageDir().concat("/.sketchware/data/" + sc_id + "/files/resource/drawable/");
-        String drawables_xhdpi = FileUtil.getExternalStorageDir().concat("/.sketchware/data/" + sc_id + "/files/resource/drawable-xhdpi/");
+        String menus = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/resource/menu/");
+        String layouts = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/resource/layout/");
+        String animations = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/resource/anim/");
+        String drawables = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/resource/drawable/");
+        String drawables_xhdpi = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/resource/drawable-xhdpi/");
         try {
             switch (json.getString("id")) {
                 case "menu" -> {

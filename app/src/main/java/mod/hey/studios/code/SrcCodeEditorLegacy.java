@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import mod.agus.jcoderz.lib.FileUtil;
 import mod.hey.studios.lib.code_editor.CodeEditorLayout;

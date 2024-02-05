@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 
 public class LogicHandler {
 
@@ -99,7 +100,7 @@ public class LogicHandler {
                     newStr = newStr.concat("\n").concat(arr2.get(i));
                 }
             }
-            FileUtil.writeFile(newStr, FileUtil.getExternalStorageDir().concat("/.sketchware/data/system/temp/").concat(javaName));
+            FileUtil.writeFile(newStr, FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/temp/").concat(javaName));
         } catch (Exception ignored) {
         }
     }

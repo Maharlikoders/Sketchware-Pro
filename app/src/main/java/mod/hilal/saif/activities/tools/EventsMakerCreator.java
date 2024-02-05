@@ -11,13 +11,14 @@ import android.widget.TextView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.util.OldResourceIdMapper;
 
@@ -144,7 +145,7 @@ public class EventsMakerCreator extends Activity {
             return;
         }
         ArrayList<HashMap<String, Object>> arrayList;
-        String concat = FileUtil.getExternalStorageDir().concat("/.sketchware/data/system/events.json");
+        String concat = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/events.json");
         if (FileUtil.isExistFile(concat)) {
             arrayList = new Gson().fromJson(FileUtil.readFile(concat), Helper.TYPE_MAP_LIST);
         } else {
@@ -175,7 +176,7 @@ public class EventsMakerCreator extends Activity {
     }
 
     private int figureP(String str) {
-        String concat = FileUtil.getExternalStorageDir().concat("/.sketchware/data/system/events.json");
+        String concat = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/events.json");
         if (FileUtil.isExistFile(concat)) {
             ArrayList<HashMap<String, Object>> arrayList = new Gson().fromJson(FileUtil.readFile(concat), Helper.TYPE_MAP_LIST);
             for (int i = 0; i < arrayList.size(); i++) {

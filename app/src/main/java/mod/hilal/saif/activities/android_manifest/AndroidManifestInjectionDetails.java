@@ -24,12 +24,13 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.hilal.saif.android_manifest.ActComponentsDialog;
 
@@ -53,7 +54,7 @@ public class AndroidManifestInjectionDetails extends Activity {
             activityName = getIntent().getStringExtra("file_name").replaceAll(".java", "");
             type = getIntent().getStringExtra("type");
         }
-        ATTRIBUTES_FILE_PATH = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(src_id).concat("/Injection/androidmanifest/attributes.json");
+        ATTRIBUTES_FILE_PATH = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(src_id).concat("/Injection/androidmanifest/attributes.json");
         setupConst();
         setToolbar();
         setupViews();

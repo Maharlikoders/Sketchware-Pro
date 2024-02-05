@@ -11,17 +11,21 @@ import android.util.Pair;
 
 import com.besome.sketch.beans.ProjectFileBean;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sketchware.remod.xml.XmlBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import mod.agus.jcoderz.editor.manifest.EditorManifest;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileResConfig;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
 import mod.hey.studios.util.Helper;
@@ -94,37 +98,19 @@ public class Ix {
         XmlBuilder serviceTag = new XmlBuilder("service");
         serviceTag.addAttribute("android", "name", "com.google.firebase.components.ComponentDiscoveryService");
         serviceTag.addAttribute("android", "exported", "false");
-        if (c.isFirebaseAuthUsed) {
-            XmlBuilder metadataTag = new XmlBuilder("meta-data");
-            metadataTag.addAttribute("android", "name", "com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar");
-            metadataTag.addAttribute("android", "value", "com.google.firebase.components.ComponentRegistrar");
-            serviceTag.a(metadataTag);
-        }
-        if (c.isFirebaseDatabaseUsed) {
-            XmlBuilder metadataTag = new XmlBuilder("meta-data");
-            metadataTag.addAttribute("android", "name", "com.google.firebase.components:com.google.firebase.database.DatabaseRegistrar");
-            metadataTag.addAttribute("android", "value", "com.google.firebase.components.ComponentRegistrar");
-            serviceTag.a(metadataTag);
-        }
-        if (c.isFirebaseStorageUsed) {
-            XmlBuilder metadataTag = new XmlBuilder("meta-data");
-            metadataTag.addAttribute("android", "name", "com.google.firebase.components:com.google.firebase.storage.StorageRegistrar");
-            metadataTag.addAttribute("android", "value", "com.google.firebase.components.ComponentRegistrar");
-            serviceTag.a(metadataTag);
-        }
-        if (c.isDynamicLinkUsed) {
-            XmlBuilder metadataTag = new XmlBuilder("meta-data");
-            metadataTag.addAttribute("android", "name", "com.google.firebase.components:com.google.firebase.dynamiclinks.internal.FirebaseDynamicLinkRegistrar");
-            metadataTag.addAttribute("android", "value", "com.google.firebase.components.ComponentRegistrar");
-            serviceTag.a(metadataTag);
-        }
-        if (c.x.isFCMUsed) {
-            XmlBuilder metadataTag = new XmlBuilder("meta-data");
-            metadataTag.addAttribute("android", "name", "com.google.firebase.components:com.google.firebase.iid.Registrar");
-            metadataTag.addAttribute("android", "value", "com.google.firebase.components.ComponentRegistrar");
-            serviceTag.a(metadataTag);
+        List<Map<String, Object>> firebaseMetaDataList = getBuiltInFirebaseMetaData();
+        firebaseMetaDataList.addAll(getCustomFirebaseMetaData());
+        for(Map<String, Object> metaData : firebaseMetaDataList) {
+            writeMetaData(serviceTag, (String) metaData.get("name"), (String) metaData.get("value"));
         }
         applicationTag.a(serviceTag);
+    }
+
+    private void writeMetaData(XmlBuilder applicationTag, String name, String value) {
+        XmlBuilder metadataTag = new XmlBuilder("meta-data");
+        metadataTag.addAttribute("android", "name", name);
+        metadataTag.addAttribute("android", "value", value);
+        applicationTag.a(metadataTag);
     }
 
     /**
@@ -157,10 +143,7 @@ public class Ix {
      * @param applicationTag {@link XmlBuilder} object to add the {@code meta-data} tag to
      */
     private void writeGMSVersion(XmlBuilder applicationTag) {
-        XmlBuilder metadataTag = new XmlBuilder("meta-data");
-        metadataTag.addAttribute("android", "name", "com.google.android.gms.version");
-        metadataTag.addAttribute("android", "value", "@integer/google_play_services_version");
-        applicationTag.a(metadataTag);
+        writeMetaData(applicationTag, "com.google.android.gms.version", "@integer/google_play_services_version");
     }
 
     /**
@@ -185,10 +168,7 @@ public class Ix {
     }
 
     private void writeAdmobAppId(XmlBuilder applicationTag) {
-        XmlBuilder metadataTag = new XmlBuilder("meta-data");
-        metadataTag.addAttribute("android", "name", "com.google.android.gms.ads.APPLICATION_ID");
-        metadataTag.addAttribute("android", "value", c.appId);
-        applicationTag.a(metadataTag);
+        writeMetaData(applicationTag, "com.google.android.gms.ads.APPLICATION_ID", c.appId);
     }
 
     /**
@@ -742,8 +722,55 @@ public class Ix {
         applicationTag.a(activityTag);
     }
 
+    private List<Map<String, Object>> getBuiltInFirebaseMetaData() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        if (c.isFirebaseAuthUsed) {
+            map = new HashMap<>();
+            map.put("name", "com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar");
+            map.put("value", "com.google.firebase.components.ComponentRegistrar");
+            list.add(map);
+        }
+        if (c.isFirebaseDatabaseUsed) {
+            map = new HashMap<>();
+            map.put("name", "com.google.firebase.components:com.google.firebase.database.DatabaseRegistrar");
+            map.put("value", "com.google.firebase.components.ComponentRegistrar");
+            list.add(map);
+        }
+        if (c.isFirebaseStorageUsed) {
+            map = new HashMap<>();
+            map.put("name", "com.google.firebase.components:com.google.firebase.storage.StorageRegistrar");
+            map.put("value", "com.google.firebase.components.ComponentRegistrar");
+            list.add(map);
+        }
+        if (c.isDynamicLinkUsed) {
+            map = new HashMap<>();
+            map.put("name", "com.google.firebase.components:com.google.firebase.dynamiclinks.internal.FirebaseDynamicLinkRegistrar");
+            map.put("value", "com.google.firebase.components.ComponentRegistrar");
+            list.add(map);
+        }
+        if (c.x.isFCMUsed) {
+            map = new HashMap<>();
+            map.put("name", "com.google.firebase.components:com.google.firebase.iid.Registrar");
+            map.put("value", "com.google.firebase.components.ComponentRegistrar");
+            list.add(map);
+        }
+        return list;
+    }
+
+    private List<Map<String, Object>> getCustomFirebaseMetaData() {
+        String metaDataPath = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(c.sc_id).concat("/Injection/firebase/meta-data");
+        if (FileUtil.isExistFile(metaDataPath)) {
+            try {
+                return new Gson().fromJson(FileUtil.readFile(metaDataPath), new TypeToken<List<Map<String, Object>>>(){});
+            } catch (Exception ignored) {
+            }
+        }
+        return new ArrayList<>();
+    }
+
     private ArrayList<HashMap<String, Object>> getActivityAttrs() {
-        String activityAttributesPath = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(c.sc_id).concat("/Injection/androidmanifest/attributes.json");
+        String activityAttributesPath = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(c.sc_id).concat("/Injection/androidmanifest/attributes.json");
         if (FileUtil.isExistFile(activityAttributesPath)) {
             try {
                 return new Gson().fromJson(FileUtil.readFile(activityAttributesPath), Helper.TYPE_MAP_LIST);

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.lib.base.BaseDialogActivity;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 

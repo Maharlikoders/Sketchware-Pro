@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import java.io.File;
 
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 
 /**
  * Helper used in {@link com.besome.sketch.editor.LogicEditorActivity} to get menus for custom
@@ -20,7 +21,7 @@ public class BlockMenu {
     public static Pair<String, String[]> getMenu(String name) {
         Pair<String, String[]> result = null;
         Pair<String, String[]> fallback = new Pair<>("Select a " + name + " Variable", new String[0]);
-        File file = new File(Environment.getExternalStorageDirectory(), ".sketchware/resources/block/My Block/menu.json");
+        File file = new File(Environment.getExternalStorageDirectory(), SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/My Block/menu.json");
         if (!file.exists()) {
             result = fallback;
         } else {

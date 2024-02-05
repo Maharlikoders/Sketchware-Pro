@@ -14,8 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.sketchware.remod.BuildConfig;
-import com.sketchware.remod.R;
+import com.sketchware.pro.BuildConfig;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class CollectErrorActivity extends Activity {
 
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle(xB.b().a(getApplicationContext(), R.string.common_error_an_error_occurred))
-                    .setMessage("An error occurred while running Sketchware Pro. " +
+                    .setMessage("An error occurred while running SketchwareX Pro. " +
                             "Do you want to report this error log so that we can fix it? " +
                             "No personal information will be included.")
                     .setPositiveButton("Send", null)
@@ -67,7 +67,7 @@ public class CollectErrorActivity extends Activity {
 
                 long fileSizeInBytes = new File(info.applicationInfo.sourceDir).length();
 
-                String deviceInfo = "Sketchware Pro " + info.versionName + " (" + info.versionCode + ")\n"
+                String deviceInfo = "SketchwareX Pro " + info.versionName + " (" + info.versionCode + ")\n"
                         + "base.apk size: " + Formatter.formatFileSize(this, fileSizeInBytes) + " (" + fileSizeInBytes + " B)\n"
                         + "Locale: " + GB.g(getApplicationContext()) + "\n"
                         + "SDK version: " + Build.VERSION.SDK_INT + "\n"

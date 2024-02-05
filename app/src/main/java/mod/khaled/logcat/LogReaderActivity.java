@@ -30,7 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -175,7 +175,7 @@ public class LogReaderActivity extends AppCompatActivity {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         autoScroll = true;
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.sketchware.remod.ACTION_NEW_DEBUG_LOG");
+        intentFilter.addAction("com.sketchware.pro.ACTION_NEW_DEBUG_LOG");
         registerReceiver(logger, intentFilter);
     }
 

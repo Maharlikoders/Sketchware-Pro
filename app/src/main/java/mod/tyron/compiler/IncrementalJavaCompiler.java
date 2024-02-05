@@ -20,6 +20,8 @@ import a.a.a.yq;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.jbk.build.BuiltInLibraries;
 import mod.jbk.util.LogUtil;
@@ -39,13 +41,14 @@ public class IncrementalJavaCompiler extends Compiler {
     private final BuildSettings buildSettings;
     private final ProjectBuilder compileHelper;
     private final ManageLocalLibrary manageLocalLibrary;
+    private final ExternalLibraryHandler externalLibraryHandler;
     private final ArrayList<String> builtInLibraries = new ArrayList<>();
     private final oB fileUtil;
     private final File libs;
     private Compiler.Result onResultListener;
 
     public IncrementalJavaCompiler(yq projectConfig) {
-        SAVE_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/mysc/" + projectConfig.sc_id + "/incremental";
+        SAVE_PATH = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/mysc/" + projectConfig.sc_id + "/incremental";
 
         this.projectConfig = projectConfig;
         buildSettings = new BuildSettings(projectConfig.sc_id);
@@ -53,6 +56,7 @@ public class IncrementalJavaCompiler extends Compiler {
         BuiltInLibraries.extractCompileAssets();
         compileHelper.buildBuiltInLibraryInformation();
         manageLocalLibrary = new ManageLocalLibrary(projectConfig.sc_id);
+        externalLibraryHandler = new ExternalLibraryHandler(projectConfig.sc_id);
         fileUtil = new oB(false);
         libs = new File(getContext().getFilesDir(), "libs");
     }
@@ -164,7 +168,7 @@ public class IncrementalJavaCompiler extends Compiler {
     }
 
     /**
-     * Gets all Java source code files, that Sketchware Pro has generated.
+     * Gets all Java source code files, that SketchwareX Pro has generated.
      */
     private ArrayList<JavaFile> getSketchwareFiles() {
         ArrayList<JavaFile> arrayList = new ArrayList<>();
@@ -362,6 +366,7 @@ public class IncrementalJavaCompiler extends Compiler {
         }
 
         sb.append(manageLocalLibrary.getJarLocalLibrary());
+        sb.append(externalLibraryHandler.getJar());
 
         return sb.toString();
     }

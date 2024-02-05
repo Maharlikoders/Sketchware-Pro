@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,12 +13,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -24,22 +31,35 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.besome.sketch.design.DesignActivity;
 import com.besome.sketch.editor.manage.library.ProjectComparator;
 import com.besome.sketch.projects.MyProjectSettingActivity;
-import com.sketchware.remod.R;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.sketchware.pro.R;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
+import a.a.a.aB;
 import a.a.a.DA;
 import a.a.a.DB;
 import a.a.a.lC;
 import a.a.a.wB;
+import mod.SketchwareUtil;
+import mod.elfilibustero.sketch.beans.GitHubBean;
+import mod.elfilibustero.sketch.editor.manage.github.ManageGitHubSettingActivity;
+import mod.elfilibustero.sketch.lib.git.Clone;
+import mod.elfilibustero.sketch.lib.git.PullRemoteUpdates;
+import mod.elfilibustero.sketch.lib.ui.CreateItemView;
+import mod.elfilibustero.sketch.lib.utils.GitHubUtil;
 import mod.hasrat.dialog.SketchDialog;
 import mod.hey.studios.project.ProjectTracker;
 import mod.hey.studios.project.backup.BackupRestoreManager;
 import mod.hey.studios.util.Helper;
 
-public class ProjectsFragment extends DA implements View.OnClickListener {
+public class ProjectsFragment extends DA {
+
     private SwipeRefreshLayout swipeRefresh;
     private SearchView projectsSearchView;
     private final ArrayList<HashMap<String, Object>> projectsList = new ArrayList<>();
@@ -47,6 +67,10 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
     private DB preference;
     private LottieAnimationView loading;
     private RecyclerView myProjects;
+
+    private BottomSheetBehavior<View> bottomSheetBehavior;
+
+    private LinearLayout bottomSheetContent;
 
     public final ActivityResultLauncher<Intent> openProjectSettings = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
@@ -59,12 +83,38 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         }
     });
 
+    private final OnBackPressedCallback closeBottomSheet = new OnBackPressedCallback(false) {
+        @Override
+        public void handleOnBackPressed() {
+            if (isBottomSheetExpanded()) {
+                hideBottomSheet();
+            }
+        }
+    };
+
     private void initialize(View view) {
         preference = new DB(requireContext(), "project");
         swipeRefresh = view.findViewById(R.id.swipe_refresh);
         loading = view.findViewById(R.id.loading_3balls);
+        NestedScrollView bottomSheet = view.findViewById(R.id.bottom_sheet);
+        bottomSheetContent = view.findViewById(R.id.bottom_sheet_content);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        requireActivity().getOnBackPressedDispatcher().addCallback((LifecycleOwner)this, closeBottomSheet);
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    closeBottomSheet.setEnabled(true);
+                } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    closeBottomSheet.setEnabled(false);
+                }
+            }
 
-        requireActivity().findViewById(R.id.create_new_project).setOnClickListener(this);
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
 
         swipeRefresh.setOnRefreshListener(() -> {
             // Check storage access
@@ -82,7 +132,41 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
 
         projectsAdapter = new ProjectsAdapter(this, new ArrayList<>(projectsList));
         myProjects.setAdapter(projectsAdapter);
-        refreshProjectsList();
+
+        view.findViewById(R.id.bottom_sheet_content_holder).setOnClickListener(v -> {
+            if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                showBottomSheet();
+            } else {
+                hideBottomSheet();
+            }
+        });
+
+        addItem(CreateItemView.PROJECT, v -> {
+            hideBottomSheet();
+            toProjectSettingsActivity();
+        });
+        addItem(CreateItemView.RESTORE, v -> {
+            hideBottomSheet();
+            restoreProject();
+        });
+        addItem(CreateItemView.CLONE, v -> {
+            hideBottomSheet();
+            showGitCloneDialog();
+        });
+
+        myProjects.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView rv, int dx, int dy) {
+            super.onScrolled(rv, dx, dy);
+                if (isBottomSheetExpanded()) {
+                    hideBottomSheet();
+                }
+            }
+        });
+    }
+
+    public boolean isBottomSheetExpanded() {
+        return bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
     }
 
     public void refreshProjectsList() {
@@ -119,6 +203,38 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         ProjectTracker.setScId(sc_id);
         intent.putExtra("sc_id", sc_id);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        boolean isAutoFetchEnabled = new DB(requireContext(), "GITHUB_SETTINGS").a(sc_id + "_" + ManageGitHubSettingActivity.GITHUB_FETCH, false);
+        GitHubUtil gitUtil = new GitHubUtil(sc_id);
+        GitHubBean bean = gitUtil.getBean();
+        if (!bean.username.isEmpty() && !bean.token.isEmpty() && bean.useYn.equals("Y") && isAutoFetchEnabled) {
+                new PullRemoteUpdates(requireActivity(), sc_id).execute(success -> {
+                    if (success) {
+                        final String errorMessage;
+                        try {
+                            CompletableFuture<Void> build = new GitHubUtil(sc_id).build(true);
+                            build.whenComplete((result, exception) -> {
+                                if (exception == null) {
+                                    requireActivity().runOnUiThread(() -> SketchwareUtil.toast("Pulled updates from remote branch: " + bean.branch));
+                                    requireActivity().startActivity(intent);
+                                } else {
+                                    requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + exception.getMessage()));
+                                }
+                            });
+                            build.join();
+                            return;
+                        } catch (FileNotFoundException e) {
+                            errorMessage = e.getMessage();
+                        } catch (Exception e) {
+                            errorMessage = e.getMessage();
+                        }
+                        requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + errorMessage));
+                    } else {
+                        requireActivity().startActivity(intent);
+                    }
+                });
+            return;
+        }
         requireActivity().startActivity(intent);
     }
 
@@ -160,15 +276,6 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        int viewId = v.getId();
-
-        if ((viewId == R.id.create_new_project)) {
-            toProjectSettingsActivity();
-        }
-    }
-
-    @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.projects_fragment_menu, menu);
     }
@@ -179,6 +286,9 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         projectsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(String s) {
+                if (isBottomSheetExpanded()) {
+                    hideBottomSheet();
+                }
                 projectsAdapter.filterData(s);
                 return false;
             }
@@ -193,6 +303,7 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.sortProject) {
+            hideBottomSheet();
             showProjectSortingDialog();
             return true;
         }
@@ -206,6 +317,32 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         setHasOptionsMenu(true);
         initialize(viewGroup);
         return viewGroup;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        refreshProjectsList();
+    }
+
+    public void hideBottomSheet() {
+        if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+    }
+
+    public void showBottomSheet() {
+        if (bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+    }
+
+    private void addItem(int type, View.OnClickListener listener) {
+        CreateItemView item = new CreateItemView(requireActivity());
+        item.setTag(type);
+        item.setData(type);
+        item.setOnClickListener(listener);
+        bottomSheetContent.addView(item);
     }
 
     private void showProjectSortingDialog() {
@@ -251,5 +388,38 @@ public class ProjectsFragment extends DA implements View.OnClickListener {
         });
         dialog.setNegativeButton("Cancel", Helper.getDialogDismissListener(dialog));
         dialog.show();
+    }
+
+    private void showGitCloneDialog() {
+        try {
+            Clone clone = new Clone(requireActivity(), lC.b());
+            clone.execute((boolean success, String sc_id, GitHubBean bean) -> {
+                if (success) {
+                    GitHubUtil gitUtil = new GitHubUtil(sc_id);
+                    gitUtil.setBean(bean);
+                    final String errorMessage;
+                    try {
+                        CompletableFuture<Void> build = gitUtil.build(false);
+                        build.whenComplete((result, exception) -> {
+                            if (exception == null) {
+                                refreshProjectsList();
+                                toDesignActivity(sc_id);
+                            } else {
+                                requireActivity().runOnUiThread(() -> SketchwareUtil.toastError(exception.getMessage()));
+                            }
+                        });
+                        build.join();
+                        return;
+                    } catch (FileNotFoundException e) {
+                        errorMessage = e.getMessage();
+                    } catch (Exception e) {
+                        errorMessage = e.getMessage();
+                    }
+                    requireActivity().runOnUiThread(() -> SketchwareUtil.toastError("Generating failed: " + errorMessage));
+                }
+            });
+        } catch (Exception e) {
+            SketchwareUtil.toastError("Cloning failed: " + e.getMessage());
+        }
     }
 }

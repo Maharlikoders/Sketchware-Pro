@@ -246,6 +246,14 @@ public class mq {
                 importList.add("android.widget.HorizontalScrollView");
                 return importList;
 
+            case "RadioButton":
+                importList.add("android.widget.RadioButton");
+                return importList;
+
+            case "RadioGroup":
+                importList.add("android.widget.RadioGroup");
+                return importList;
+
             case "TextView":
                 importList.add("android.widget.TextView");
                 return importList;
@@ -393,6 +401,10 @@ public class mq {
                 importList.add("com.google.android.material.floatingactionbutton.FloatingActionButton");
                 return importList;
 
+            case "ExtendedFloatingActionButton":
+                importList.add("com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton");
+                return importList;
+
             case "Toolbar":
                 importList.add("androidx.appcompat.widget.Toolbar");
                 importList.add("androidx.annotation.NonNull");
@@ -519,15 +531,23 @@ public class mq {
                 return importList;
 
             case "MaterialButton":
-                importList.add("com.google.android.material.button.*");
+                importList.add("com.google.android.material.button.MaterialButton");
                 return importList;
 
             case "MaterialCardView":
-                importList.add("com.google.android.material.card.*");
+                importList.add("com.google.android.material.card.MaterialCardView");
+                return importList;
+
+            case "MaterialToolbar":
+                importList.add("com.google.android.material.appbar.MaterialToolbar");
+                return importList;
+
+            case "AppBarLayout":
+                importList.add("com.google.android.material.appbar.AppBarLayout");
                 return importList;
 
             case "Chip":
-                importList.add("com.google.android.material.chip.*");
+                importList.add("com.google.android.material.chip.Chip");
                 return importList;
 
             case "NavigationView":
@@ -545,8 +565,11 @@ public class mq {
                 return importList;
 
             case "TextInputLayout":
+                importList.add("com.google.android.material.textfield.TextInputLayout");
+                return importList;
+
             case "TextInputEditText":
-                importList.add("com.google.android.material.textfield.*");
+                importList.add("com.google.android.material.textfield.TextInputEditText");
                 return importList;
 
             case "SignInButton":
@@ -554,7 +577,6 @@ public class mq {
                 return importList;
 
             case "RecyclerView":
-                importList.add("androidx.recyclerview.widget.*");
                 importList.add("androidx.recyclerview.widget.RecyclerView");
                 importList.add("androidx.recyclerview.widget.RecyclerView.Adapter");
                 importList.add("androidx.recyclerview.widget.RecyclerView.ViewHolder");
@@ -628,6 +650,10 @@ public class mq {
             case "com.facebook.ads.AdView":
             case "com.facebook.ads.InterstitialAd":
                 importList.add("com.facebook.ads.*");
+                return importList;
+
+            case "ConstraintLayout":
+                importList.add("androidx.constraintlayout.widget.ConstraintLayout");
                 return importList;
 
             default:

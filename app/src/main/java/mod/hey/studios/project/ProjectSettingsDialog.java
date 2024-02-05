@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.aB;
 import mod.hey.studios.util.Helper;
@@ -71,6 +71,13 @@ public class ProjectSettingsDialog {
                 InputType.TYPE_CLASS_TEXT,
                 preferenceContainer);
 
+        EditText utilClassName = addInputPref(
+                ProjectSettings.SETTING_UTIL_CLASS,
+                "SketchwareUtil",
+                "Util class name",
+                InputType.TYPE_CLASS_TEXT,
+                preferenceContainer);
+
         CheckBox removeOldMethods = addTogglePref(
                 ProjectSettings.SETTING_DISABLE_OLD_METHODS,
                 false,
@@ -90,6 +97,7 @@ public class ProjectSettingsDialog {
                 minimumSdkVersion,
                 targetSdkVersion,
                 applicationClassName,
+                utilClassName,
                 removeOldMethods,
                 useNewMaterialComponentsAppTheme
         };

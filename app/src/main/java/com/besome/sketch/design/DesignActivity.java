@@ -44,7 +44,6 @@ import com.besome.sketch.common.SrcViewerActivity;
 import com.besome.sketch.editor.manage.ManageCollectionActivity;
 import com.besome.sketch.editor.manage.font.ManageFontActivity;
 import com.besome.sketch.editor.manage.image.ManageImageActivity;
-import com.besome.sketch.editor.manage.library.ManageLibraryActivity;
 import com.besome.sketch.editor.manage.sound.ManageSoundActivity;
 import com.besome.sketch.editor.manage.view.ManageViewActivity;
 import com.besome.sketch.editor.view.ProjectFileSelector;
@@ -53,7 +52,7 @@ import com.besome.sketch.lib.ui.CustomViewPager;
 import com.besome.sketch.tools.CompileLogActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 import com.topjohnwu.superuser.Shell;
 
 import java.io.File;
@@ -61,6 +60,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import a.a.a.DB;
 import a.a.a.GB;
@@ -81,22 +81,22 @@ import a.a.a.wq;
 import a.a.a.yB;
 import a.a.a.yq;
 import a.a.a.zy;
-import dev.aldi.sayuti.editor.manage.ManageCustomAttributeActivity;
-import dev.aldi.sayuti.editor.manage.ManageLocalLibraryActivity;
 import io.github.rosemoe.sora.langs.java.JavaLanguage;
 import io.github.rosemoe.sora.widget.CodeEditor;
 import io.github.rosemoe.sora.widget.component.Magnifier;
 import io.github.rosemoe.sora.widget.schemes.EditorColorScheme;
 import mod.SketchwareUtil;
-import mod.agus.jcoderz.editor.manage.permission.ManagePermissionActivity;
 import mod.agus.jcoderz.editor.manage.resource.ManageResourceActivity;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.GitHubBean;
+import mod.elfilibustero.sketch.editor.manage.github.ManageGitHubActivity;
+import mod.elfilibustero.sketch.editor.manage.library.ManageLibrariesActivity;
+import mod.elfilibustero.sketch.editor.manage.project.ManageProjectSettingActivity;
+import mod.elfilibustero.sketch.editor.manage.resource.ManageXmlActivity;
+import mod.elfilibustero.sketch.lib.utils.GitHubUtil;
 import mod.hey.studios.activity.managers.assets.ManageAssetsActivity;
 import mod.hey.studios.activity.managers.java.ManageJavaActivity;
-import mod.hey.studios.activity.managers.nativelib.ManageNativelibsActivity;
-import mod.hey.studios.build.BuildSettingsDialog;
 import mod.hey.studios.compiler.kotlin.KotlinCompilerBridge;
-import mod.hey.studios.project.custom_blocks.CustomBlocksDialog;
 import mod.hey.studios.project.proguard.ManageProguardActivity;
 import mod.hey.studios.project.proguard.ProguardHandler;
 import mod.hey.studios.project.stringfog.ManageStringfogActivity;
@@ -322,43 +322,28 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             } else if (v.getId() == R.id.btn_compiler_opt) {
                 PopupMenu popupMenu = new PopupMenu(this, findViewById(R.id.btn_compiler_opt));
                 Menu menu = popupMenu.getMenu();
-
-                menu.add(Menu.NONE, 1, Menu.NONE, "Build Settings");
-                menu.add(Menu.NONE, 2, Menu.NONE, "Clean temporary files");
-                menu.add(Menu.NONE, 3, Menu.NONE, "Show last compile error");
-                menu.add(Menu.NONE, 5, Menu.NONE, "Show source code");
+                menu.add(Menu.NONE, 1, Menu.NONE, "Show last compile error");
+                menu.add(Menu.NONE, 2, Menu.NONE, "Show source code");
                 if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
-                    menu.add(Menu.NONE, 4, Menu.NONE, "Install last built APK");
+                    menu.add(Menu.NONE, 3, Menu.NONE, "Install last built APK");
                 }
 
                 popupMenu.setOnMenuItemClickListener(item -> {
                     switch (item.getItemId()) {
                         case 1:
-                            new BuildSettingsDialog(this, sc_id).show();
-                            break;
-
-                        case 2:
-                            new Thread(() -> {
-                                FileUtil.deleteFile(q.projectMyscPath);
-                                runOnUiThread(() ->
-                                        SketchwareUtil.toast("Done cleaning temporary files!"));
-                            }).start();
-                            break;
-
-                        case 3:
                             new CompileErrorSaver(sc_id).showLastErrors(this);
                             break;
 
-                        case 4:
+                        case 2:
+                            showCurrentActivitySrcCode();
+                            break;
+
+                        case 3:
                             if (FileUtil.isExistFile(q.finalToInstallApkPath)) {
                                 installBuiltApk();
                             } else {
                                 SketchwareUtil.toast("APK doesn't exist anymore");
                             }
-                            break;
-
-                        case 5:
-                            showCurrentActivitySrcCode();
                             break;
 
                         default:
@@ -728,6 +713,13 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
+     * Opens {@link ManageProjectSettingActivity}.
+     */
+    void toProjectManager() {
+        launchActivity(ManageProjectSettingActivity.class, null);
+    }
+
+    /**
      * Opens {@link AndroidManifestInjection}.
      */
     void toAndroidManifestManager() {
@@ -736,25 +728,10 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
-     * Opens {@link ManageCustomAttributeActivity}.
-     */
-    void toAppCompatInjectionManager() {
-        launchActivity(ManageCustomAttributeActivity.class, null,
-                new Pair<>("file_name", projectFileSelector.currentXmlFileName));
-    }
-
-    /**
      * Opens {@link ManageAssetsActivity}.
      */
     void toAssetManager() {
         launchActivity(ManageAssetsActivity.class, null);
-    }
-
-    /**
-     * Shows a {@link CustomBlocksDialog}.
-     */
-    void toCustomBlocksViewer() {
-        CustomBlocksDialog.show(this, sc_id);
     }
 
     /**
@@ -766,31 +743,24 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
-     * Opens {@link ManageLocalLibraryActivity}.
-     */
-    void toLocalLibraryManager() {
-        launchActivity(ManageLocalLibraryActivity.class, null);
-    }
-
-    /**
-     * Opens {@link ManageNativelibsActivity}.
-     */
-    void toNativeLibraryManager() {
-        launchActivity(ManageNativelibsActivity.class, null);
-    }
-
-    /**
-     * Opens {@link ManagePermissionActivity}.
-     */
-    void toPermissionManager() {
-        launchActivity(ManagePermissionActivity.class, null);
-    }
-
-    /**
      * Opens {@link ManageProguardActivity}.
      */
     void toProguardManager() {
         launchActivity(ManageProguardActivity.class, null);
+    }
+
+    /**
+     * Opens {@link ManageGitHubActivity}.
+     */
+    void toGitHubManager() {
+        launchActivity(ManageGitHubActivity.class, null);
+    }
+
+    /**
+     * Opens {@link ManageXmlActivity}.
+     */
+    void toXmlManager() {
+        launchActivity(ManageXmlActivity.class, null);
     }
 
     /**
@@ -822,10 +792,10 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
     }
 
     /**
-     * Opens {@link ManageLibraryActivity}.
+     * Opens {@link ManageLibrariesActivity}.
      */
     void toLibraryManager() {
-        launchActivity(ManageLibraryActivity.class, openLibraryManager);
+        launchActivity(ManageLibrariesActivity.class, openLibraryManager);
     }
 
     /**
@@ -1060,7 +1030,7 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
                         if (isMissingDirectory) {
                             dialog.b("Missing directory detected");
                             dialog.a("A directory important for building is missing. " +
-                                    "Sketchware Pro can try creating " + e.getMissingFile().getAbsolutePath() +
+                                    "SketchwareX Pro can try creating " + e.getMissingFile().getAbsolutePath() +
                                     " if you'd like to.");
                             dialog.configureDefaultButton("Create", v -> {
                                 dialog.dismiss();
@@ -1285,6 +1255,11 @@ public class DesignActivity extends BaseAppCompatActivity implements OnClickList
             var sc_id = activity.sc_id;
             activity.saveVersionCodeInformationToProject();
             activity.h();
+            GitHubUtil gitUtil = new GitHubUtil(sc_id);
+            if (!gitUtil.getBean().repoUrl.isEmpty()) {
+                CompletableFuture<Void> build = gitUtil.generate();
+                if (build != null) build.join();
+            }
             jC.d(sc_id).f();
             jC.d(sc_id).g();
             jC.d(sc_id).e();

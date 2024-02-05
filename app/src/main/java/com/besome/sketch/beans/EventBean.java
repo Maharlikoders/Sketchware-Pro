@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.eC;
 import a.a.a.jC;
@@ -27,6 +27,7 @@ public class EventBean extends CollapsibleBean implements Parcelable {
     public static final int EVENT_TYPE_ACTIVITY = 3;
     public static final int EVENT_TYPE_DRAWER_VIEW = 4;
     public static final int EVENT_TYPE_ETC = 5;
+    public static final int EVENT_TYPE_COMMAND = 6;
 
     public static final String SEPARATOR = "_";
 
@@ -60,6 +61,7 @@ public class EventBean extends CollapsibleBean implements Parcelable {
     public static int getEventIconResource(int eventType, int targetType) {
         switch (eventType) {
             case EVENT_TYPE_ACTIVITY:
+            case EVENT_TYPE_COMMAND:
                 return R.drawable.widget_source;
 
             case EVENT_TYPE_VIEW:
@@ -113,6 +115,12 @@ public class EventBean extends CollapsibleBean implements Parcelable {
 
             case EVENT_TYPE_DRAWER_VIEW:
                 return "drawer view event";
+
+            case EVENT_TYPE_ETC:
+                return "moreblock event";
+
+            case EVENT_TYPE_COMMAND:
+                return "command event";
 
             default:
                 return "";

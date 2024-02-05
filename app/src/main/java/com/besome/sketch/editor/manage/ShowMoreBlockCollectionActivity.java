@@ -19,7 +19,7 @@ import com.besome.sketch.beans.MoreBlockCollectionBean;
 import com.besome.sketch.editor.logic.BlockPane;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.besome.sketch.lib.ui.EasyDeleteEditText;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

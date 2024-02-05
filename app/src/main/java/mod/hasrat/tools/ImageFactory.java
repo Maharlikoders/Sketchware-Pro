@@ -12,6 +12,8 @@ import java.io.IOException;
 
 import mod.agus.jcoderz.lib.FileUtil;
 
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
+
 public class ImageFactory {
 
     /**
@@ -22,7 +24,7 @@ public class ImageFactory {
      * @return A File object of the saved bitmap.
      */
     public static File saveBitmap(View view, String imageName) {
-        File saveToDirectory = new File(FileUtil.getExternalStorageDir(), "sketchware/saved_block");
+        File saveToDirectory = new File(FileUtil.getExternalStorageDir(), SketchFileUtil.SKETCHWARE_DIRECTORY + File.separator + "saved_block");
         if (!saveToDirectory.exists()) {
             FileUtil.makeDir(saveToDirectory.getAbsolutePath());
         }

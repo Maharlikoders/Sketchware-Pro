@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +23,7 @@ import java.util.TimerTask;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.lib.code_editor.CodeEditorEditText;
 import mod.hey.studios.lib.code_editor.CodeEditorLayout;
 import mod.hey.studios.lib.code_editor.ColorScheme;
@@ -43,7 +44,7 @@ public class ActComponentsDialog extends Dialog {
 
     public ActComponentsDialog(Activity activity, String sc_id, String activityName) {
         super(activity);
-        ACTIVITIES_COMPONENTS_FILE_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/Injection/androidmanifest/activities_components.json";
+        ACTIVITIES_COMPONENTS_FILE_PATH = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/Injection/androidmanifest/activities_components.json";
         this.activity = activity;
         this.activityName = activityName;
     }

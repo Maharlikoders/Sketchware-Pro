@@ -25,6 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.besome.sketch.beans.ImageBean;
 import com.besome.sketch.beans.LayoutBean;
 import com.besome.sketch.beans.ProjectResourceBean;
@@ -34,6 +36,7 @@ import com.besome.sketch.editor.view.item.ItemButton;
 import com.besome.sketch.editor.view.item.ItemCalendarView;
 import com.besome.sketch.editor.view.item.ItemCardView;
 import com.besome.sketch.editor.view.item.ItemCheckBox;
+import com.besome.sketch.editor.view.item.ItemConstraintLayout;
 import com.besome.sketch.editor.view.item.ItemEditText;
 import com.besome.sketch.editor.view.item.ItemFloatingActionButton;
 import com.besome.sketch.editor.view.item.ItemHorizontalScrollView;
@@ -51,19 +54,19 @@ import com.besome.sketch.editor.view.item.ItemTextView;
 import com.besome.sketch.editor.view.item.ItemVerticalScrollView;
 import com.besome.sketch.editor.view.item.ItemWebView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import a.a.a.Gx;
+import a.a.a.jC;
 import a.a.a.kC;
 import a.a.a.sy;
 import a.a.a.ty;
 import a.a.a.wB;
 import a.a.a.zB;
-import dev.aldi.sayuti.editor.view.ExtraViewPane;
 import dev.aldi.sayuti.editor.view.item.ItemBadgeView;
 import dev.aldi.sayuti.editor.view.item.ItemBottomNavigationView;
 import dev.aldi.sayuti.editor.view.item.ItemCircleImageView;
@@ -88,6 +91,7 @@ import mod.agus.jcoderz.editor.view.item.ItemRatingBar;
 import mod.agus.jcoderz.editor.view.item.ItemSearchView;
 import mod.agus.jcoderz.editor.view.item.ItemTimePicker;
 import mod.agus.jcoderz.editor.view.item.ItemVideoView;
+import mod.elfilibustero.sketch.lib.handler.InjectAttributeHandler;
 import mod.hey.studios.util.ProjectFile;
 
 @SuppressLint({"RtlHardcoded", "DiscouragedApi"})
@@ -219,11 +223,6 @@ public class ViewPane extends RelativeLayout {
 
     public View b(ViewBean viewBean) {
         View item = switch (viewBean.type) {
-            case ViewBean.VIEW_TYPE_LAYOUT_LINEAR,
-                    ViewBeans.VIEW_TYPE_LAYOUT_COLLAPSINGTOOLBARLAYOUT,
-                    ViewBeans.VIEW_TYPE_LAYOUT_TEXTINPUTLAYOUT,
-                    ViewBeans.VIEW_TYPE_LAYOUT_SWIPEREFRESHLAYOUT,
-                    ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP -> new ItemLinearLayout(getContext());
             case ViewBeans.VIEW_TYPE_LAYOUT_CARDVIEW -> new ItemCardView(getContext());
             case ViewBean.VIEW_TYPE_LAYOUT_HSCROLLVIEW ->
                     new ItemHorizontalScrollView(getContext());
@@ -274,7 +273,13 @@ public class ViewPane extends RelativeLayout {
             case ViewBeans.VIEW_TYPE_WIDGET_OTPVIEW -> new ItemOTPView(getContext());
             case ViewBeans.VIEW_TYPE_WIDGET_CODEVIEW -> new ItemCodeView(getContext());
             case ViewBeans.VIEW_TYPE_WIDGET_RECYCLERVIEW -> new ItemRecyclerView(getContext());
-            default -> null;
+            case ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT -> new ItemConstraintLayout(getContext());
+            case ViewBean.VIEW_TYPE_LAYOUT_LINEAR,
+                    ViewBeans.VIEW_TYPE_LAYOUT_COLLAPSINGTOOLBARLAYOUT,
+                    ViewBeans.VIEW_TYPE_LAYOUT_TEXTINPUTLAYOUT,
+                    ViewBeans.VIEW_TYPE_LAYOUT_SWIPEREFRESHLAYOUT,
+                    ViewBeans.VIEW_TYPE_LAYOUT_RADIOGROUP  -> new ItemLinearLayout(getContext());
+            default -> new ItemLinearLayout(getContext());
         };
         item.setId(++b);
         item.setTag(viewBean.id);
@@ -308,7 +313,6 @@ public class ViewPane extends RelativeLayout {
     private void b(View view, ViewBean viewBean) {
         ImageBean imageBean;
         String str;
-        ExtraViewPane.a(view, viewBean, this, resourcesManager);
         if (viewBean.id.charAt(0) == '_') {
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -357,7 +361,6 @@ public class ViewPane extends RelativeLayout {
             view.setVisibility(View.VISIBLE);
             return;
         }
-        updateLayout(view, viewBean);
         view.setRotation(viewBean.image.rotate);
         view.setAlpha(viewBean.alpha);
         view.setTranslationX(wB.a(getContext(), viewBean.translationX));
@@ -390,6 +393,9 @@ public class ViewPane extends RelativeLayout {
             }
         }
         Gx classInfo = viewBean.getClassInfo();
+        updateLayout(classInfo, view, viewBean);
+        updateConstraintLayout(view, viewBean);
+
         if (classInfo.a("LinearLayout")) {
             LinearLayout linearLayout = (LinearLayout) view;
             linearLayout.setOrientation(viewBean.layout.orientation);
@@ -412,10 +418,10 @@ public class ViewPane extends RelativeLayout {
                 }
             }
         }
-        if (classInfo.b("EditText")) {
+        if (classInfo.a("EditText")) {
             updateEditText((EditText) view, viewBean);
         }
-        if (classInfo.b("ImageView")) {
+        if (classInfo.a("ImageView")) {
             if (resourcesManager.h(viewBean.image.resName) == ProjectResourceBean.PROJECT_RES_TYPE_RESOURCE) {
                 ((ImageView) view).setImageResource(getContext().getResources().getIdentifier(viewBean.image.resName, "drawable", getContext().getPackageName()));
             } else if (viewBean.image.resName.equals("default_image")) {
@@ -429,7 +435,11 @@ public class ViewPane extends RelativeLayout {
                     ((ImageView) view).setImageResource(R.drawable.default_image);
                 }
             }
-            ((ImageView) view).setScaleType(ImageView.ScaleType.valueOf(viewBean.image.scaleType));
+            if (classInfo.b("CircleImageView")) {
+                ((ItemCircleImageView) view).setScaleType(ImageView.ScaleType.CENTER_CROP);
+            } else {
+                ((ImageView) view).setScaleType(ImageView.ScaleType.valueOf(viewBean.image.scaleType));
+            }
         }
         if (classInfo.a("CompoundButton")) {
             ((CompoundButton) view).setChecked(viewBean.checked != 0);
@@ -449,54 +459,32 @@ public class ViewPane extends RelativeLayout {
             ((ItemAdView) view).setAdSize(viewBean.adSize);
         }
         if (classInfo.b("CardView")) {
-            ((ItemCardView) view).setContentPadding(
-                    viewBean.layout.paddingLeft,
-                    viewBean.layout.paddingTop,
-                    viewBean.layout.paddingRight,
-                    viewBean.layout.paddingBottom);
+            updateCardView((ItemCardView) view, viewBean);
+        }
+        if (classInfo.b("CircleImageView")) {
+            updateCircleImageView((ItemCircleImageView) view, viewBean);
         }
         if (classInfo.b("SignInButton")) {
             ItemSignInButton button = (ItemSignInButton) view;
-            boolean hasButtonSize = false;
-            boolean hasColorScheme = false;
-            for (String line : viewBean.inject.split("\n")) {
-                if (line.contains("buttonSize")) {
-                    String buttonSize = extractAttrValue(line, "app:buttonSize");
-                    if (!buttonSize.startsWith("@")) {
-                        hasButtonSize = true;
-                        switch (buttonSize) {
-                            case "icon_only":
-                                button.setSize(ItemSignInButton.ButtonSize.ICON_ONLY);
-                                break;
-                            case "wide":
-                                button.setSize(ItemSignInButton.ButtonSize.WIDE);
-                                break;
-                            case "standard":
-                            default:
-                                button.setSize(ItemSignInButton.ButtonSize.STANDARD);
-                                break;
-                        }
-                    }
-                }
-                if (line.contains("colorScheme")) {
-                    String colorScheme = extractAttrValue(line, "app:colorScheme");
-                    if (!colorScheme.startsWith("@")) {
-                        hasColorScheme = true;
-                        switch (colorScheme) {
-                            case "dark":
-                                button.setColorScheme(ItemSignInButton.ColorScheme.DARK);
-                                break;
-                            case "auto":
-                            case "light":
-                            default:
-                                button.setColorScheme(ItemSignInButton.ColorScheme.LIGHT);
-                                break;
-                        }
-                    }
-                }
-                if (!hasButtonSize) button.setSize(ItemSignInButton.ButtonSize.STANDARD);
-                if (!hasColorScheme) button.setColorScheme(ItemSignInButton.ColorScheme.LIGHT);
-            }
+
+            InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+            String buttonSize = handler.getAttributeValueOf("buttonSize");
+            String colorScheme = handler.getAttributeValueOf("colorScheme");
+
+            ItemSignInButton.ButtonSize btnSizeValue = switch (buttonSize) {
+                case "icon_only" -> ItemSignInButton.ButtonSize.ICON_ONLY;
+                case "wide" -> ItemSignInButton.ButtonSize.WIDE;
+                default -> ItemSignInButton.ButtonSize.STANDARD;
+            };
+
+            button.setSize(btnSizeValue);
+
+            ItemSignInButton.ColorScheme colorSchemeValue = switch (colorScheme) {
+                case "dark" -> ItemSignInButton.ColorScheme.DARK;
+                default -> ItemSignInButton.ColorScheme.LIGHT;
+            };
+
+            button.setColorScheme(colorSchemeValue);
         }
         view.setVisibility(VISIBLE);
     }
@@ -544,6 +532,12 @@ public class ViewPane extends RelativeLayout {
                 viewBean.parent = view.getTag().toString();
                 viewBean.parentType = ViewBeans.VIEW_TYPE_LAYOUT_CARDVIEW;
                 viewBean.layout.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            } else if (view instanceof ItemConstraintLayout) {
+                viewBean.preIndex = viewBean.index;
+                viewBean.index = (Integer) d[2];
+                viewBean.preParent = viewBean.parent;
+                viewBean.parent = view.getTag().toString();
+                viewBean.parentType = ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT;
             }
         } else {
             viewBean.preIndex = viewBean.index;
@@ -736,6 +730,8 @@ public class ViewPane extends RelativeLayout {
                     a(view, (ViewGroup) child);
                 } else if (child instanceof ItemCardView) {
                     a(view, (ViewGroup) child);
+                } else if (child instanceof ItemConstraintLayout) {
+                    a(view, (ItemConstraintLayout) child);
                 }
 
                 var13 = var4;
@@ -765,6 +761,8 @@ public class ViewPane extends RelativeLayout {
                     a(viewBean, (ViewGroup) childAt);
                 } else if (childAt instanceof ItemCardView) {
                     a(viewBean, (ViewGroup) childAt);
+                } else if (childAt instanceof ItemConstraintLayout) {
+                    a(viewBean, (ItemConstraintLayout) childAt);
                 }
             }
         }
@@ -790,7 +788,7 @@ public class ViewPane extends RelativeLayout {
         }
     }
 
-    private void updateLayout(View view, ViewBean viewBean) {
+    private void updateLayout(Gx classInfo, View view, ViewBean viewBean) {
         LayoutBean layoutBean = viewBean.layout;
         int width = layoutBean.width;
         int height = layoutBean.height;
@@ -800,7 +798,13 @@ public class ViewPane extends RelativeLayout {
         if (height > 0) {
             height = (int) wB.a(getContext(), (float) viewBean.layout.height);
         }
-        view.setBackgroundColor(viewBean.layout.backgroundColor);
+        if (classInfo.b("MaterialButton")) {
+            ItemMaterialButton button = (ItemMaterialButton) view;
+            button.setMainColor(ProjectFile.getColor(sc_id, "color_primary"));
+            button.setBackgroundTint(viewBean.layout.backgroundColor);
+        } else {
+            view.setBackgroundColor(viewBean.layout.backgroundColor);
+        }
         if (viewBean.id.equals("root")) {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
             layoutParams.leftMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
@@ -858,8 +862,164 @@ public class ViewPane extends RelativeLayout {
         editText.setHintTextColor(viewBean.text.hintColor);
     }
 
-    private String extractAttrValue(String line, String attrbute) {
-        Matcher matcher = Pattern.compile("=\"([^\"]*)\"").matcher(line);
-        return matcher.find() ? matcher.group(1) : "";
+    private void updateCardView(ItemCardView cardView, ViewBean viewBean) {
+        cardView.setContentPadding(
+            viewBean.layout.paddingLeft,
+            viewBean.layout.paddingTop,
+            viewBean.layout.paddingRight,
+            viewBean.layout.paddingBottom);
+        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+        String cardElevation = handler.getAttributeValueOf("cardElevation");
+        String cardCornerRadius = handler.getAttributeValueOf("cardCornerRadius");
+        String compatPadding = handler.getAttributeValueOf("cardUseCompatPadding");
+        String strokeColor = handler.getAttributeValueOf("strokeColor");
+        String strokeWidth = handler.getAttributeValueOf("strokeWidth");
+
+        int elevation = 4;
+        if (!cardElevation.isEmpty()) {
+                try {
+                elevation = Integer.parseInt(cardElevation.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+        cardView.setCardElevation(elevation);
+
+        int radius = 8;
+        if (!cardCornerRadius.isEmpty()) {
+            try {
+                radius = Integer.parseInt(cardCornerRadius.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+        cardView.setRadius((float) radius);
+
+        boolean useCompatPadding = false;
+        if (!compatPadding.isEmpty()) {
+            try {
+                useCompatPadding = Boolean.parseBoolean(compatPadding);
+            } catch (Exception e) {
+            }
+        }
+        cardView.setUseCompatPadding(useCompatPadding);
+
+        int width = 2;
+        if (!strokeWidth.isEmpty()) {
+            try {
+                width = Integer.parseInt(strokeWidth.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+
+        cardView.setStrokeWidth(width);
+
+        int defaultColor = Color.WHITE;
+        if (!strokeColor.isEmpty()) {
+            try {
+                defaultColor = getColorFromString(strokeColor, "#FFFFFF");
+            } catch (Exception e) {
+            }
+        }
+        cardView.setStrokeColor(defaultColor);
+    }
+
+    private void updateCircleImageView(ItemCircleImageView imageView, ViewBean viewBean) {
+        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+        String borderColor = handler.getAttributeValueOf("civ_border_color");
+        String backgroundColor = handler.getAttributeValueOf("civ_circle_background_color");
+        String borderWidth = handler.getAttributeValueOf("civ_border_width");
+
+        int defaultBorderColor = ProjectFile.getColor(sc_id, "color_primary");
+        if (!borderColor.isEmpty()) {
+            try {
+                defaultBorderColor = getColorFromString(borderColor, "#008DCD");
+            } catch (Exception e) {
+            }
+        }
+        imageView.setBorderColor(defaultBorderColor);
+
+        int defaultBackgroundColor = Color.WHITE;
+        if (!backgroundColor.isEmpty()) {
+            try {
+                defaultBackgroundColor = getColorFromString(backgroundColor, "#FFFFFF");
+            } catch (Exception e) {
+            }
+        }
+        imageView.setCircleBackgroundColor(defaultBackgroundColor);
+
+        int borderWidthValue = 4;
+        if (!borderWidth.isEmpty()) {
+                try {
+                borderWidthValue = Integer.parseInt(borderWidth.replaceAll("\\D+", ""));
+            } catch (Exception e) {
+            }
+        }
+        imageView.setBorderWidth(borderWidthValue);
+    }
+
+    private void updateConstraintLayout(View view, ViewBean viewBean) {
+        //ArrayList<ViewBean> list = jC.a(sc_id).b(projectFileBean.getXmlName(), viewBean);
+        int defaultParent = ConstraintLayout.LayoutParams.PARENT_ID;
+        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+        String leftToLeft = handler.getAttributeValueOf("layout_constraintLeft_toLeftOf");
+        String leftToRight = handler.getAttributeValueOf("layout_constraintLeft_toRightOf");
+        String rightToRight = handler.getAttributeValueOf("layout_constraintRight_toRightOf");
+        String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
+
+        if (view.getParent() instanceof ItemConstraintLayout parentView) {
+            if (view.getLayoutParams() instanceof ConstraintLayout.LayoutParams layoutParams) {
+                if (!leftToLeft.isEmpty()) {
+                    int value = defaultParent;
+                    if (!leftToLeft.equals("parent")) {
+                        value = getViewId(getIdFromString(leftToLeft, "parent"));
+                    }
+                    layoutParams.leftToLeft = value;
+                }
+                if (!leftToRight.isEmpty()) {
+                    int value = defaultParent;
+                    if (!leftToRight.equals("parent")) {
+                        value = getViewId(getIdFromString(leftToRight, "parent"));
+                    }
+                    layoutParams.leftToRight = value;
+                }
+                if (!rightToRight.isEmpty()) {
+                    int value = defaultParent;
+                    if (!rightToRight.equals("parent")) {
+                        value = getViewId(getIdFromString(rightToRight, "parent"));
+                    }
+                    layoutParams.rightToRight = value;
+                }
+                if (!rightToLeft.isEmpty()) {
+                    int value = defaultParent;
+                    if (!rightToLeft.equals("parent")) {
+                        value = getViewId(getIdFromString(rightToLeft, "parent"));
+                    }
+                    layoutParams.rightToLeft = value;
+                }
+                view.setLayoutParams(layoutParams);
+            }
+        }
+        
+    }
+
+    private int getViewId(String targetTag) {
+        View toView = rootLayout.findViewWithTag(targetTag);
+        if (toView != null) {
+            return toView.getId();
+        }
+        return ConstraintLayout.LayoutParams.PARENT_ID;
+    }
+
+    private String getIdFromString(String id, String defaultId) {
+        if (id.isEmpty() || !id.startsWith("@+id/")) {
+            return defaultId;
+        }
+        return id.replaceFirst("@+id/", "");
+    }
+
+    private int getColorFromString(String color, String defaultColor) {
+        String hexColor = color.replaceFirst("#", "");
+        String formattedColor = String.format("#%8s", hexColor).replaceAll(" ", "F");
+        int result = Color.parseColor(color.startsWith("@") ? defaultColor : formattedColor);
+        return result != Color.TRANSPARENT ? result : Color.parseColor(defaultColor);
     }
 }

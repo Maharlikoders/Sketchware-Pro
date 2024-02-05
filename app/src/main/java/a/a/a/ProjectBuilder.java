@@ -58,6 +58,8 @@ import mod.agus.jcoderz.editor.library.ExtLibSelected;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.compiler.kotlin.KotlinCompilerBridge;
 import mod.hey.studios.project.ProjectSettings;
@@ -86,6 +88,7 @@ public class ProjectBuilder {
     public yq yq;
     public FilePathUtil fpu;
     public ManageLocalLibrary mll;
+    public ExternalLibraryHandler externalLibraryHandler;
     public BuiltInLibraryManager builtInLibraryManager;
     public String androidJarPath;
     public ProguardHandler proguard;
@@ -111,7 +114,7 @@ public class ProjectBuilder {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
 
-            LogUtil.d(TAG, "Running Sketchware Pro " + info.versionName + " (" + info.versionCode + ")");
+            LogUtil.d(TAG, "Running SketchwareX Pro " + info.versionName + " (" + info.versionCode + ")");
 
             ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
 
@@ -127,6 +130,7 @@ public class ProjectBuilder {
         yq = yqVar;
         fpu = new FilePathUtil();
         mll = new ManageLocalLibrary(yqVar.sc_id);
+        externalLibraryHandler = new ExternalLibraryHandler(yqVar.sc_id);
         builtInLibraryManager = new BuiltInLibraryManager(yqVar.sc_id);
         File defaultAndroidJar = new File(BuiltInLibraries.EXTRACTED_COMPILE_ASSETS_PATH, "android.jar");
         androidJarPath = build_settings.getValue(BuildSettings.SETTING_ANDROID_JAR_PATH, defaultAndroidJar.getAbsolutePath());
@@ -284,13 +288,16 @@ public class ProjectBuilder {
         /* Add local libraries to the classpath */
         classpath.append(mll.getJarLocalLibrary());
 
+        /*Add external libraries to the classpath */
+        classpath.append(externalLibraryHandler.getJar());
+
         /* Append user's custom classpath */
         if (!build_settings.getValue(BuildSettings.SETTING_CLASSPATH, "").equals("")) {
             classpath.append(":").append(build_settings.getValue(BuildSettings.SETTING_CLASSPATH, ""));
         }
 
         /* Add JARs from project's classpath */
-        String path = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + yq.sc_id + "/files/classpath/";
+        String path = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + yq.sc_id + "/files/classpath/";
         ArrayList<String> jars = FileUtil.listFiles(path, "jar");
         classpath.append(":").append(TextUtils.join(":", jars));
 
@@ -302,7 +309,7 @@ public class ProjectBuilder {
      */
     public String getProguardClasspath() {
         Collection<String> localLibraryJarsWithFullModeOn = new LinkedList<>();
-
+        localLibraryJarsWithFullModeOn.addAll(externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.JAR));
         for (HashMap<String, Object> localLibrary : mll.list) {
             Object nameObject = localLibrary.get("name");
             Object jarPathObject = localLibrary.get("jarPath");
@@ -479,7 +486,7 @@ public class ProjectBuilder {
                 extraPackages.append(library.getPackageName()).append(":");
             }
         }
-        return extraPackages + mll.getPackageNameLocalLibrary();
+        return extraPackages + mll.getPackageNameLocalLibrary() + externalLibraryHandler.getPackageName();
     }
 
     /**
@@ -588,6 +595,12 @@ public class ProjectBuilder {
                 }
             }
 
+            for (String jarPath : externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.JAR)) {
+                if (!jarPath.trim().isEmpty()) {
+                    apkBuilder.addResourcesFromJar(new File(jarPath));
+                }
+            }
+
             /* Add project's native libraries */
             File nativeLibrariesDirectory = new File(fpu.getPathNativelibs(yq.sc_id));
             if (nativeLibrariesDirectory.exists()) {
@@ -657,6 +670,10 @@ public class ProjectBuilder {
         /* Add used built-in libraries' DEX files */
         for (Jp builtInLibrary : builtInLibraryManager.getLibraries()) {
             dexes.add(BuiltInLibraries.getLibraryDexFile(builtInLibrary.getName()));
+        }
+
+        for (String dexPath : externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.DEX)) {
+            dexes.add(new File(dexPath));
         }
 
         /* Add local libraries' main DEX files */
@@ -835,6 +852,12 @@ public class ProjectBuilder {
                 sb.append(".** { *; }");
             }
         }
+        for (String packageName : externalLibraryHandler.getPackageName().split(":")) {
+            sb.append("\n");
+            sb.append("-keep class ");
+            sb.append(packageName);
+            sb.append(".** { *; }");
+        }
         for (HashMap<String, Object> hashMap : mll.list) {
             String obj = hashMap.get("name").toString();
             if (hashMap.containsKey("packageName") && !proguard.libIsProguardFMEnabled(obj)) {
@@ -863,10 +886,11 @@ public class ProjectBuilder {
                 config.add(f.getAbsolutePath());
             }
         }
+        config.addAll(externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.PROGUARD));
         config.addAll(mll.getPgRules());
         ArrayList<String> jars = new ArrayList<>();
         jars.add(yq.compiledClassesPath + ".jar");
-
+        jars.addAll(externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.JAR));
         for (HashMap<String, Object> hashMap : mll.list) {
             String obj = hashMap.get("name").toString();
             if (hashMap.containsKey("jarPath") && proguard.libIsProguardFMEnabled(obj)) {
@@ -902,6 +926,12 @@ public class ProjectBuilder {
         proguardAddLibConfigs(args);
         proguardAddRjavaRules(args);
 
+        /* Include external libraries' ProGuard rules */
+        for (String rule : externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.PROGUARD)) {
+            args.add("-include");
+            args.add(rule);
+        }
+
         /* Include local libraries' ProGuard rules */
         for (String rule : mll.getPgRules()) {
             args.add("-include");
@@ -911,7 +941,10 @@ public class ProjectBuilder {
         /* Include compiled Java classes (?) IT SAYS -in*jar*s, so why include .class es? */
         args.add("-injars");
         args.add(yq.compiledClassesPath);
-
+        for (String jarPath : externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.JAR)) {
+            args.add("-injars");
+            args.add(jarPath);
+        }
         for (HashMap<String, Object> hashMap : mll.list) {
             String obj = hashMap.get("name").toString();
             if (hashMap.containsKey("jarPath") && proguard.libIsProguardFMEnabled(obj)) {

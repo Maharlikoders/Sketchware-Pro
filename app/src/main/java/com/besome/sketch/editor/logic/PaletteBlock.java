@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.besome.sketch.lib.ui.CustomHorizontalScrollView;
 import com.besome.sketch.lib.ui.CustomScrollView;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.Rs;
 import a.a.a.Ts;

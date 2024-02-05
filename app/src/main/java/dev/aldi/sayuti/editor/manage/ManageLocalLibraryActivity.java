@@ -24,7 +24,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +37,8 @@ import java.util.stream.Collectors;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.beans.DependencyBean;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuiltInLibraries;
 import mod.pranav.dependency.resolver.DependencyResolver;
@@ -58,7 +60,7 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         ImageView import_library_icon = findViewById(R.id.ig_toolbar_load_file);
         import_library_icon.setPadding((int) getDip(2), (int) getDip(2), (int) getDip(2), (int) getDip(2));
         import_library_icon.setImageResource(R.drawable.download_80px);
-        import_library_icon.setVisibility(View.VISIBLE);
+        import_library_icon.setVisibility(View.GONE);
         Helper.applyRippleToToolbarView(import_library_icon);
         import_library_icon.setOnClickListener(this);
     }
@@ -92,7 +94,8 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
             var group = parts[0];
             var artifact = parts[1];
             var version = parts[2];
-            var resolver = new DependencyResolver(group, artifact, version, skipDownloadingDependencies.isChecked());
+            var resolver = new DependencyResolver(DependencyBean.Companion.from(url));
+            resolver.skipSubDependencies(skipDownloadingDependencies.isChecked());
             var handler = new Handler(Looper.getMainLooper());
 
             class SetTextRunnable implements Runnable {
@@ -200,9 +203,9 @@ public class ManageLocalLibraryActivity extends Activity implements View.OnClick
         if (getIntent().hasExtra("sc_id")) {
             String sc_id = Objects.requireNonNull(getIntent().getStringExtra("sc_id"));
             notAssociatedWithProject = sc_id.equals("system");
-            local_lib_file = FileUtil.getExternalStorageDir().concat("/.sketchware/data/").concat(sc_id.concat("/local_library"));
+            local_lib_file = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/").concat(sc_id.concat("/local_library"));
         }
-        local_libs_path = FileUtil.getExternalStorageDir().concat("/.sketchware/libs/local_libs/");
+        local_libs_path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs/");
         loadFiles();
     }
 

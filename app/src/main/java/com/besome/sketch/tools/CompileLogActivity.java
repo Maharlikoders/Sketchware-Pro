@@ -20,7 +20,7 @@ import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import mod.SketchwareUtil;
 import mod.hey.studios.util.CompileLogHelper;

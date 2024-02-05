@@ -65,7 +65,7 @@ import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -1502,7 +1502,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
             String typeName = convert.isEmpty() ? ViewBean.getViewTypeName(viewBean.type) : IdGenerator.getLastPath(convert);
             if (!convert.equals("include")) {
                 Set<String> toNotAdd = new Ox(new jq(), M).readAttributesToReplace(viewBean);
-                if (!toNotAdd.contains("android:id")) {
+                if (!toNotAdd.contains("android:id") && viewBean.disable_id == 0) {
                     viewGroup.addView(d(typeName, viewBean.id));
                 }
             }
@@ -1927,8 +1927,8 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
             stringExtra = ReturnMoreblockManager.getMbName(C) + " : " + stringExtra;
         }
         d.setTitle(stringExtra);
-        PaletteSelector l = findViewById(R.id.palette_selector);
-        l.setOnBlockCategorySelectListener(this);
+        paletteSelector = findViewById(R.id.palette_selector);
+        paletteSelector.setOnBlockCategorySelectListener(this);
         m = findViewById(R.id.palette_block);
         p = findViewById(R.id.dummy);
         n = findViewById(R.id.editor);

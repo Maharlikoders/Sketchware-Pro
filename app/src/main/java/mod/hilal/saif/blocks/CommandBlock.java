@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 
 /**
@@ -26,7 +27,7 @@ public class CommandBlock {
 
     public static String applyCommands(String fileName, String c) {
         String str = c;
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/temp/commands");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/temp/commands");
         ArrayList<HashMap<String, Object>> data;
         try {
             //writeLog("try");
@@ -241,7 +242,7 @@ public class CommandBlock {
 
     // Write Temporary File
     public static void WTF(ArrayList<HashMap<String, Object>> list) {
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/temp/commands");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/temp/commands");
         ArrayList<HashMap<String, Object>> data = new ArrayList<>();
         try {
             if (FileUtil.isExistFile(path) && !FileUtil.readFile(path).equals("") && !FileUtil.readFile(path).equals("[]")) {
@@ -254,7 +255,7 @@ public class CommandBlock {
     }
 
     public static void x() {
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/temp/commands");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/temp/commands");
         if (FileUtil.isExistFile(path)) {
             FileUtil.deleteFile(path);
         }
@@ -284,7 +285,7 @@ public class CommandBlock {
     }
 
     public static void writeLog(String s) {
-        String path = FileUtil.getExternalStorageDir().concat("/.sketchware/temp/log.txt");
+        String path = FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/temp/log.txt");
         String text = "";
         if (FileUtil.isExistFile(path)) {
             text = FileUtil.readFile(path);

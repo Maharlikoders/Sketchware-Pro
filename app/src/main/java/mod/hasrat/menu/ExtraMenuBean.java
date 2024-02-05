@@ -20,11 +20,13 @@ import com.besome.sketch.editor.LogicEditorActivity;
 import com.github.angads25.filepicker.model.DialogConfigs;
 import com.github.angads25.filepicker.model.DialogProperties;
 import com.github.angads25.filepicker.view.FilePickerDialog;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +41,8 @@ import mod.agus.jcoderz.editor.manage.block.makeblock.BlockMenu;
 import mod.agus.jcoderz.lib.FilePathUtil;
 import mod.agus.jcoderz.lib.FileResConfig;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.constants.XmlResourceConstant;
+import mod.elfilibustero.sketch.lib.handler.XmlResourceHandler;
 import mod.elfilibustero.sketch.lib.utils.CustomVariableUtil;
 import mod.hasrat.highlighter.SimpleHighlighter;
 import mod.hey.studios.util.Helper;
@@ -46,6 +50,8 @@ import mod.hilal.saif.activities.tools.ConfigActivity;
 import mod.hilal.saif.asd.AsdDialog;
 import mod.hilal.saif.asd.asdforall.AsdAllEditor;
 import mod.hilal.saif.asd.old.AsdOldDialog;
+
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 
 public class ExtraMenuBean {
 
@@ -64,8 +70,8 @@ public class ExtraMenuBean {
     public static final String[] patternFlags = {"CANON_EQ", "CASE_INSENSITIVE", "COMMENTS", "DOTALL", "LITERAL", "MULTILINE", "UNICODE_CASE", "UNIX_LINES"};
     public static final String[] permission = {"CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "RECORD_AUDIO", "READ_CONTACTS", "WRITE_CONTACTS", "READ_SMS", "SEND_SMS", "READ_PHONE_STATE", "CALL_PHONE", "READ_CALENDAR", "WRITE_CALENDAR", "BLUETOOTH", "BLUETOOTH_ADMIN"};
 
-    private final String ASSETS_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/data/%s/files/assets/";
-    private final String NATIVE_PATH = FileUtil.getExternalStorageDir() + "/.sketchware/data/%s/files/native_libs/";
+    private final String ASSETS_PATH = FileUtil.getExternalStorageDir() + File.separator + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data/%s/files/assets/";
+    private final String NATIVE_PATH = FileUtil.getExternalStorageDir() + File.separator + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data/%s/files/native_libs/";
     private final ExtraMenuBlock extraMenuBlock;
     private final FilePathUtil fpu;
     private final FilePickerDialog fpd;
@@ -588,15 +594,24 @@ public class ExtraMenuBean {
                 menus.add("SIZE_WIDE");
                 break;
 
-            case "ResString":
-            case "ResStyle":
-            case "ResColor":
-            case "ResArray":
-            case "ResDimen":
-            case "ResBool":
-            case "ResInteger":
-            case "ResAttr":
-            case "ResXml":
+            case "resString":
+                title = Helper.getResString(R.string.logic_editor_title_select_xml_string);
+                parseResources(menus, XmlResourceConstant.TYPE_STRING);
+                break;
+            case "resColor":
+                title = Helper.getResString(R.string.logic_editor_title_select_xml_color);
+                parseResources(menus, XmlResourceConstant.TYPE_COLOR);
+                break;
+            case "resStyle":
+                title = Helper.getResString(R.string.logic_editor_title_select_xml_style);
+                parseResources(menus, XmlResourceConstant.TYPE_STYLE);
+                break;
+            case "resArray":
+            case "resDimen":
+            case "resBool":
+            case "resInteger":
+            case "resAttr":
+            case "resXml":
                 title = "Deprecated";
                 dialog.a("This Block Menu was initially used to parse resource values, but was too I/O heavy and has been removed due to that. Please use the Code Editor instead.");
                 break;
@@ -749,6 +764,27 @@ public class ExtraMenuBean {
 
     private ArrayList<String> getComponentMenus(int type) {
         return projectDataManager.b(javaName, type);
+    }
+
+    private void parseResources(ArrayList<String> menus, int resType) {
+        String fileName = XmlResourceConstant.getFileName(resType);
+        XmlResourceHandler handler = new XmlResourceHandler(logicEditor, sc_id);
+        List<Map<String, Object>> resources = handler.parseResourceFile(fileName);
+        if (resources == null || resources.isEmpty()) {
+            resources = switch (resType) {
+                case XmlResourceConstant.TYPE_STRING -> handler.getDefaultStringsXml();
+                case XmlResourceConstant.TYPE_COLOR -> handler.getDefaultColorsXml();
+                case XmlResourceConstant.TYPE_STYLE -> handler.getDefaultStylesXml();
+                default -> new ArrayList<>();
+            };
+        }
+        for (Map<String, Object> map : resources) {
+            String name = (String) map.get("name");
+            if (resType == XmlResourceConstant.TYPE_STYLE) {
+                name = name.replaceAll("\\.", "_");
+            }
+            menus.add(name);
+        }
     }
 
     private void asdDialog(Ss ss, String message) {

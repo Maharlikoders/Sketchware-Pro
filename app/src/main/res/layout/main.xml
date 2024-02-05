@@ -27,15 +27,6 @@
             android:name="com.besome.sketch.ProjectsFragment"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/create_new_project"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/color_chk_white_normal"
-            android:src="@drawable/plus_96"
-            tools:ignore="ContentDescription" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.besome.sketch.MainDrawer

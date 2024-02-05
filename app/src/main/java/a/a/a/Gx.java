@@ -66,6 +66,12 @@ public class Gx {
                 classInfos = "Var.Map";
                 break;
 
+            case "int":
+            case "Integer":
+            case "Color":
+                classInfos = "Var.int.Integer.Color";
+                break;
+
             case "ListInt":
                 classInfos = "List.ListInt";
                 break;
@@ -230,7 +236,7 @@ public class Gx {
                 break;
 
             case "MaterialButton":
-                classInfos = "View.Clickable.TextView.Button";
+                classInfos = "View.Clickable.TextView.Button.MaterialButton";
                 break;
 
             case "CircleImageView":
@@ -272,6 +278,9 @@ public class Gx {
             case "RecyclerView":
                 classInfos = "View.ViewGroup.RecyclerView";
                 break;
+
+            case "ConstraintLayout":
+                classInfos = "View.ViewGroup.ConstraintLayout";
 
             case "TextToSpeech":
                 classInfos = "Component.TextToSpeech";
@@ -412,6 +421,8 @@ public class Gx {
             default:
                 classInfos = ComponentsHandler.c(a);
         }
+
+        classInfos = "Object." + classInfos;
 
         b = classInfos.split("\\.");
     }

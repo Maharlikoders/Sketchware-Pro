@@ -15,6 +15,7 @@ import a.a.a.zy;
 import mod.agus.jcoderz.editor.manage.library.locallibrary.ManageLocalLibrary;
 import mod.agus.jcoderz.lib.BinaryExecutor;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.handler.ExternalLibraryHandler;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
 import mod.jbk.build.BuildProgressReceiver;
@@ -122,6 +123,9 @@ public class ResourceCompiler {
             compileBuiltInLibraryResources();
             LogUtil.d(TAG + ":c", "Compiling built-in library resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
             savedTimeMillis = System.currentTimeMillis();
+            compileExternalLibraryResources(outputPath);
+            LogUtil.d(TAG + ":c", "Compiling external library resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
+            savedTimeMillis = System.currentTimeMillis();
             compileLocalLibraryResources(outputPath);
             LogUtil.d(TAG + ":c", "Compiling local library resources took " + (System.currentTimeMillis() - savedTimeMillis) + " ms");
             savedTimeMillis = System.currentTimeMillis();
@@ -200,6 +204,13 @@ public class ResourceCompiler {
                     args.add("-A");
                     args.add(assetsPath);
                 }
+            }
+
+            /* Add external libraries' assets */
+            for (String dir : new ExternalLibraryHandler(buildHelper.yq.sc_id).get(ExternalLibraryHandler.ResourceType.ASSETS)) {
+                linkingAssertDirectoryExists(dir);
+                args.add("-A");
+                args.add(dir);
             }
 
             /* Add local libraries' assets */
@@ -320,6 +331,34 @@ public class ResourceCompiler {
                     commands.add(localLibraryResDirectory);
                     commands.add("-o");
                     commands.add(outputPath + File.separator + localLibraryDirectory.getName() + ".zip");
+
+                    LogUtil.d(TAG + ":cLLR", "Now executing: " + commands);
+                    BinaryExecutor executor = new BinaryExecutor();
+                    executor.setCommands(commands);
+                    if (!executor.execute().isEmpty()) {
+                        LogUtil.e(TAG, executor.getLog());
+                        throw new zy(executor.getLog());
+                    }
+                }
+            }
+        }
+        
+        private void compileExternalLibraryResources(String outputPath) throws zy, MissingFileException {
+            int externalLibrariesCount = buildHelper.externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.RES).size();
+            LogUtil.d(TAG + ":cLLR", "About to compile " + externalLibrariesCount
+                    + " local " + (externalLibrariesCount == 1 ? "library" : "libraries"));
+            for (String externalLibraryResDirectory : buildHelper.externalLibraryHandler.get(ExternalLibraryHandler.ResourceType.RES)) {
+                File externalLibraryDirectory = new File(externalLibraryResDirectory).getParentFile();
+                if (externalLibraryDirectory != null) {
+                    compilingAssertDirectoryExists(externalLibraryResDirectory);
+
+                    ArrayList<String> commands = new ArrayList<>();
+                    commands.add(aapt2.getAbsolutePath());
+                    commands.add("compile");
+                    commands.add("--dir");
+                    commands.add(externalLibraryResDirectory);
+                    commands.add("-o");
+                    commands.add(outputPath + File.separator + externalLibraryDirectory.getName() + ".zip");
 
                     LogUtil.d(TAG + ":cLLR", "Now executing: " + commands);
                     BinaryExecutor executor = new BinaryExecutor();

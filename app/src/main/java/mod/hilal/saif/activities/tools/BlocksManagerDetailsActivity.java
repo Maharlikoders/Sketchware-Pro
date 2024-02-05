@@ -32,7 +32,7 @@ import com.github.angads25.filepicker.view.FilePickerDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,11 +42,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 
 public class BlocksManagerDetailsActivity extends AppCompatActivity {
 
-    private static final String BLOCK_EXPORT_PATH = new File(FileUtil.getExternalStorageDir(), ".sketchware/resources/block/export/").getAbsolutePath();
+    private static final String BLOCK_EXPORT_PATH = new File(FileUtil.getExternalStorageDir(), SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/resources/block/export/").getAbsolutePath();
 
     private final ArrayList<HashMap<String, Object>> filtered_list = new ArrayList<>();
     private final ArrayList<Integer> reference_list = new ArrayList<>();

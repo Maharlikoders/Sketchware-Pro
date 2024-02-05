@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.besome.sketch.SketchApplication;
 import com.besome.sketch.beans.ComponentBean;
 import com.google.gson.Gson;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +23,7 @@ import a.a.a.Lx;
 import a.a.a.xB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.util.OldResourceIdMapper;
 //responsible code :
@@ -448,7 +449,7 @@ public class ComponentsHandler {
             }
         }
 
-        return "Component";
+        return name;
     }
 
     /**
@@ -549,7 +550,7 @@ public class ComponentsHandler {
     }
 
     public static String getPath() {
-        return FileUtil.getExternalStorageDir().concat("/.sketchware/data/system/component.json");
+        return FileUtil.getExternalStorageDir().concat("/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/system/component.json");
     }
 
     /**

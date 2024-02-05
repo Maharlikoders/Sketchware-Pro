@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.besome.sketch.editor.property.PropertySwitchItem;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.mB;
 import mod.hey.studios.util.Helper;

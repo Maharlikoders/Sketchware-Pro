@@ -13,7 +13,7 @@ import com.besome.sketch.beans.ProjectFileBean;
 import com.besome.sketch.beans.ProjectLibraryBean;
 import com.besome.sketch.beans.SrcCodeBean;
 import com.besome.sketch.beans.ViewBean;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 import com.sketchware.remod.xml.XmlBuilder;
 
 import java.io.File;
@@ -25,6 +25,10 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.handler.BuiltInUtilClassHandler;
+import mod.elfilibustero.sketch.lib.handler.XmlResourceHandler;
+import mod.elfilibustero.sketch.lib.utils.ProjectConfigurationUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.build.BuildSettings;
 import mod.hey.studios.project.ProjectSettings;
 import mod.hilal.saif.blocks.CommandBlock;
@@ -160,6 +164,8 @@ public class yq {
      */
     public final ProjectSettings projectSettings;
 
+    public final ProjectConfigurationUtil projectConfigUtil;
+
     /**
      * Example content: /storage/emulated/0/.sketchware/mysc/605/app/src/main/AndroidManifest.xml
      */
@@ -226,6 +232,7 @@ public class yq {
         colorControlHighlight = yB.a(metadata, "color_control_highlight", ContextCompat.getColor(context, R.color.color_control_highlight));
         colorControlNormal = yB.a(metadata, "color_control_normal", ContextCompat.getColor(context, R.color.color_control_normal));
         projectSettings = new ProjectSettings(sc_id);
+        projectConfigUtil = new ProjectConfigurationUtil(sc_id);
 
         fileUtil = new oB(true);
         packageNameAsFolders = packageName.replaceAll("\\.", File.separator);
@@ -303,8 +310,6 @@ public class yq {
      * Generates top-level build.gradle, build.gradle for module ':app' and settings.gradle files.
      */
     public void h() {
-        fileUtil.b(projectMyscPath + File.separator + "app" + File.separator + "build.gradle",
-                Lx.getBuildGradleString(28, 21, 28, N));
         fileUtil.b(projectMyscPath + File.separator + "settings.gradle", Lx.a());
         fileUtil.b(projectMyscPath + File.separator + "build.gradle", Lx.c("3.4.2", "4.3.3"));
     }
@@ -338,7 +343,7 @@ public class yq {
         boolean logcatEnabled = N.isDebugBuild && new BuildSettings(sc_id).getValue(
                 BuildSettings.SETTING_ENABLE_LOGCAT, BuildSettings.SETTING_GENERIC_VALUE_TRUE).equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE);
 
-        String javaDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/java/";
+        String javaDir = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/java/";
         if (!new File(javaDir, "DebugActivity.java").exists()) {
             fileUtil.b(javaFilesPath + File.separator
                             + packageNameAsFolders + File.separator
@@ -415,7 +420,11 @@ public class yq {
             fileUtil.b(resDirectoryPath + File.separator + "values" + File.separator + fileName, fileContent);
         } else if (fileName.equals("provider_paths.xml")) {
             fileUtil.b(resDirectoryPath + File.separator + "xml" + File.separator + fileName, fileContent);
-        } else {
+        }else if (fileName.equals("secrets.xml")) {
+            fileUtil.b(resDirectoryPath + File.separator + "values" +  File.separator + fileName, fileContent);
+        } else if (fileName.equals("build.gradle")) {
+            fileUtil.b(projectMyscPath + File.separator + "app" + File.separator + fileName, fileContent);
+        }  else {
             fileUtil.b(layoutFilesPath + File.separator + fileName, fileContent);
         }
     }
@@ -625,20 +634,13 @@ public class yq {
      */
     public void b(hC projectFileManager, eC projectDataManger, iC projectLibraryManager, BuiltInLibraryManager builtInLibraryManager) {
         ArrayList<SrcCodeBean> srcCodeBeans = a(projectFileManager, projectDataManger, builtInLibraryManager);
-        if (N.u) {
-            XmlBuilder pathsTag = new XmlBuilder("paths");
-            pathsTag.addAttribute("xmlns", "android", "http://schemas.android.com/apk/res/android");
-            XmlBuilder externalPathTag = new XmlBuilder("external-path");
-            externalPathTag.addAttribute("", "name", "external_files");
-            externalPathTag.addAttribute("", "path", ".");
-            pathsTag.a(externalPathTag);
-            srcCodeBeans.add(new SrcCodeBean("provider_paths.xml",
-                    CommandBlock.applyCommands("xml/provider_paths.xml", pathsTag.toCode())));
-        }
-
         for (SrcCodeBean bean : srcCodeBeans) {
             a(bean.srcFileName, bean.source);
         }
+        h();
+    }
+
+    private String generateSecretXml(iC projectLibraryManager) {
         if (N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) {
             ProjectLibraryBean firebaseLibrary = projectLibraryManager.d();
             XmlBuilderHelper mx = new XmlBuilderHelper();
@@ -668,11 +670,9 @@ public class yq {
                 // if p3 is false, then "translatable="false" will be added
                 mx.addString("google_maps_key", projectLibraryManager.e().data, false);
             }
-            String filePath = "values/secrets.xml";
-            fileUtil.b(resDirectoryPath + File.separator + filePath,
-                    CommandBlock.applyCommands(filePath, mx.toCode()));
+            return mx.toCode();
         }
-        h();
+        return null;
     }
 
     /**
@@ -682,8 +682,8 @@ public class yq {
         a(SketchApplication.getContext());
         CommandBlock.x();
 
-        final String javaDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/java/";
-        final String layoutDir = FileUtil.getExternalStorageDir() + "/.sketchware/data/" + sc_id + "/files/resource/layout/";
+        final String javaDir = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/java/";
+        final String layoutDir = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/data/" + sc_id + "/files/resource/layout/";
         List<File> javaFiles;
         {
             File[] files = new File(javaDir).listFiles();
@@ -738,12 +738,14 @@ public class yq {
         ix.setYq(this);
 
         // Make generated classes viewable
-        if (!javaFiles.contains(new File(javaDir + "SketchwareUtil.java"))) {
-            srcCodeBeans.add(new SrcCodeBean("SketchwareUtil.java",
-                    Lx.i(packageName)));
+        String customUtilClassName = new ProjectSettings(sc_id).getValue(ProjectSettings.SETTING_UTIL_CLASS, "SketchwareUtil");
+        String customUtilJavaName = customUtilClassName + ".java";
+        if (BuiltInUtilClassHandler.isSketchwareUtilBlockUsed(projectFileManager, projectDataManager) && !javaFiles.contains(new File(javaDir + customUtilJavaName))) {
+            srcCodeBeans.add(new SrcCodeBean(customUtilJavaName,
+                    Lx.i(packageName, customUtilClassName)));
         }
 
-        if (!javaFiles.contains(new File(javaDir + "FileUtil.java"))) {
+        if (BuiltInUtilClassHandler.isFileUtilBlockUsed(projectFileManager, projectDataManager) && !javaFiles.contains(new File(javaDir + "FileUtil.java"))) {
             srcCodeBeans.add(new SrcCodeBean("FileUtil.java",
                     Lx.e(packageName)));
         }
@@ -777,72 +779,40 @@ public class yq {
 
         srcCodeBeans.add(new SrcCodeBean("AndroidManifest.xml",
                 CommandBlock.applyCommands("AndroidManifest.xml", ix.a())));
-        if (N.g) {
-            boolean useNewMaterialComponentsTheme = projectSettings.getValue(ProjectSettings.SETTING_ENABLE_BRIDGELESS_THEMES,
-                    BuildSettings.SETTING_GENERIC_VALUE_FALSE).equals(BuildSettings.SETTING_GENERIC_VALUE_TRUE);
 
-            XmlBuilderHelper colorsFileBuilder = new XmlBuilderHelper();
-            colorsFileBuilder.addColor("colorPrimary", String.format("#%06X", colorPrimary & 0xffffff));
-            colorsFileBuilder.addColor("colorPrimaryDark", String.format("#%06X", colorPrimaryDark & 0xffffff));
-            colorsFileBuilder.addColor("colorAccent", String.format("#%06X", colorAccent & 0xffffff));
-            colorsFileBuilder.addColor("colorControlHighlight", String.format("#%06X", colorControlHighlight & 0xffffff));
-            colorsFileBuilder.addColor("colorControlNormal", String.format("#%06X", colorControlNormal & 0xffffff));
-            srcCodeBeans.add(new SrcCodeBean("colors.xml",
-                    CommandBlock.applyCommands("colors.xml", colorsFileBuilder.toCode())));
+        XmlResourceHandler resourceHandler = new XmlResourceHandler(SketchApplication.getContext(), sc_id);
 
-            XmlBuilderHelper stylesFileBuilder = new XmlBuilderHelper();
-            stylesFileBuilder.addStyle("AppTheme", "Theme.MaterialComponents.Light.NoActionBar" + (useNewMaterialComponentsTheme ? "" : ".Bridge"));
-            stylesFileBuilder.addItemToStyle("AppTheme", "colorPrimary", "@color/colorPrimary");
-            stylesFileBuilder.addItemToStyle("AppTheme", "colorPrimaryDark", "@color/colorPrimaryDark");
-            stylesFileBuilder.addItemToStyle("AppTheme", "colorAccent", "@color/colorAccent");
-            stylesFileBuilder.addItemToStyle("AppTheme", "colorControlHighlight", "@color/colorControlHighlight");
-            stylesFileBuilder.addItemToStyle("AppTheme", "colorControlNormal", "@color/colorControlNormal");
-            stylesFileBuilder.addStyle("AppTheme.FullScreen", "AppTheme");
-            stylesFileBuilder.addItemToStyle("AppTheme.FullScreen", "android:windowFullscreen", "true");
-            stylesFileBuilder.addItemToStyle("AppTheme.FullScreen", "android:windowContentOverlay", "@null");
-            stylesFileBuilder.addStyle("AppTheme.AppBarOverlay", "ThemeOverlay.MaterialComponents.Dark.ActionBar");
-            stylesFileBuilder.addStyle("AppTheme.PopupOverlay", "ThemeOverlay.MaterialComponents.Light");
-            srcCodeBeans.add(new SrcCodeBean("styles.xml",
-                    CommandBlock.applyCommands("styles.xml", stylesFileBuilder.toCode())));
-        } else {
-            XmlBuilderHelper stylesFileBuilder = new XmlBuilderHelper();
-            stylesFileBuilder.addStyle("AppTheme", "@android:style/Theme.Material.Light.DarkActionBar");
-            stylesFileBuilder.addItemToStyle("AppTheme", "android:colorPrimary", "@color/colorPrimary");
-            stylesFileBuilder.addItemToStyle("AppTheme", "android:colorPrimaryDark", "@color/colorPrimaryDark");
-            stylesFileBuilder.addItemToStyle("AppTheme", "android:colorAccent", "@color/colorAccent");
-            stylesFileBuilder.addItemToStyle("AppTheme", "android:colorControlHighlight", "@color/colorControlHighlight");
-            stylesFileBuilder.addItemToStyle("AppTheme", "android:colorControlNormal", "@color/colorControlNormal");
-            stylesFileBuilder.addStyle("FullScreen", "@android:style/Theme.Material.Light.NoActionBar.Fullscreen");
-            stylesFileBuilder.addItemToStyle("FullScreen", "android:colorPrimary", "@color/colorPrimary");
-            stylesFileBuilder.addItemToStyle("FullScreen", "android:colorPrimaryDark", "@color/colorPrimaryDark");
-            stylesFileBuilder.addItemToStyle("FullScreen", "android:colorAccent", "@color/colorAccent");
-            stylesFileBuilder.addItemToStyle("FullScreen", "android:colorControlHighlight", "@color/colorControlHighlight");
-            stylesFileBuilder.addItemToStyle("FullScreen", "android:colorControlNormal", "@color/colorControlNormal");
-            stylesFileBuilder.addStyle("NoActionBar", "@android:style/Theme.Material.Light.NoActionBar");
-            stylesFileBuilder.addItemToStyle("NoActionBar", "android:colorPrimary", "@color/colorPrimary");
-            stylesFileBuilder.addItemToStyle("NoActionBar", "android:colorPrimaryDark", "@color/colorPrimaryDark");
-            stylesFileBuilder.addItemToStyle("NoActionBar", "android:colorAccent", "@color/colorAccent");
-            stylesFileBuilder.addItemToStyle("NoActionBar", "android:colorControlHighlight", "@color/colorControlHighlight");
-            stylesFileBuilder.addItemToStyle("NoActionBar", "android:colorControlNormal", "@color/colorControlNormal");
-            stylesFileBuilder.addStyle("NoStatusBar", "AppTheme");
-            stylesFileBuilder.addItemToStyle("NoStatusBar", "android:windowFullscreen", "true");
-            srcCodeBeans.add(new SrcCodeBean("styles.xml",
-                    CommandBlock.applyCommands("styles.xml", stylesFileBuilder.toCode())));
+        srcCodeBeans.add(new SrcCodeBean("styles.xml",
+                CommandBlock.applyCommands("styles.xml", resourceHandler.getStylesXml())));
 
-            XmlBuilderHelper colorsFileBuilder = new XmlBuilderHelper();
-            colorsFileBuilder.addColor("colorPrimary", String.format("#%06X", colorPrimary & 0xffffff));
-            colorsFileBuilder.addColor("colorPrimaryDark", String.format("#%06X", colorPrimaryDark & 0xffffff));
-            colorsFileBuilder.addColor("colorAccent", String.format("#%06X", colorAccent & 0xffffff));
-            colorsFileBuilder.addColor("colorControlHighlight", String.format("#%06X", colorControlHighlight & 0xffffff));
-            colorsFileBuilder.addColor("colorControlNormal", String.format("#%06X", colorControlNormal & 0xffffff));
-            srcCodeBeans.add(new SrcCodeBean("colors.xml",
-                    CommandBlock.applyCommands("colors.xml", colorsFileBuilder.toCode())));
+        srcCodeBeans.add(new SrcCodeBean("colors.xml",
+                CommandBlock.applyCommands("colors.xml", resourceHandler.getColorsXml())));
+
+        srcCodeBeans.add(new SrcCodeBean("strings.xml",
+                CommandBlock.applyCommands("strings.xml", resourceHandler.getStringsXml())));
+
+        String secretXmlContent = generateSecretXml(jC.c(sc_id));
+        if ((N.isFirebaseEnabled || N.isAdMobEnabled || N.isMapUsed) && secretXmlContent != null) {
+            srcCodeBeans.add(new SrcCodeBean("secrets.xml",
+                CommandBlock.applyCommands("secrets.xml", secretXmlContent)));
         }
 
-        XmlBuilderHelper stringsFileBuilder = new XmlBuilderHelper();
-        stringsFileBuilder.addNonTranslatableString("app_name", applicationName);
-        srcCodeBeans.add(new SrcCodeBean("strings.xml",
-                CommandBlock.applyCommands("strings.xml", stringsFileBuilder.toCode())));
+        if (N.u) {
+            XmlBuilder pathsTag = new XmlBuilder("paths");
+            pathsTag.addAttribute("xmlns", "android", "http://schemas.android.com/apk/res/android");
+            XmlBuilder externalPathTag = new XmlBuilder("external-path");
+            externalPathTag.addAttribute("", "name", "external_files");
+            externalPathTag.addAttribute("", "path", ".");
+            pathsTag.a(externalPathTag);
+            srcCodeBeans.add(new SrcCodeBean("provider_paths.xml",
+                    CommandBlock.applyCommands("xml/provider_paths.xml", pathsTag.toCode())));
+        }
+
+        int minSdk = Integer.parseInt(projectConfigUtil.getMinSdk());
+        int targetSdk = Integer.parseInt(projectConfigUtil.getTargetSdk());
+        srcCodeBeans.add(new SrcCodeBean("build.gradle", 
+                CommandBlock.applyCommands("build.gradle", Lx.getBuildGradleString(28, minSdk, targetSdk, N))));
+
         CommandBlock.x();
         return srcCodeBeans;
     }

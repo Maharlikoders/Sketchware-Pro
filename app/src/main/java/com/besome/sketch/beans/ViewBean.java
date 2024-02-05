@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import a.a.a.Gx;
 import a.a.a.nA;
@@ -60,6 +60,8 @@ public class ViewBean extends nA implements Parcelable {
     public static final int VIEW_TYPE_WIDGET_MAPVIEW = 18;
     public static final int VIEW_TYPE_COUNT = 19;
 
+    public static final int VIEW_TYPE_LAYOUT_CONSTRAINT = 49;
+
     @Expose
     public String adSize;
     @Expose
@@ -79,6 +81,8 @@ public class ViewBean extends nA implements Parcelable {
     public String customView;
     @Expose
     public int dividerHeight;
+    @Expose
+    public int disable_id;
     @Expose
     public int enabled;
     @Expose
@@ -133,6 +137,7 @@ public class ViewBean extends nA implements Parcelable {
     public ViewBean() {
         parent = null;
         parentType = -1;
+        disable_id = 0;
         enabled = 1;
         clickable = 1;
         spinnerMode = 1;
@@ -167,6 +172,7 @@ public class ViewBean extends nA implements Parcelable {
         parentType = parcel.readInt();
         index = parcel.readInt();
         enabled = parcel.readInt();
+        disable_id = parcel.readInt();
         clickable = parcel.readInt();
         spinnerMode = parcel.readInt();
         dividerHeight = parcel.readInt();
@@ -261,6 +267,9 @@ public class ViewBean extends nA implements Parcelable {
             case "ScrollView":
                 return VIEW_TYPE_LAYOUT_VSCROLLVIEW;
 
+            case "ConstraintLayout":
+                return VIEW_TYPE_LAYOUT_CONSTRAINT;
+
             default:
                 return ViewBeans.getViewTypeByTypeName(typeName);
         }
@@ -319,6 +328,9 @@ public class ViewBean extends nA implements Parcelable {
             case VIEW_TYPE_WIDGET_MAPVIEW:
                 return "MapView";
 
+            case VIEW_TYPE_LAYOUT_CONSTRAINT:
+                return "ConstraintLayout";
+
             default:
                 return ViewBeans.getViewTypeName(type);
         }
@@ -330,6 +342,7 @@ public class ViewBean extends nA implements Parcelable {
                 return R.drawable.widget_linear_horizontal;
 
             case VIEW_TYPE_LAYOUT_RELATIVE:
+            case VIEW_TYPE_LAYOUT_CONSTRAINT:
                 return R.drawable.widget_relative_layout;
 
             case VIEW_TYPE_LAYOUT_HSCROLLVIEW:
@@ -469,6 +482,10 @@ public class ViewBean extends nA implements Parcelable {
                 name = "MapView";
                 break;
 
+            case VIEW_TYPE_LAYOUT_CONSTRAINT:
+                name = "ConstraintLayout";
+                break;
+
             default:
                 name = ViewBeans.buildClassInfo(type);
         }
@@ -496,6 +513,7 @@ public class ViewBean extends nA implements Parcelable {
         parentType = other.parentType;
         index = other.index;
         enabled = other.enabled;
+        disable_id = other.disable_id;
         clickable = other.clickable;
         spinnerMode = other.spinnerMode;
         dividerHeight = other.dividerHeight;
@@ -549,7 +567,7 @@ public class ViewBean extends nA implements Parcelable {
 
     public boolean isEqual(ViewBean viewBean) {
         if (type != viewBean.type || parentType != viewBean.parentType || index != viewBean.index ||
-                enabled != viewBean.enabled || clickable != viewBean.clickable || alpha != viewBean.alpha ||
+                enabled != viewBean.enabled || disable_id != viewBean.disable_id || clickable != viewBean.clickable || alpha != viewBean.alpha ||
                 translationX != viewBean.translationX || translationY != viewBean.translationY ||
                 scaleX != viewBean.scaleX || scaleY != viewBean.scaleY || spinnerMode != viewBean.spinnerMode ||
                 dividerHeight != viewBean.dividerHeight || choiceMode != viewBean.choiceMode ||
@@ -601,6 +619,7 @@ public class ViewBean extends nA implements Parcelable {
         dest.writeInt(parentType);
         dest.writeInt(index);
         dest.writeInt(enabled);
+        dest.writeInt(disable_id);
         dest.writeInt(clickable);
         dest.writeInt(spinnerMode);
         dest.writeInt(dividerHeight);

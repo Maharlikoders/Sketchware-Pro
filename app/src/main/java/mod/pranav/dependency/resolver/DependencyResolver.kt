@@ -1,5 +1,6 @@
 package mod.pranav.dependency.resolver
 
+import a.a.a.wq
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -10,6 +11,8 @@ import com.android.tools.r8.OutputMode
 import com.google.gson.Gson
 import mod.agus.jcoderz.dx.command.dexer.Main
 import mod.agus.jcoderz.lib.FileUtil
+import mod.elfilibustero.sketch.beans.DependencyBean
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil
 import mod.hey.studios.util.Helper
 import mod.jbk.build.BuiltInLibraries
 import org.cosmic.ide.dependency.resolver.api.Artifact
@@ -22,18 +25,25 @@ import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.ArrayList
 import java.util.regex.Pattern
 import java.util.zip.ZipFile
 import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.io.path.readText
 import kotlin.io.path.writeText
 
-class DependencyResolver(
-    private val groupId: String,
-    private val artifactId: String,
-    private val version: String,
-    private val skipDependencies: Boolean,
-) {
+class DependencyResolver {
+
+    private val dependencyBeans = mutableListOf<DependencyBean>()
+
+    constructor(dependencies: List<DependencyBean>) {
+        dependencyBeans.addAll(dependencies)
+    }
+
+    constructor(dependency: DependencyBean) {
+        dependencyBeans.add(dependency)
+    }
+
     companion object {
         private val DEFAULT_REPOS = """
             |[
@@ -69,12 +79,13 @@ class DependencyResolver(
             """.trimMargin()
     }
 
-    private val downloadPath: String =
-        FileUtil.getExternalStorageDir() + "/.sketchware/libs/local_libs"
+    private var downloadPath: String = FileUtil.getExternalStorageDir() + "/" + SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + "/libs/local_libs"
+
+    private var skipDependencies = false
 
     private val repositoriesJson = Paths.get(
         Environment.getExternalStorageDirectory().absolutePath,
-        ".sketchware", "libs", "repositories.json"
+        SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY, "libs", "repositories.json"
     )
 
     init {
@@ -120,18 +131,28 @@ class DependencyResolver(
         return "$groupId:$artifactId:$version"
     }
 
+    fun setScId(scId: String) {
+        downloadPath = wq.getExternalLibrary(scId)
+    }
+
+    fun skipSubDependencies(skip: Boolean) {
+        skipDependencies = skip
+    }
+
     fun resolveDependency(callback: DependencyResolverCallback) {
         // this is pretty much the same as `Artifact.downloadArtifact()`, but with some modifications for checks and callbacks
         val dependencies = mutableListOf<Artifact>()
-        callback.startResolving("$groupId:$artifactId:$version")
-        val dependency = getArtifact(groupId, artifactId, version)
-        if (dependency == null) {
-            callback.onDependencyNotFound("$groupId:$artifactId:$version")
-            return
-        }
+        dependencyBeans.forEach { bean ->
+            callback.startResolving(bean.toString())
+            val dependency = getArtifact("${bean.groupId}", "${bean.artifactId}", "${bean.version}")
+            if (dependency == null) {
+                callback.onDependencyNotFound(bean.toString())
+                return
+            }
 
-        callback.onDependencyResolved(dependency.toStr())
-        resolve(dependency, dependencies, callback)
+            callback.onDependencyResolved(dependency.toStr())
+            resolve(dependency, dependencies, callback)
+        }
 
         // basically, remove all the duplicates and keeps the latest among them
         val latestDeps =
@@ -170,24 +191,26 @@ class DependencyResolver(
             if (Files.exists(path)) {
                 callback.log("Dependency ${artifact.toStr()} already exists, skipping...")
             }
-            Files.createDirectories(path.parent)
-            callback.downloading(artifact.toStr())
-            try {
-                artifact.downloadTo(path.toFile())
-                if (path.toFile().exists().not()) {
-                    latestDeps.remove(artifact)
-                    callback.onDependencyResolveFailed(Exception("Cannot download ${artifact.toStr()}"))
-                    return@forEach
-                }
-                dependencyClasspath.add(
-                    Paths.get(
-                        downloadPath,
-                        "${artifact.artifactId}-v${artifact.version}",
-                        "classes.jar"
+            if (Files.exists(Paths.get(downloadPath, "${artifact.artifactId}-v${artifact.version}", "classes.jar")).not()) {
+                Files.createDirectories(path.parent)
+                callback.downloading(artifact.toStr())
+                try {
+                    artifact.downloadTo(path.toFile())
+                    if (path.toFile().exists().not()) {
+                        latestDeps.remove(artifact)
+                        callback.onDependencyResolveFailed(Exception("Cannot download ${artifact.toStr()}"))
+                        return@forEach
+                    }
+                    dependencyClasspath.add(
+                        Paths.get(
+                            downloadPath,
+                            "${artifact.artifactId}-v${artifact.version}",
+                            "classes.jar"
+                        )
                     )
-                )
-            } catch (e: Exception) {
-                callback.onDependencyResolveFailed(e)
+                } catch (e: Exception) {
+                    callback.onDependencyResolveFailed(e)
+                }
             }
             if (path.toFile().exists().not()) {
                 callback.log("Cannot download ${artifact.toStr()}")
@@ -196,10 +219,10 @@ class DependencyResolver(
                 callback.log("Unzipping ${artifact.toStr()}")
                 unzip(path)
                 Files.delete(path)
-                val packageName =
-                    findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
-                path.parent.resolve("config").writeText(packageName)
             }
+            val packageName = findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
+            path.parent.resolve("config").writeText(packageName)
+            path.parent.resolve("dependencies").writeText(artifact.toStr())
         }
         println(dependencyClasspath)
         latestDeps.forEach { artifact ->
@@ -239,7 +262,7 @@ class DependencyResolver(
                 callback.log("Cannot resolve sub-dependencies for ${artifact.toStr()}")
                 return
             }
-            val deps = pom.resolvePOM(dependencies, callback)
+            val deps = pom.resolvePOM(artifact, dependencies, callback)
             deps.forEach { dep ->
                 callback.log("Resolving ${dep.groupId}:${dep.artifactId}")
                 if (dep.version.isEmpty()) {
@@ -259,12 +282,13 @@ class DependencyResolver(
                     callback.log("Cannot resolve ${artifact.toStr()}")
                     return
                 }
-                resolve(dep, dependencies, callback)
+                dependencies.add(dep)
             }
         }
     }
 
     private fun InputStream.resolvePOM(
+        artifactParent: Artifact,
         deps: List<Artifact>,
         callback: DependencyResolverCallback
     ): List<Artifact> {
@@ -341,7 +365,7 @@ class DependencyResolver(
                 artifact.version = version
             }
 
-            if (deps.any { it.groupId == groupId && it.artifactId == artifactId && it.version >= version }) {
+            if (deps.any { it.groupId == groupId && it.artifactId == artifactId && it.version >= artifactParent.version }) {
                 println("Dependency ${artifact.toStr()} already resolved, skipping...")
                 continue
             }

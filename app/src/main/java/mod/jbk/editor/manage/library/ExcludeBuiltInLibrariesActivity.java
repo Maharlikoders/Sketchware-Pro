@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -47,6 +47,7 @@ import a.a.a.MA;
 import a.a.a.aB;
 import mod.SketchwareUtil;
 import mod.agus.jcoderz.lib.FileUtil;
+import mod.elfilibustero.sketch.lib.utils.SketchFileUtil;
 import mod.hey.studios.util.Helper;
 import mod.jbk.build.BuiltInLibraries;
 import mod.jbk.util.LogUtil;
@@ -188,7 +189,7 @@ public class ExcludeBuiltInLibrariesActivity extends BaseAppCompatActivity imple
 
     private static File getConfigPath(String sc_id) {
         return new File(Environment.getExternalStorageDirectory(),
-                ".sketchware" + File.separator + "data" + File.separator + sc_id + File.separator + "excluded_library");
+                SketchFileUtil.SKETCHWARE_WORKSPACE_DIRECTORY + File.separator + "data" + File.separator + sc_id + File.separator + "excluded_library");
     }
 
     private static void saveConfig(String sc_id, boolean isExcludingEnabled, List<BuiltInLibraries.BuiltInLibrary> excludedLibraries) {

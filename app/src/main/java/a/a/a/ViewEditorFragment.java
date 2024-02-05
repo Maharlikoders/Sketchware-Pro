@@ -24,7 +24,7 @@ import com.besome.sketch.editor.view.DraggingListener;
 import com.besome.sketch.editor.view.ViewEditor;
 import com.besome.sketch.editor.view.ViewProperty;
 import com.besome.sketch.editor.view.palette.PaletteWidget;
-import com.sketchware.remod.R;
+import com.sketchware.pro.R;
 
 import java.util.ArrayList;
 
@@ -221,6 +221,7 @@ public class ViewEditorFragment extends qA {
         viewEditor.extraWidgetLayout("", "RadioGroup");
 
         viewEditor.paletteWidget.extraTitle("AndroidX", 0);
+        //viewEditor.extraWidgetLayout("", "ConstraintLayout");
         viewEditor.extraWidgetLayout("", "TabLayout");
         viewEditor.extraWidgetLayout("", "BottomNavigationView");
         viewEditor.extraWidgetLayout("", "CollapsingToolbarLayout");
@@ -234,7 +235,6 @@ public class ViewEditorFragment extends qA {
         viewEditor.addWidget(PaletteWidget.b.a, "", "Button", "Button");
         viewEditor.extraWidget("", "MaterialButton", "MaterialButton");
         viewEditor.addWidget(PaletteWidget.b.d, "", "ImageView", "default_image");
-        viewEditor.extraWidget("", "CircleImageView", "default_image");
         viewEditor.addWidget(PaletteWidget.b.g, "", "CheckBox", "CheckBox");
         viewEditor.extraWidget("", "RadioButton", "RadioButton");
         viewEditor.addWidget(PaletteWidget.b.i, "", "Switch", "Switch");
@@ -253,18 +253,19 @@ public class ViewEditorFragment extends qA {
         viewEditor.extraWidget("", "ViewPager", "ViewPager");
 
         viewEditor.paletteWidget.extraTitle("Library", 1);
-        viewEditor.extraWidget("", "WaveSideBar", "WaveSideBar");
-        viewEditor.extraWidget("", "PatternLockView", "PatternLockView");
-        viewEditor.extraWidget("", "CodeView", "CodeView");
+        viewEditor.extraWidget("", "CircleImageView", "default_image");
+        //viewEditor.extraWidget("", "WaveSideBar", "WaveSideBar");
+        //viewEditor.extraWidget("", "PatternLockView", "PatternLockView");
+        //viewEditor.extraWidget("", "CodeView", "CodeView");
         viewEditor.extraWidget("", "LottieAnimation", "LottieAnimation");
-        viewEditor.extraWidget("", "OTPView", "OTPView");
+        //viewEditor.extraWidget("", "OTPView", "OTPView");
+        viewEditor.extraWidget("", "YoutubePlayer", "YoutubePlayer");
 
         viewEditor.paletteWidget.extraTitle("Google", 1);
         viewEditor.addWidget(PaletteWidget.b.l, "", "AdView", "AdView");
         viewEditor.addWidget(PaletteWidget.b.n, "", "MapView", "MapView");
         viewEditor.extraWidget("", "SignInButton", "SignInButton");
-        viewEditor.extraWidget("", "YoutubePlayer", "YoutubePlayer");
-
+        
         viewEditor.paletteWidget.extraTitle("Date & Time", 1);
         viewEditor.extraWidget("", "AnalogClock", "AnalogClock");
         viewEditor.extraWidget("", "DigitalClock", "DigitalClock");
