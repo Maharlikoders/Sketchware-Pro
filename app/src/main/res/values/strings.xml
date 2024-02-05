@@ -908,6 +908,7 @@
     <string name="common_error_failed_to_save">Failed to save</string>
     <string name="common_error_unknown">Unknown error! Please contact the administrator</string>
     <string name="common_google_play_services_unknown_issue">%1$s is having trouble with Google Play services. Please try again.</string>
+    <string name="common_message_cannot_contain_periods">Cannot contains period</string>
     <string name="common_message_check_network">Please check your internet connection</string>
     <string name="common_message_complete_delete">Delete complete</string>
     <string name="common_message_complete_reset">Reset complete</string>
@@ -1370,6 +1371,7 @@ Do you want to continue?"</string>
     <string name="ga_trackingId">UA-80718117-1</string>
     <string name="ideas_url">https://ideas.sketchware.io/</string>
     <string name="invalid_component">Invalid component</string>
+    <string name="invalid_generated_source">Invalid generated source</string>
     <string name="invalid_icon_id">Invalid icon ID</string>
     <string name="invalid_name_cannot_be_empty">Name can\'t be empty</string>
     <string name="invalid_required_fields">Some required fields are empty</string>

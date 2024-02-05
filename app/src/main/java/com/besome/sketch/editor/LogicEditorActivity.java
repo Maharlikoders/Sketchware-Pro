@@ -127,6 +127,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
     private final int[] v = new int[2];
     public ProjectFileBean M;
     public PaletteBlock m;
+    public PaletteSelector paletteSelector;
     public BlockPane o;
     public String B = "";
     public String C = "";
