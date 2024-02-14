@@ -12,7 +12,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.besome.sketch.lib.base.BaseAppCompatActivity;
-import com.besome.sketch.lib.ui.MiddleLineHeader;
 import com.sketchware.pro.R;
 
 import a.a.a.mB;
@@ -65,17 +64,6 @@ public class ManageProjectSettingActivity extends AppCompatActivity implements K
         addPreferenceInput("target_sdk", util.getTargetSdk());
         addPreferenceInput("dexer", util.getDexer());
         addPreferenceInput("java_ver", util.getJavaVersion());
-        MiddleLineHeader projectHeader = new MiddleLineHeader(this);
-        projectHeader.b.setText("More Settings");
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.leftMargin = (int) wB.a(this, 8f);
-        layoutParams.topMargin = (int) wB.a(this, 4f);
-        layoutParams.bottomMargin = (int) wB.a(this, 4f);
-        layoutParams.rightMargin = (int) wB.a(this, 0f);
-        projectHeader.setLayoutParams(layoutParams);
-        contentLayout.addView(projectHeader);
         addPreferenceInput("app_class", util.getApplicationClass());
         addPreferenceInput("util_class", util.getUtilClass());
         addPreferenceInput("disable_old_methods", util.getOldMethods());
