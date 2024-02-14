@@ -211,18 +211,18 @@ class DependencyResolver {
                 } catch (e: Exception) {
                     callback.onDependencyResolveFailed(e)
                 }
+                if (path.toFile().exists().not()) {
+                    callback.log("Cannot download ${artifact.toStr()}")
+                }
+                if (ext == "aar") {
+                    callback.log("Unzipping ${artifact.toStr()}")
+                    unzip(path)
+                    Files.delete(path)
+                }
+                val packageName = findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
+                path.parent.resolve("config").writeText(packageName)
+                path.parent.resolve("dependencies").writeText(artifact.toStr())
             }
-            if (path.toFile().exists().not()) {
-                callback.log("Cannot download ${artifact.toStr()}")
-            }
-            if (ext == "aar") {
-                callback.log("Unzipping ${artifact.toStr()}")
-                unzip(path)
-                Files.delete(path)
-            }
-            val packageName = findPackageName(path.parent.toAbsolutePath().toString(), artifact.groupId)
-            path.parent.resolve("config").writeText(packageName)
-            path.parent.resolve("dependencies").writeText(artifact.toStr())
         }
         println(dependencyClasspath)
         latestDeps.forEach { artifact ->
@@ -232,7 +232,16 @@ class DependencyResolver {
                     "${artifact.artifactId}-v${artifact.version}",
                     "classes.jar"
                 )
+            val dex =
+                Paths.get(
+                    downloadPath,
+                    "${artifact.artifactId}-v${artifact.version}",
+                    "classes.dex"
+                )
             if (Files.notExists(jar)) {
+                return@forEach
+            }
+            if (Files.exists(dex)) {
                 return@forEach
             }
             callback.dexing(artifact.toStr())
