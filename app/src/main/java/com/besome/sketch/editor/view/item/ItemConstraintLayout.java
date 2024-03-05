@@ -53,8 +53,8 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
 
     private void initialize(Context context) {
         setDrawingCacheEnabled(true);
-        setMinimumWidth((int) wB.a(context, 32.0F));
-        setMinimumHeight((int) wB.a(context, 32.0F));
+        setMinWidth((int) wB.a(context, 32.0F));
+        setMinHeight((int) wB.a(context, 32.0F));
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(wB.a(getContext(), 2.0F));
         rect = new Rect();
@@ -63,20 +63,28 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
     @Override
     public void addView(View child, int index) {
         int childCount = getChildCount();
-
         if (index > childCount) {
             super.addView(child);
         } else {
-            int firstGoneIndex = -1;
+            byte var4 = -1;
+            int var5 = 0;
 
-            for (int i = 0; i < childCount; i++) {
-                if (getChildAt(i).getVisibility() == View.GONE) {
-                    firstGoneIndex = i;
+            int var6;
+            while (true) {
+                var6 = var4;
+                if (var5 >= childCount) {
                     break;
                 }
+
+                if (getChildAt(var5).getVisibility() == View.GONE) {
+                    var6 = var5;
+                    break;
+                }
+
+                ++var5;
             }
 
-            if (firstGoneIndex >= 0 && index >= firstGoneIndex) {
+            if (var6 >= 0 && index >= var6) {
                 super.addView(child, index + 1);
             } else {
                 super.addView(child, index);
