@@ -748,15 +748,13 @@ public class ViewPane extends RelativeLayout {
     }
 
     private void findConstraintsTargetFor(ViewBean bean, ItemConstraintLayout constraintLayout) {
+        int[] viewLocationOnScreen = new int[2];
+        constraintLayout.getLocationOnScreen(viewLocationOnScreen);
+        int xCoordinate = viewLocationOnScreen[0];
+        int yCoordinate = viewLocationOnScreen[1];
+        a(new Rect(xCoordinate, yCoordinate, ((int) (constraintLayout.getWidth() * getScaleX())) + xCoordinate, ((int) (constraintLayout.getHeight() * getScaleY())) + yCoordinate), constraintLayout, -1, b(constraintLayout));
         int totalViews = constraintLayout.getChildCount();
         int index = 0;
-        ConstraintLayout constraint = new ConstraintLayout(getContext());
-        constraint.setLayoutParams(new ViewGroup.LayoutParams(bean.layout.width, bean.layout.height));
-
-        ViewGroup parent = (ViewGroup) constraintLayout.getParent();
-        int constraintIndex = parent.indexOfChild(constraintLayout);
-        parent.removeView(constraintLayout);
-        parent.addView(constraint, constraintIndex);
 
         for (int i = 0; i < totalViews; i++) {
             View child = constraintLayout.getChildAt(i);
@@ -767,27 +765,20 @@ public class ViewPane extends RelativeLayout {
                 index++;
                 if (child instanceof sy editorItem) {
                     ViewBean childBean = editorItem.getBean();
-                    updateConstraintLayout(constraint, constraintLayout, child, childBean);
-                    if (child instanceof ItemLinearLayout) {
-                        a(childBean, (ItemLinearLayout) child);
-                    } else if (child instanceof ItemHorizontalScrollView) {
-                        a(childBean, (ViewGroup) child);
-                    } else if (child instanceof ItemVerticalScrollView) {
-                        a(childBean, (ViewGroup) child);
-                    } else if (child instanceof ItemCardView) {
-                        a(childBean, (ViewGroup) child);
-                    } else if (child instanceof ItemConstraintLayout) {
-                        findConstraintsTargetFor(childBean, (ItemConstraintLayout) child);
-                    }
+                    updateConstraintLayout(constraintLayout, child, childBean);
+                }
+                if (child instanceof ItemLinearLayout) {
+                    a(childBean, (ItemLinearLayout) child);
+                } else if (child instanceof ItemHorizontalScrollView) {
+                    a(childBean, (ViewGroup) child);
+                } else if (child instanceof ItemVerticalScrollView) {
+                    a(childBean, (ViewGroup) child);
+                } else if (child instanceof ItemCardView) {
+                    a(childBean, (ViewGroup) child);
+                } else if (child instanceof ItemConstraintLayout) {
+                    findConstraintsTargetFor(childBean, (ItemConstraintLayout) child);
                 }
             }
-        }
-        if (index < 1) {
-            int[] viewLocationOnScreen = new int[2];
-            constraintLayout.getLocationOnScreen(viewLocationOnScreen);
-            int xCoordinate = viewLocationOnScreen[0];
-            int yCoordinate = viewLocationOnScreen[1];
-            a(new Rect(xCoordinate, yCoordinate, ((int) (constraintLayout.getWidth() * getScaleX())) + xCoordinate, ((int) (constraintLayout.getHeight() * getScaleY())) + yCoordinate), constraintLayout, -1, b(constraintLayout));
         }
     }
 
@@ -1009,7 +1000,7 @@ public class ViewPane extends RelativeLayout {
         imageView.setBorderWidth(borderWidthValue);
     }
 
-    private void updateConstraintLayout(ConstraintLayout constraint, ItemConstraintLayout constraintItem, View view, ViewBean viewBean) {
+    private void updateConstraintLayout(ItemConstraintLayout constraintItem, View view, ViewBean viewBean) {
         //ArrayList<ViewBean> list = jC.a(sc_id).b(projectFileBean.getXmlName(), viewBean);
         int defaultParent = ConstraintLayout.LayoutParams.PARENT_ID;
         InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
@@ -1056,10 +1047,10 @@ public class ViewPane extends RelativeLayout {
     }
 
     private String getIdFromString(String id, String defaultId) {
-        if (id.isEmpty() || !id.startsWith("@+id/")) {
+        if (id.isEmpty() || !id.startsWith("@+id/") || !id.startsWith("@id/")) {
             return defaultId;
         }
-        return id.replaceFirst("@+id/", "");
+        return id.replace("@+id/", "").replace("@id/", "");
     }
 
     private int getColorFromString(String color, String defaultColor) {
