@@ -753,27 +753,21 @@ public class ViewPane extends RelativeLayout {
         int xCoordinate = viewLocationOnScreen[0];
         int yCoordinate = viewLocationOnScreen[1];
         a(new Rect(xCoordinate, yCoordinate, ((int) (constraintLayout.getWidth() * getScaleX())) + xCoordinate, ((int) (constraintLayout.getHeight() * getScaleY())) + yCoordinate), constraintLayout, -1, b(constraintLayout));
-        int totalViews = constraintLayout.getChildCount();
-        int index = 0;
-
-        for (int i = 0; i < totalViews; i++) {
+        for (int i = 0; i < constraintLayout.getChildCount(); i++) {
             View child = constraintLayout.getChildAt(i);
             if (child != null && child.getTag() != null &&
                 (bean == null || bean.id == null || !child.getTag().equals(bean.id)) &&
                 child.getVisibility() == View.VISIBLE) {
-                if (child instanceof sy editorItem) {
-                    ViewBean childBean = editorItem.getBean();
-                    if (child instanceof ItemLinearLayout) {
-                        a(childBean, (ItemLinearLayout) child);
-                    } else if (child instanceof ItemHorizontalScrollView) {
-                        a(childBean, (ViewGroup) child);
-                    } else if (child instanceof ItemVerticalScrollView) {
-                        a(childBean, (ViewGroup) child);
-                    } else if (child instanceof ItemCardView) {
-                        a(childBean, (ViewGroup) child);
-                    } else if (child instanceof ItemConstraintLayout) {
-                        findConstraintsTargetFor(childBean, (ItemConstraintLayout) child);
-                    }
+                if (child instanceof ItemLinearLayout) {
+                    a(bean, (ItemLinearLayout) child);
+                } else if (child instanceof ItemHorizontalScrollView) {
+                    a(bean, (ViewGroup) child);
+                } else if (child instanceof ItemVerticalScrollView) {
+                    a(bean, (ViewGroup) child);
+                } else if (child instanceof ItemCardView) {
+                    a(bean, (ViewGroup) child);
+                } else if (child instanceof ItemConstraintLayout) {
+                    findConstraintsTargetFor(bean, (ItemConstraintLayout) child);
                 }
             }
         }
@@ -1000,12 +994,12 @@ public class ViewPane extends RelativeLayout {
     private void updateConstraintLayout(View view, ViewBean viewBean) {
         //ArrayList<ViewBean> list = jC.a(sc_id).b(projectFileBean.getXmlName(), viewBean);
         if (view.getParent() instanceof ItemConstraintLayout constraintItem) {
-        int defaultParent = ConstraintLayout.LayoutParams.PARENT_ID;
-        InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
-        String leftToLeft = handler.getAttributeValueOf("layout_constraintLeft_toLeftOf");
-        String leftToRight = handler.getAttributeValueOf("layout_constraintLeft_toRightOf");
-        String rightToRight = handler.getAttributeValueOf("layout_constraintRight_toRightOf");
-        String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
+            int defaultParent = ConstraintLayout.LayoutParams.PARENT_ID;
+            InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
+            String leftToLeft = handler.getAttributeValueOf("layout_constraintLeft_toLeftOf");
+            String leftToRight = handler.getAttributeValueOf("layout_constraintLeft_toRightOf");
+            String rightToRight = handler.getAttributeValueOf("layout_constraintRight_toRightOf");
+            String rightToLeft = handler.getAttributeValueOf("layout_constraintRight_toLeftOf");
             if (!leftToLeft.isEmpty()) {
                 int value = defaultParent;
                 if (!leftToLeft.equals("parent")) {
