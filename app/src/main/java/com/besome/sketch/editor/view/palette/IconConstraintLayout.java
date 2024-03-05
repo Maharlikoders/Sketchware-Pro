@@ -20,7 +20,7 @@ public class IconConstraintLayout extends IconBase {
         viewBean.type = ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT;
         viewBean.layout.orientation = VERTICAL;
         viewBean.layout.width = ViewGroup.LayoutParams.MATCH_PARENT;
-        viewBean.layout.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        viewBean.layout.height = ViewGroup.LayoutParams.WRAP_CONTENT;
         viewBean.layout.paddingLeft = 8;
         viewBean.layout.paddingTop = 8;
         viewBean.layout.paddingRight = 8;
