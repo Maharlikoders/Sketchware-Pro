@@ -158,62 +158,62 @@ public class ItemConstraintLayout extends LinearLayout implements sy, ty {
         invalidate();
     }
 
-    private void setConstraint(ConstraintLayout layout, View target, int value, int startSide, int endSide) {
+    private void setConstraint(View target, int value, int startSide, int endSide) {
         ConstraintSet set = new ConstraintSet();
-        set.clone(layout);
+        set.clone(this);
         set.connect(target.getId(), startSide, value, endSide);
         set.applyTo(layout);
     }
 
-    public void setLeftToLeft(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, LEFT, LEFT);
+    public void setLeftToLeft(View target, int value) {
+        setConstraint(target, value, LEFT, LEFT);
     }
 
-    public void setRightToRight(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, RIGHT, RIGHT);
+    public void setRightToRight(View target, int value) {
+        setConstraint(target, value, RIGHT, RIGHT);
     }
 
-    public void setLeftToRight(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, LEFT, RIGHT);
+    public void setLeftToRight(View target, int value) {
+        setConstraint(target, value, LEFT, RIGHT);
     }
 
-    public void setRightToLeft(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, RIGHT, LEFT);
+    public void setRightToLeft(View target, int value) {
+        setConstraint(target, value, RIGHT, LEFT);
     }
 
-    public void setTopToTop(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, TOP, TOP);
+    public void setTopToTop(View target, int value) {
+        setConstraint(target, value, TOP, TOP);
     }
 
-    public void setBottomToBottom(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, BOTTOM, BOTTOM);
+    public void setBottomToBottom(View target, int value) {
+        setConstraint(target, value, BOTTOM, BOTTOM);
     }
 
-    public void setTopToBottom(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, TOP, BOTTOM);
+    public void setTopToBottom(View target, int value) {
+        setConstraint(target, value, TOP, BOTTOM);
     }
 
-    public void setBottomToTop(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, BOTTOM, TOP);
+    public void setBottomToTop(View target, int value) {
+        setConstraint(target, value, BOTTOM, TOP);
     }
 
-    public void setBaselineToBaseline(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, BASELINE, BASELINE);
+    public void setBaselineToBaseline(View target, int value) {
+        setConstraint(target, value, BASELINE, BASELINE);
     }
 
-    public void setStartToStart(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, START, START);
+    public void setStartToStart(View target, int value) {
+        setConstraint(target, value, START, START);
     }
 
-    public void setEndToEnd(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, END, END);
+    public void setEndToEnd(View target, int value) {
+        setConstraint(target, value, END, END);
     }
 
-    public void setStartToEnd(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, START, END);
+    public void setStartToEnd(View target, int value) {
+        setConstraint(target, value, START, END);
     }
 
-    public void setEndToStart(ConstraintLayout layout, View target, int value) {
-        setConstraint(layout, target, value, END, START);
+    public void setEndToStart(View target, int value) {
+        setConstraint(target, value, END, START);
     }
 }

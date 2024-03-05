@@ -394,7 +394,7 @@ public class ViewPane extends RelativeLayout {
         }
         Gx classInfo = viewBean.getClassInfo();
         updateLayout(classInfo, view, viewBean);
-        //updateConstraintLayout(view, viewBean);
+        updateConstraintLayout(view, viewBean);
 
         if (classInfo.a("LinearLayout")) {
             LinearLayout linearLayout = (LinearLayout) view;
@@ -761,12 +761,9 @@ public class ViewPane extends RelativeLayout {
             if (child != null && child.getTag() != null &&
                 (bean == null || bean.id == null || !child.getTag().equals(bean.id)) &&
                 child.getVisibility() == View.VISIBLE) {
-                constraint.addView(child);
-                index++;
                 if (child instanceof sy editorItem) {
                     ViewBean childBean = editorItem.getBean();
                     updateConstraintLayout(constraintLayout, child, childBean);
-                }
                 if (child instanceof ItemLinearLayout) {
                     a(childBean, (ItemLinearLayout) child);
                 } else if (child instanceof ItemHorizontalScrollView) {
@@ -777,6 +774,7 @@ public class ViewPane extends RelativeLayout {
                     a(childBean, (ViewGroup) child);
                 } else if (child instanceof ItemConstraintLayout) {
                     findConstraintsTargetFor(childBean, (ItemConstraintLayout) child);
+                }
                 }
             }
         }
@@ -1000,8 +998,9 @@ public class ViewPane extends RelativeLayout {
         imageView.setBorderWidth(borderWidthValue);
     }
 
-    private void updateConstraintLayout(ItemConstraintLayout constraintItem, View view, ViewBean viewBean) {
+    private void updateConstraintLayout(View view, ViewBean viewBean) {
         //ArrayList<ViewBean> list = jC.a(sc_id).b(projectFileBean.getXmlName(), viewBean);
+        if (view.getParent() instanceof ItemConstraintLayout constraintItem) {
         int defaultParent = ConstraintLayout.LayoutParams.PARENT_ID;
         InjectAttributeHandler handler = new InjectAttributeHandler(viewBean);
         String leftToLeft = handler.getAttributeValueOf("layout_constraintLeft_toLeftOf");
@@ -1013,29 +1012,30 @@ public class ViewPane extends RelativeLayout {
                 if (!leftToLeft.equals("parent")) {
                     value = getViewId(getIdFromString(leftToLeft, "parent"));
                 }
-                constraintItem.setLeftToLeft(constraint, view, value);
+                constraintItem.setLeftToLeft(view, value);
             }
             if (!leftToRight.isEmpty()) {
                 int value = defaultParent;
                 if (!leftToRight.equals("parent")) {
                     value = getViewId(getIdFromString(leftToRight, "parent"));
                 }
-                constraintItem.setLeftToRight(constraint, view, value);
+                constraintItem.setLeftToRight(view, value);
             }
             if (!rightToRight.isEmpty()) {
                 int value = defaultParent;
                 if (!rightToRight.equals("parent")) {
                     value = getViewId(getIdFromString(rightToRight, "parent"));
                 }
-                constraintItem.setRightToRight(constraint, view, value);
+                constraintItem.setRightToRight(view, value);
             }
             if (!rightToLeft.isEmpty()) {
                 int value = defaultParent;
                 if (!rightToLeft.equals("parent")) {
                     value = getViewId(getIdFromString(rightToLeft, "parent"));
                 }
-                constraintItem.setRightToLeft(constraint, view, value);
+                constraintItem.setRightToLeft(view, value);
             }
+        }
     }
 
     private int getViewId(String targetTag) {
