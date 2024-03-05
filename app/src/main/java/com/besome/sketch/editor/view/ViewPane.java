@@ -763,18 +763,17 @@ public class ViewPane extends RelativeLayout {
                 child.getVisibility() == View.VISIBLE) {
                 if (child instanceof sy editorItem) {
                     ViewBean childBean = editorItem.getBean();
-                    updateConstraintLayout(constraintLayout, child, childBean);
-                if (child instanceof ItemLinearLayout) {
-                    a(childBean, (ItemLinearLayout) child);
-                } else if (child instanceof ItemHorizontalScrollView) {
-                    a(childBean, (ViewGroup) child);
-                } else if (child instanceof ItemVerticalScrollView) {
-                    a(childBean, (ViewGroup) child);
-                } else if (child instanceof ItemCardView) {
-                    a(childBean, (ViewGroup) child);
-                } else if (child instanceof ItemConstraintLayout) {
-                    findConstraintsTargetFor(childBean, (ItemConstraintLayout) child);
-                }
+                    if (child instanceof ItemLinearLayout) {
+                        a(childBean, (ItemLinearLayout) child);
+                    } else if (child instanceof ItemHorizontalScrollView) {
+                        a(childBean, (ViewGroup) child);
+                    } else if (child instanceof ItemVerticalScrollView) {
+                        a(childBean, (ViewGroup) child);
+                    } else if (child instanceof ItemCardView) {
+                        a(childBean, (ViewGroup) child);
+                    } else if (child instanceof ItemConstraintLayout) {
+                        findConstraintsTargetFor(childBean, (ItemConstraintLayout) child);
+                    }
                 }
             }
         }
