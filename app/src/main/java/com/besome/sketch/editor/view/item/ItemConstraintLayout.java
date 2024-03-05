@@ -15,7 +15,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.besome.sketch.beans.ViewBean;
 
-public class ItemConstraintLayout extends LinearLayout implements sy, ty {
+public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
 
     private ViewBean viewBean = null;
     private boolean isSelected = false;
@@ -162,7 +162,7 @@ public class ItemConstraintLayout extends LinearLayout implements sy, ty {
         ConstraintSet set = new ConstraintSet();
         set.clone(this);
         set.connect(target.getId(), startSide, value, endSide);
-        set.applyTo(layout);
+        set.applyTo(this);
     }
 
     public void setLeftToLeft(View target, int value) {
