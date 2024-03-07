@@ -71,6 +71,7 @@ public class ViewBeans {
             .put(VIEW_TYPE_WIDGET_OTPVIEW, "OTPView")
             .put(VIEW_TYPE_WIDGET_CODEVIEW, "CodeView")
             .put(VIEW_TYPE_WIDGET_RECYCLERVIEW, "RecyclerView")
+            .put(ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT, "ConstraintLayout")
             .build();
 
     public static String buildClassInfo(int id) {
