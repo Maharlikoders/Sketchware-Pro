@@ -394,7 +394,6 @@ public class ViewPane extends RelativeLayout {
         }
         Gx classInfo = viewBean.getClassInfo();
         updateLayout(view, viewBean);
-        updateMargin(view, viewBean);
         updateConstraintLayout(view, viewBean);
 
         if (classInfo.a("LinearLayout")) {
@@ -825,46 +824,6 @@ public class ViewPane extends RelativeLayout {
         }
     }
 
-    private void updateMargin(View view, ViewBean viewBean) {
-        int left = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
-        int top = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
-        int right = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
-        int bottom = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        if (params != null) {
-            params.setMargins(left, top, right,bottom);
-            view.setLayoutParams(params);
-        } else if (viewBean.id.equals("root")) {
-            var layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
-            layoutParams.leftMargin = left;
-            layoutParams.topMargin = top;
-            layoutParams.rightMargin = right;
-            layoutParams.bottomMargin = bottom;
-            view.setLayoutParams(layoutParams);
-        } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
-            var layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
-            layoutParams.leftMargin = left;
-            layoutParams.topMargin = top;
-            layoutParams.rightMargin = right;
-            layoutParams.bottomMargin = bottom;
-            view.setLayoutParams(layoutParams);
-        } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT) {
-            var layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-            layoutParams.leftMargin = left;
-            layoutParams.topMargin = top;
-            layoutParams.rightMargin = right;
-            layoutParams.bottomMargin = bottom;
-            view.setLayoutParams(layoutParams);
-        } else {
-            var layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
-            layoutParams.leftMargin = left;
-            layoutParams.topMargin = top;
-            layoutParams.rightMargin = right;
-            layoutParams.bottomMargin = bottom;
-            view.setLayoutParams(layoutParams);
-        }
-    }
-
     private void updateLayout(View view, ViewBean viewBean) {
         LayoutBean layoutBean = viewBean.layout;
         int width = layoutBean.width;
@@ -881,22 +840,32 @@ public class ViewPane extends RelativeLayout {
             params.width = width;
             params.height = height;
         } else {
-            if (params instanceof LinearLayout.LayoutParams) {
+            if (view.getParent() instanceof LinearLayout) {
                 params = new LinearLayout.LayoutParams(width, height);
-            } else if (params instanceof ConstraintLayout.LayoutParams) {
+            } else if (view.getParent() instanceof ConstraintLayout) {
                 params = new ConstraintLayout.LayoutParams(width, height);
             } else {
                 params = new FrameLayout.LayoutParams(width, height);
             }
         }
+        int left = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
+        int top = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
+        int right = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
+        int bottom = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
+
+        params.leftMargin = left;
+        params.topMargin = top;
+        params.rightMargin = right;
+        params.bottomMargin = bottom;
         
         if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
-            var param = (LinearLayout.LayoutParams) params;
-            int layoutGravity = viewBean.layout.layoutGravity;
-            if (layoutGravity != 0) {
-                param.gravity = layoutGravity;
+            if (params instanceof LinearLayout.LayoutParams param) {
+                int layoutGravity = viewBean.layout.layoutGravity;
+                if (layoutGravity != 0) {
+                    param.gravity = layoutGravity;
+                }
+                param.weight = viewBean.layout.weight;
             }
-            param.weight = viewBean.layout.weight;
         }
         view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
         view.setLayoutParams(params);
