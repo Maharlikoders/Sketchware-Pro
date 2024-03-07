@@ -393,7 +393,8 @@ public class ViewPane extends RelativeLayout {
             }
         }
         Gx classInfo = viewBean.getClassInfo();
-        updateLayout(classInfo, view, viewBean);
+        updateLayout(view, viewBean);
+        updateMargin(view, viewBean);
         updateConstraintLayout(view, viewBean);
 
         if (classInfo.a("LinearLayout")) {
@@ -441,6 +442,15 @@ public class ViewPane extends RelativeLayout {
                 ((ImageView) view).setScaleType(ImageView.ScaleType.valueOf(viewBean.image.scaleType));
             }
         }
+
+        if (classInfo.b("MaterialButton")) {
+            ItemMaterialButton button = (ItemMaterialButton) view;
+            button.setMainColor(ProjectFile.getColor(sc_id, "color_primary"));
+            button.setBackgroundTint(viewBean.layout.backgroundColor);
+        } else {
+            view.setBackgroundColor(viewBean.layout.backgroundColor);
+        }
+
         if (classInfo.a("CompoundButton")) {
             ((CompoundButton) view).setChecked(viewBean.checked != 0);
         }
@@ -815,23 +825,7 @@ public class ViewPane extends RelativeLayout {
         }
     }
 
-    private void updateLayout(Gx classInfo, View view, ViewBean viewBean) {
-        LayoutBean layoutBean = viewBean.layout;
-        int width = layoutBean.width;
-        int height = layoutBean.height;
-        if (width > 0) {
-            width = (int) wB.a(getContext(), (float) viewBean.layout.width);
-        }
-        if (height > 0) {
-            height = (int) wB.a(getContext(), (float) viewBean.layout.height);
-        }
-        if (classInfo.b("MaterialButton")) {
-            ItemMaterialButton button = (ItemMaterialButton) view;
-            button.setMainColor(ProjectFile.getColor(sc_id, "color_primary"));
-            button.setBackgroundTint(viewBean.layout.backgroundColor);
-        } else {
-            view.setBackgroundColor(viewBean.layout.backgroundColor);
-        }
+    private void updateMargin(View view, ViewBean viewBean) {
         int left = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
         int top = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
         int right = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
@@ -869,6 +863,18 @@ public class ViewPane extends RelativeLayout {
             layoutParams.bottomMargin = bottom;
             view.setLayoutParams(layoutParams);
         }
+    }
+
+    private void updateLayout(View view, ViewBean viewBean) {
+        LayoutBean layoutBean = viewBean.layout;
+        int width = layoutBean.width;
+        int height = layoutBean.height;
+        if (width > 0) {
+            width = (int) wB.a(getContext(), (float) viewBean.layout.width);
+        }
+        if (height > 0) {
+            height = (int) wB.a(getContext(), (float) viewBean.layout.height);
+        }
 
         if (viewBean.id.equals("root") || viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
             var param = (LinearLayout.LayoutParams) view.getLayoutParams();
@@ -898,10 +904,6 @@ public class ViewPane extends RelativeLayout {
             param.width = width;
             param.height = height;
             view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
-            int layoutGravity = viewBean.layout.layoutGravity;
-            if (layoutGravity != LayoutBean.GRAVITY_NONE) {
-                param.gravity = layoutGravity;
-            }
             view.setLayoutParams(param);
         }
     }
