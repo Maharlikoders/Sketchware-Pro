@@ -853,10 +853,11 @@ public class ViewPane extends RelativeLayout {
         int right = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
         int bottom = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
 
-        params.leftMargin = left;
-        params.topMargin = top;
-        params.rightMargin = right;
-        params.bottomMargin = bottom;
+        var marginParams = (ViewGroup.MarginLayoutParams) params;
+        marginParams.leftMargin = left;
+        marginParams.topMargin = top;
+        marginParams.rightMargin = right;
+        marginParams.bottomMargin = bottom;
         
         if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
             if (params instanceof LinearLayout.LayoutParams param) {
