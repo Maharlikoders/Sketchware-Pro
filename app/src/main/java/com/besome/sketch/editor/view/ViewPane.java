@@ -832,50 +832,66 @@ public class ViewPane extends RelativeLayout {
         } else {
             view.setBackgroundColor(viewBean.layout.backgroundColor);
         }
-        if (viewBean.id.equals("root")) {
+        int left = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
+        int top = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
+        int right = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
+        int bottom = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        if (params != null) {
+            params.setMargins(left != null? left : params.leftMargin,
+                    top != null ? top : params.topMargin,
+                    right != null ? right : params.rightMargin,
+                    bottom != null ? bottom : params.bottomMargin);
+                    view.setLayoutParams(params);
+        } else if (viewBean.id.equals("root")) {
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
-            layoutParams.leftMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
-            layoutParams.topMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
-            layoutParams.rightMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
-            layoutParams.bottomMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
-            LayoutBean layoutBean2 = viewBean.layout;
-            view.setPadding(layoutBean2.paddingLeft, layoutBean2.paddingTop, layoutBean2.paddingRight, layoutBean2.paddingBottom);
+            layoutParams.leftMargin = left;
+            layoutParams.topMargin = top;
+            layoutParams.rightMargin = right;
+            layoutParams.bottomMargin = bottom;
             view.setLayoutParams(layoutParams);
         } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
-            LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(width, height);
-            layoutParams2.leftMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
-            layoutParams2.topMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
-            layoutParams2.rightMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
-            layoutParams2.bottomMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
-            LayoutBean layoutBean3 = viewBean.layout;
-            view.setPadding(layoutBean3.paddingLeft, layoutBean3.paddingTop, layoutBean3.paddingRight, layoutBean3.paddingBottom);
-            int i3 = viewBean.layout.layoutGravity;
-            if (i3 != 0) {
-                layoutParams2.gravity = i3;
-            }
-            layoutParams2.weight = viewBean.layout.weight;
-            view.setLayoutParams(layoutParams2);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, height);
+            layoutParams.leftMargin = left;
+            layoutParams.topMargin = top;
+            layoutParams.rightMargin = right;
+            layoutParams.bottomMargin = bottom;
+            view.setLayoutParams(layoutParams);
         } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT) {
             ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(width, height);
-            layoutParams.leftMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
-            layoutParams.topMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
-            layoutParams.rightMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
-            layoutParams.bottomMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
-            view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
+            layoutParams.leftMargin = left;
+            layoutParams.topMargin = top;
+            layoutParams.rightMargin = right;
+            layoutParams.bottomMargin = bottom;
             view.setLayoutParams(layoutParams);
         } else {
-            FrameLayout.LayoutParams layoutParams3 = new FrameLayout.LayoutParams(width, height);
-            layoutParams3.leftMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginLeft);
-            layoutParams3.topMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginTop);
-            layoutParams3.rightMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginRight);
-            layoutParams3.bottomMargin = (int) wB.a(getContext(), (float) viewBean.layout.marginBottom);
-            LayoutBean layoutBean4 = viewBean.layout;
-            view.setPadding(layoutBean4.paddingLeft, layoutBean4.paddingTop, layoutBean4.paddingRight, layoutBean4.paddingBottom);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
+            layoutParams.leftMargin = left;
+            layoutParams.topMargin = top;
+            layoutParams.rightMargin = right;
+            layoutParams.bottomMargin = bottom;
+            view.setLayoutParams(layoutParams);
+        }
+
+        if (viewBean.id.equals("root")) {
+            view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
+        }  else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
+            var params = (LinearLayout.LayoutParams) view.getLayoutParams();
+            view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
+            int layoutGravity = viewBean.layout.layoutGravity;
+            if (layoutGravity != 0) {
+                params.gravity = layoutGravity;
+            }
+            params.weight = viewBean.layout.weight;
+            view.setLayoutParams(layoutParams2);
+        } else {
+            var params = (FrameLayout.LayoutParams) view.getLayoutParams();
+            view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
             int layoutGravity = viewBean.layout.layoutGravity;
             if (layoutGravity != LayoutBean.GRAVITY_NONE) {
-                layoutParams3.gravity = layoutGravity;
+                lparams.gravity = layoutGravity;
             }
-            view.setLayoutParams(layoutParams3);
+            view.setLayoutParams(params);
         }
     }
 
