@@ -15,7 +15,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.besome.sketch.beans.ViewBean;
 
-public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
+public class ItemConstraintLayout extends ConstraintLayout implements sy {
 
     private ViewBean viewBean = null;
     private boolean isSelected = false;
@@ -38,6 +38,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
         initialize(context);
     }
 
+    /*
     @Override
     public void a() {
         int index = 0;
@@ -50,6 +51,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
             }
         }
     }
+    */
 
     private void initialize(Context context) {
         setDrawingCacheEnabled(true);
@@ -133,6 +135,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
         this.viewBean = viewBean;
     }
 
+    /*
     @Override
     public void setChildScrollEnabled(boolean childScrollEnabled) {
         for (int i = 0; i < getChildCount(); ++i) {
@@ -150,6 +153,7 @@ public class ItemConstraintLayout extends ConstraintLayout implements sy, ty {
             }
         }
     }
+    */
 
     public void setFixed(boolean isFixed) {
         this.isFixed = isFixed;

@@ -782,7 +782,7 @@ public class ViewPane extends RelativeLayout {
                     child.getLocationOnScreen(childLocationOnScreen);
                     int x = childLocationOnScreen[0];
                     int y = childLocationOnScreen[1];
-                    a(new Rect(x, y, ((int) (child.getWidth() * getScaleX())) + x, ((int) (child.getHeight() * getScaleY())) + y), child, i, b(child));
+                    //a(new Rect(x, y, ((int) (child.getWidth() * getScaleX())) + x, ((int) (child.getHeight() * getScaleY())) + y), child, i, 1 + b(child));
                 }
             }
         }
