@@ -835,28 +835,28 @@ public class ViewPane extends RelativeLayout {
             params.setMargins(left, top, right,bottom);
             view.setLayoutParams(params);
         } else if (viewBean.id.equals("root")) {
-            var layoutParams = new LinearLayout.LayoutParams();
+            var layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
             layoutParams.leftMargin = left;
             layoutParams.topMargin = top;
             layoutParams.rightMargin = right;
             layoutParams.bottomMargin = bottom;
             view.setLayoutParams(layoutParams);
         } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
-            var layoutParams = new LinearLayout.LayoutParams();
+            var layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
             layoutParams.leftMargin = left;
             layoutParams.topMargin = top;
             layoutParams.rightMargin = right;
             layoutParams.bottomMargin = bottom;
             view.setLayoutParams(layoutParams);
         } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT) {
-            var layoutParams = new ConstraintLayout.LayoutParams();
+            var layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
             layoutParams.leftMargin = left;
             layoutParams.topMargin = top;
             layoutParams.rightMargin = right;
             layoutParams.bottomMargin = bottom;
             view.setLayoutParams(layoutParams);
         } else {
-            var layoutParams = new FrameLayout.LayoutParams();
+            var layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
             layoutParams.leftMargin = left;
             layoutParams.topMargin = top;
             layoutParams.rightMargin = right;
