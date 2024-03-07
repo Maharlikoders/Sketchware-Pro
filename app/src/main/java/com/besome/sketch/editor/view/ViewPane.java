@@ -876,8 +876,15 @@ public class ViewPane extends RelativeLayout {
             height = (int) wB.a(getContext(), (float) viewBean.layout.height);
         }
 
-        view.getLayoutParams().width = width;
-        view.getLayoutParams().height = height;
+        var params = (ViewGroup.LayoutParams) view.getLayoutParams();
+        if (params != null) {
+            params.width = width;
+            params.height = height;
+        } else {
+            params = new ViewGroup.LayoutParams(width, height);
+        }
+        view.setLayoutParams(params);
+        
         if (viewBean.id.equals("root") || viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
             var param = (LinearLayout.LayoutParams) view.getLayoutParams();
             view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
