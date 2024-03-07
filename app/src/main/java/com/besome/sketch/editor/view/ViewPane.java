@@ -264,7 +264,7 @@ public class ViewPane extends RelativeLayout {
             case ViewBeans.VIEW_TYPE_WIDGET_OTPVIEW -> new ItemOTPView(getContext());
             case ViewBeans.VIEW_TYPE_WIDGET_CODEVIEW -> new ItemCodeView(getContext());
             case ViewBeans.VIEW_TYPE_WIDGET_RECYCLERVIEW -> new ItemRecyclerView(getContext());
-            case ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT -> new ItemConstraintLayout(getContext());
+            case ViewBeans.VIEW_TYPE_LAYOUT_CONSTRAINT -> new ItemConstraintLayout(getContext());
             case ViewBean.VIEW_TYPE_LAYOUT_LINEAR,
                     ViewBeans.VIEW_TYPE_LAYOUT_COLLAPSINGTOOLBARLAYOUT,
                     ViewBeans.VIEW_TYPE_LAYOUT_TEXTINPUTLAYOUT,
@@ -777,6 +777,12 @@ public class ViewPane extends RelativeLayout {
                     a(bean, (ViewGroup) child);
                 } else if (child instanceof ItemConstraintLayout) {
                     findConstraintsTargetFor(bean, (ItemConstraintLayout) child);
+                } else {
+                    int[] childLocationOnScreen = new int[2];
+                    child.getLocationOnScreen(childLocationOnScreen);
+                    int x = childLocationOnScreen[0];
+                    int y = childLocationOnScreen[1];
+                    a(new Rect(x, y, ((int) (child.getWidth() * getScaleX())) + x, ((int) (child.getHeight() * getScaleY())) + y), child, i, b(child));
                 }
             }
         }
