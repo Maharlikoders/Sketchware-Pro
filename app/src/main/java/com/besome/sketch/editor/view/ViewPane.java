@@ -876,35 +876,29 @@ public class ViewPane extends RelativeLayout {
             height = (int) wB.a(getContext(), (float) viewBean.layout.height);
         }
 
-        var params = (ViewGroup.LayoutParams) view.getLayoutParams();
+        var params = view.getLayoutParams();
         if (params != null) {
             params.width = width;
             params.height = height;
         } else {
-            params = new ViewGroup.LayoutParams(width, height);
-        }
-        view.setLayoutParams(params);
-        
-        if (viewBean.id.equals("root") || viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
-            var param = (LinearLayout.LayoutParams) view.getLayoutParams();
-            view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
-            if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
-                int layoutGravity = viewBean.layout.layoutGravity;
-                if (layoutGravity != 0) {
-                    param.gravity = layoutGravity;
-                }
-                param.weight = viewBean.layout.weight;
+            if (params instanceof LinearLayout.LayoutParams) {
+                params = new LinearLayout.LayoutParams(width, height);
+            } else if (params instanceof ConstraintLayout.LayoutParams) {
+                params = new ConstraintLayout.LayoutParams(width, height);
+            } else {
+                params = new FrameLayout.LayoutParams(width, height);
             }
-            view.setLayoutParams(param);
-        } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT) {
-            var param = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-            view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
-            view.setLayoutParams(param);
-        } else {
-            var param = (FrameLayout.LayoutParams) view.getLayoutParams();
-            view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
-            view.setLayoutParams(param);
         }
+        
+        if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
+            int layoutGravity = viewBean.layout.layoutGravity;
+            if (layoutGravity != 0) {
+                param.gravity = layoutGravity;
+            }
+            param.weight = viewBean.layout.weight;
+        }
+        view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
+        view.setLayoutParams(params);
     }
 
     private void updateTextView(TextView textView, ViewBean viewBean) {
