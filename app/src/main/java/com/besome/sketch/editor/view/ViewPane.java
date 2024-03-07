@@ -876,10 +876,10 @@ public class ViewPane extends RelativeLayout {
             height = (int) wB.a(getContext(), (float) viewBean.layout.height);
         }
 
+        view.getLayoutParams().width = width;
+        view.getLayoutParams().height = height;
         if (viewBean.id.equals("root") || viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
             var param = (LinearLayout.LayoutParams) view.getLayoutParams();
-            param.width = width;
-            param.height = height;
             view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
             if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_LINEAR) {
                 int layoutGravity = viewBean.layout.layoutGravity;
@@ -891,14 +891,10 @@ public class ViewPane extends RelativeLayout {
             view.setLayoutParams(param);
         } else if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT) {
             var param = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-            param.width = width;
-            param.height = height;
             view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
             view.setLayoutParams(param);
         } else {
             var param = (FrameLayout.LayoutParams) view.getLayoutParams();
-            param.width = width;
-            param.height = height;
             view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
             view.setLayoutParams(param);
         }
