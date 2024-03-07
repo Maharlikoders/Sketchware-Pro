@@ -881,7 +881,7 @@ public class ViewPane extends RelativeLayout {
             }
             param.weight = viewBean.layout.weight;
             view.setLayoutParams(param);
-        } else {
+        } else if (viewBean.parentType != ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT) {
             var param = (FrameLayout.LayoutParams) view.getLayoutParams();
             view.setPadding(layoutBean.paddingLeft, layoutBean.paddingTop, layoutBean.paddingRight, layoutBean.paddingBottom);
             int layoutGravity = viewBean.layout.layoutGravity;
