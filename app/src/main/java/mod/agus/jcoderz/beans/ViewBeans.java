@@ -3,6 +3,7 @@ package mod.agus.jcoderz.beans;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.sketchware.pro.R;
+import com.besome.sketch.beans.ViewBean;
 
 public class ViewBeans {
 
@@ -36,6 +37,7 @@ public class ViewBeans {
     public static final int VIEW_TYPE_WIDGET_OTPVIEW = 46;
     public static final int VIEW_TYPE_WIDGET_CODEVIEW = 47;
     public static final int VIEW_TYPE_WIDGET_RECYCLERVIEW = 48;
+    public static final int VIEW_TYPE_LAYOUT_CONSTRAINT = 49;
 
     /**
      * Map that stores both a view's type and type name.
@@ -71,7 +73,7 @@ public class ViewBeans {
             .put(VIEW_TYPE_WIDGET_OTPVIEW, "OTPView")
             .put(VIEW_TYPE_WIDGET_CODEVIEW, "CodeView")
             .put(VIEW_TYPE_WIDGET_RECYCLERVIEW, "RecyclerView")
-            .put(ViewBean.VIEW_TYPE_LAYOUT_CONSTRAINT, "ConstraintLayout")
+            .put(VIEW_TYPE_LAYOUT_CONSTRAINT, "ConstraintLayout")
             .build();
 
     public static String buildClassInfo(int id) {

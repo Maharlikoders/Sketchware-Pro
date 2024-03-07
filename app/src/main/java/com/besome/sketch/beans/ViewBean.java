@@ -267,9 +267,6 @@ public class ViewBean extends nA implements Parcelable {
             case "ScrollView":
                 return VIEW_TYPE_LAYOUT_VSCROLLVIEW;
 
-            case "ConstraintLayout":
-                return VIEW_TYPE_LAYOUT_CONSTRAINT;
-
             default:
                 return ViewBeans.getViewTypeByTypeName(typeName);
         }
@@ -327,9 +324,6 @@ public class ViewBean extends nA implements Parcelable {
 
             case VIEW_TYPE_WIDGET_MAPVIEW:
                 return "MapView";
-
-            case VIEW_TYPE_LAYOUT_CONSTRAINT:
-                return "ConstraintLayout";
 
             default:
                 return ViewBeans.getViewTypeName(type);
@@ -480,10 +474,6 @@ public class ViewBean extends nA implements Parcelable {
 
             case VIEW_TYPE_WIDGET_MAPVIEW:
                 name = "MapView";
-                break;
-
-            case VIEW_TYPE_LAYOUT_CONSTRAINT:
-                name = "ConstraintLayout";
                 break;
 
             default:
